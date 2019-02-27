@@ -1,0 +1,25 @@
+{
+  "name": "@tokenfoundry/forge-sdk",
+  "version": "0.0.0",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint --cache",
+    "test": "jest"
+  },
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "peerDependencies": {
+    "apollo-boost": "^0.1.27",
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1"
+  },
+  "devDependencies": {
+    "@tokenfoundry/eslint-config": "^1.5.1",
+    "eslint": "^5.14.1",
+    "jest": "^24.1.0"
+  }
+}
