@@ -1,9 +1,5 @@
 const { ServiceSubscriptions } = require("..");
 
-function log(...args) {
-  console.log(...args);
-}
-
 describe("ServiceSubscriptions", () => {
   function createInstance(
     credentials = { name: "margarita", secretKey: "key" }
@@ -18,7 +14,6 @@ describe("ServiceSubscriptions", () => {
     const subscriptionService = createInstance();
 
     const { data: plans } = await subscriptionService.getPlans();
-    log(plans);
 
     expect(plans).toBeInstanceOf(Array);
     for (const plan of plans) {
