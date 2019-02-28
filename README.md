@@ -14,7 +14,7 @@ yarn add @tokenfoundry/forge-sdk
 import ForgeSDK from "@tokenfoundry/forge-sdk/browser";
 
 const forge = new ForgeSDK(web3); // web3 (from MetaMask)
-const token = new forge.Token("DAI");
+const token = forge.loadToken("DAI");
 
 const amount = 100;
 const address = "0x0..." // User address (from MetaMask)

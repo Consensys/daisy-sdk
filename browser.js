@@ -1,5 +1,5 @@
 const ERC20 = require("./contracts/lite/ERC20");
-const networks = require("./contracts/lite");
+const networks = require("./contracts");
 
 module.exports = class ForgeSDK {
   constructor(web3, options = { network: "mainnet" }) {
@@ -8,8 +8,8 @@ module.exports = class ForgeSDK {
     this.addresses = networks[options.network];
   }
 
-  Token(symbol) {
-    return this.web3.eth.Contract(ERC20["abi"], this.addresses[symbol]);
+  loadToken(symbol) {
+    return new this.web3.eth.Contract(ERC20["abi"], this.addresses[symbol]);
   }
 
   prepareToken(token) {
