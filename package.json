@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@tokenfoundry/eslint-config": "^1.5.1",
-    "eslint": "^5.14.1",
+    "eslint": "^5.15.1",
     "jest": "^24.1.0"
   }
 }

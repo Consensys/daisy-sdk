@@ -115,7 +115,7 @@ export default class App extends Component {
 const { ServiceSubscriptions } = require("@tokenfoundry/forge-sdk");
 
 const serviceSubscriptions = new ServiceSubscriptions({
-  name: "margarita",
+  identifier: "margarita",
   secretKey: process.env.SUBSCRIPTION_SECRET || "key",
 });
 

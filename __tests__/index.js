@@ -2,7 +2,7 @@ const { ServiceSubscriptions } = require("..");
 
 describe("ServiceSubscriptions", () => {
   function createInstance(
-    credentials = { name: "margarita", secretKey: "key" }
+    credentials = { identifier: "margarita", secretKey: "key" }
   ) {
     return new ServiceSubscriptions(credentials);
   }
