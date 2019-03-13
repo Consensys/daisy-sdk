@@ -1,0 +1,696 @@
+{
+  "contractName": "PlanSubscriptionManager",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "name": "operation",
+          "type": "uint8"
+        },
+        {
+          "name": "txGas",
+          "type": "uint256"
+        },
+        {
+          "name": "dataGas",
+          "type": "uint256"
+        },
+        {
+          "name": "gasPrice",
+          "type": "uint256"
+        },
+        {
+          "name": "gasToken",
+          "type": "address"
+        },
+        {
+          "name": "refundAddress",
+          "type": "address"
+        },
+        {
+          "name": "meta",
+          "type": "bytes"
+        }
+      ],
+      "name": "getSubscriptionHash",
+      "outputs": [
+        {
+          "name": "subscriptionHash",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x188eb67b"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "SUBSCRIPTION_TYPE",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x2901a948"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "META_TYPE",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x2a1f2637"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "acceptedToken",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x451c3d80"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "minimumPeriod",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x457c85eb"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "wallet",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x521eb273"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "subscriptionTypeHash",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x5d333607"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x715018a6"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "subscriptionHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "execSubscription",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x7c4f8858"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x8da5cb5b"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x8f32d59b"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "subscriber",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0x98f96598"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "gracePeriod",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xa06db7dc"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "plans",
+      "outputs": [
+        {
+          "name": "period",
+          "type": "uint256"
+        },
+        {
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "name": "updatedAt",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xaa4f2653"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "name": "operation",
+          "type": "uint8"
+        },
+        {
+          "name": "txGas",
+          "type": "uint256"
+        },
+        {
+          "name": "dataGas",
+          "type": "uint256"
+        },
+        {
+          "name": "gasPrice",
+          "type": "uint256"
+        },
+        {
+          "name": "gasToken",
+          "type": "address"
+        },
+        {
+          "name": "refundAddress",
+          "type": "address"
+        },
+        {
+          "name": "meta",
+          "type": "bytes"
+        },
+        {
+          "name": "signature",
+          "type": "bytes"
+        }
+      ],
+      "name": "execSubscription",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0xadc85d78"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "EIP712DOMAIN_TYPEHASH",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xc49f91d3"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "subscriptionHash",
+          "type": "bytes32"
+        },
+        {
+          "name": "signature",
+          "type": "bytes"
+        }
+      ],
+      "name": "cancelSubscription",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0xc8726e21"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "subscriptionHash",
+          "type": "bytes32"
+        },
+        {
+          "name": "action",
+          "type": "string"
+        }
+      ],
+      "name": "getSubscriptionActionHash",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xd1dca670"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "metaTypeHash",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xe4b61599"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "subscriptionHash",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "execSubscriptions",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0xe5a0c7ce"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0xf2fde38b"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "subscriptionCancelled",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xf3002730"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "domainSeparator",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xf698da25"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "SUBSCRIPTION_ACTION_TYPEHASH",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xf788e834"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "nextPaymentTimestamp",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xfca34657"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "subscriptionHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "PaymentFailed",
+      "type": "event",
+      "signature": "0x67f27005c5c2a0f71b610c86db1ecee76e4a309e52b681e53d52b45a5b6a1566"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "subHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "SubscriptionCancelled",
+      "type": "event",
+      "signature": "0xcef6ecfd66d42c68c27def452dfeb1195cab6999685acd9ae7c30b11b51c587a"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "subHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "SubscriptionExecuted",
+      "type": "event",
+      "signature": "0x83c61b44a42b48eb9220a7226a1991d5a163bf016b8c3f41631a3d78b0fab569"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event",
+      "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "newContract",
+          "type": "address"
+        }
+      ],
+      "name": "ContractCreation",
+      "type": "event",
+      "signature": "0x4db17dd5e4732fb6da34a148104a592783ca119a1e7bb8829eba6cbadef0b511"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "name": "publisher",
+          "type": "address"
+        },
+        {
+          "name": "metaType",
+          "type": "bytes"
+        }
+      ],
+      "name": "init",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x378dfd8e"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_wallet",
+          "type": "address"
+        },
+        {
+          "name": "_minimumPeriod",
+          "type": "uint256"
+        },
+        {
+          "name": "_gracePeriod",
+          "type": "uint256"
+        },
+        {
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "name": "publisher",
+          "type": "address"
+        },
+        {
+          "name": "planIds",
+          "type": "bytes32[]"
+        },
+        {
+          "name": "planPeriods",
+          "type": "uint256[]"
+        },
+        {
+          "name": "planPrices",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "init",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0xc6f78107"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "planId",
+          "type": "bytes32"
+        },
+        {
+          "name": "period",
+          "type": "uint256"
+        },
+        {
+          "name": "price",
+          "type": "uint256"
+        }
+      ],
+      "name": "setPlan",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0xc49237c1"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "subscriptionHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "isValidSubscription",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function",
+      "signature": "0xdd8d11e2"
+    }
+  ]
+}

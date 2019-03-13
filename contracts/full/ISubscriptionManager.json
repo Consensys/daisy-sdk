@@ -1,0 +1,161 @@
+{
+  "contractName": "ISubscriptionManager",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "subscriptionHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "isValidSubscription",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "name": "operation",
+          "type": "uint8"
+        },
+        {
+          "name": "txGas",
+          "type": "uint256"
+        },
+        {
+          "name": "dataGas",
+          "type": "uint256"
+        },
+        {
+          "name": "gasPrice",
+          "type": "uint256"
+        },
+        {
+          "name": "gasToken",
+          "type": "address"
+        },
+        {
+          "name": "refundAddress",
+          "type": "address"
+        },
+        {
+          "name": "meta",
+          "type": "bytes"
+        }
+      ],
+      "name": "getSubscriptionHash",
+      "outputs": [
+        {
+          "name": "subscriptionHash",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "data",
+          "type": "bytes"
+        },
+        {
+          "name": "operation",
+          "type": "uint8"
+        },
+        {
+          "name": "txGas",
+          "type": "uint256"
+        },
+        {
+          "name": "dataGas",
+          "type": "uint256"
+        },
+        {
+          "name": "gasPrice",
+          "type": "uint256"
+        },
+        {
+          "name": "gasToken",
+          "type": "address"
+        },
+        {
+          "name": "refundAddress",
+          "type": "address"
+        },
+        {
+          "name": "meta",
+          "type": "bytes"
+        },
+        {
+          "name": "signature",
+          "type": "bytes"
+        }
+      ],
+      "name": "execSubscription",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "subscriptionHash",
+          "type": "bytes32"
+        },
+        {
+          "name": "signature",
+          "type": "bytes"
+        }
+      ],
+      "name": "cancelSubscription",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]
+}
