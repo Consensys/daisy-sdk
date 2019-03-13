@@ -1,9 +1,9 @@
-# forge-sdk
+# daisy-sdk
 
 ## Install
 
 ```sh
-yarn add @tokenfoundry/forge-sdk
+yarn add @tokenfoundry/daisy-sdk
 ```
 
 ## Usage
@@ -11,21 +11,25 @@ yarn add @tokenfoundry/forge-sdk
 ### Client-side
 
 ```js
-import ForgeSDK from "@tokenfoundry/forge-sdk/browser";
+import DaisySDK from "@tokenfoundry/daisy-sdk/browser";
 
-const forge = new ForgeSDK(web3); // web3 (from MetaMask)
-const token = forge.loadToken("DAI");
+const daisy = new DaisySDK(web3); // web3 (from MetaMask)
+const token = daisy.loadToken("DAI");
 
 const amount = 100;
 const address = "0x0..." // User address (from MetaMask)
 
-forge
+daisy
   .prepareToken(token)
   .approve(amount, { from: address })
   .on("transactionHash", blockHash => {})
   .on("confirmation", (confirmationNumber, receipt) => {})
   .on("receipt", receipt => {})
   .on("error", error => {});
+
+const signature = await daisy
+  .prepareToken(token)
+  .sign({ account, plan: this.props.plan });
 ```
 
 #### MetaMask helper
@@ -46,7 +50,7 @@ import MetaMaskContext from "./metamask";
 
 export default class App extends Component {
   handleButtonClick = (web3, account) => {
-    /// use ForgeSDK here
+    /// use DaisySDK here
   }
 
   render() {
@@ -112,7 +116,7 @@ export default class App extends Component {
 > Keep the API Key private
 
 ```js
-const { ServiceSubscriptions } = require("@tokenfoundry/forge-sdk");
+const { ServiceSubscriptions } = require("@tokenfoundry/daisy-sdk");
 
 const serviceSubscriptions = new ServiceSubscriptions({
   identifier: "margarita",

@@ -1,17 +1,20 @@
 {
-  "name": "@tokenfoundry/forge-sdk",
+  "name": "@tokenfoundry/daisy-sdk",
   "version": "0.0.0",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
   "private": false,
   "license": "MIT",
   "scripts": {
+    "build": "rollup -c",
     "lint": "eslint --cache",
     "test": "jest"
   },
   "files": [
-    "src",
-    "contracts",
-    "browser.js"
+    "dist",
+    "private",
+    "contracts"
   ],
   "dependencies": {
     "axios": "^0.18.0"
@@ -22,8 +25,18 @@
     "graphql-tag": "^2.10.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/preset-env": "^7.3.1",
     "@tokenfoundry/eslint-config": "^1.5.1",
     "eslint": "^5.15.1",
-    "jest": "^24.1.0"
+    "jest": "^24.1.0",
+    "rollup": "^1.6.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.1",
+    "rollup-plugin-json": "^3.1.0"
   }
 }

@@ -1,4 +1,4 @@
-const { ServiceSubscriptions } = require("..");
+const ServiceSubscriptions = require("./ServiceSubscriptions");
 
 describe("ServiceSubscriptions", () => {
   function createInstance(

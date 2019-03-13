@@ -22,12 +22,24 @@ class ServiceSubscriptions extends Client {
     return data;
   }
 
-  async createNewSubscription({ plan }) {
+  async submitSubscription({
+    plan,
+    account,
+    token,
+    startDate = 0,
+    expires = 0,
+    signature,
+  }) {
     const { data } = await this.request({
       method: "post",
       url: "/subscriptions/",
       data: {
         planId: plan.id || plan,
+        account,
+        token,
+        startDate,
+        expires,
+        signature,
       },
     });
     return data;
