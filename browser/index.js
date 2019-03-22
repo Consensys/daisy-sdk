@@ -1,3 +1,6 @@
+import isString from "lodash/isString";
+import EventEmitter from "eventemitter3";
+
 import ERC20 from "../contracts/lite/ERC20.json";
 import * as networks from "../contracts";
 import { TYPES, getTypedData, signTypedData } from "../common/helpers";
@@ -30,9 +33,26 @@ class DaisySDKToken {
     if (!sendArgs.from) {
       throw new Error();
     }
-    return this.token.methods
-      .approve(this.addresses["subscription-manager"], amount)
-      .send(sendArgs);
+    return this.token.methods["approve"](
+      this.addresses["subscription-manager"],
+      amount
+    ).send(sendArgs);
+  }
+
+  async resume(arg) {
+    let transactionHash = null;
+
+    if (!arg) {
+      throw new Error("Missing argument.");
+    } else if (isString(arg)) {
+      transactionHash = arg;
+    } else {
+      transactionHash = arg["transactionHash"];
+    }
+
+    const emitter = new ResumeEventEmitter(this.web3, transactionHash);
+    emitter.start();
+    return emitter;
   }
 
   async sign({ account, plan }) {
@@ -81,5 +101,73 @@ class DaisySDKToken {
 
     const signature = await signTypedData(this.web3, account, typedData);
     return signature;
+  }
+}
+
+class ResumeEventEmitter extends EventEmitter {
+  constructor(web3, transactionHash, ...args) {
+    super(...args);
+    this.web3 = web3;
+    this.transactionHash = transactionHash;
+    this.started = false;
+    // this.on("newListener", this._newListener.bind(this));
+    // this.on("removeListener", this._removeListener.bind(this));
+  }
+
+  // _newListener() {
+  //   console.log("_newListener");
+
+  //   if (!this.started) {
+  //     this.started = true;
+  //     this.execute();
+  //   }
+  // }
+
+  // _removeListener() {
+  //   console.log("_removeListener");
+  //   let count = 0;
+  //   const names = this.eventNames() || [];
+  //   for (const name of names) {
+  //     count += this.listenerCount(name);
+  //   }
+  //   if (count === 0) {
+  //     this.started = false;
+  //   }
+  // }
+
+  start() {
+    this.started = true;
+    this.execute();
+    return this;
+  }
+
+  async execute() {
+    if (!this.started) {
+      return;
+    }
+
+    try {
+      const transaction = await this.web3.eth.getTransaction(
+        this.transactionHash
+      );
+      if (transaction === null || transaction.blockNumber === null) {
+        // not mined yet.
+        throw new Error("Not mined yet. Retry.");
+      }
+      const blockNumber = transaction["blockNumber"];
+
+      const currentBlock = await this.web3.eth.getBlockNumber();
+      const confirmationNumber = currentBlock - blockNumber;
+
+      const receipt = transaction;
+
+      this.emit("confirmation", confirmationNumber, receipt);
+    } catch (error) {
+      this.emit("error", error);
+    } finally {
+      if (this.started) {
+        setTimeout(this.execute.bind(this), 3000);
+      }
+    }
   }
 }
