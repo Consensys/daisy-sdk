@@ -116,6 +116,7 @@ export default class App extends Component {
 > Keep the API Key private
 
 ```js
+const express = require("express");
 const { ServiceSubscriptions } = require("@tokenfoundry/daisy-sdk");
 
 const serviceSubscriptions = new ServiceSubscriptions({
@@ -123,5 +124,31 @@ const serviceSubscriptions = new ServiceSubscriptions({
   secretKey: process.env.SUBSCRIPTION_SECRET || "key",
 });
 
-const { data: plans } = await subscriptionService.getPlans();
+const app = express()
+
+app.get("/api/plans/", async (req, res) => {
+  const plans = await subscriptionService.getPlans();
+  res.json(plans);
+});
+
+app.post("/api/subscriptions/", async (req, res) => {
+  const { signature, account } = req.body;
+
+  const plan = plans.find(p => ...);
+
+  const subscription = await subscriptionService.submit({
+    plan: plan, // the plan the user is subscribing should match with the signature
+    account: account, // from web3 in the frontend
+    token: "DAI",
+    // startDate: 0, // optional values (default: 0)
+    // expires: 0, // optional values (default: 0)
+    signature: signature, // from DaisySDK in the frontend
+  });
+
+  // TODO: SAVE `subscription` TO LOCAL DB
+
+  res.json(subscription);
+});
+
+app.listen(3000);
 ```

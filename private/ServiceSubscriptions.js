@@ -22,7 +22,7 @@ class ServiceSubscriptions extends Client {
     return data;
   }
 
-  async submitSubscription({
+  async submit({
     plan,
     account,
     token,
