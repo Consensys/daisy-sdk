@@ -17,11 +17,11 @@ const daisy = new DaisySDK(web3); // web3 (from MetaMask)
 const token = daisy.loadToken("DAI");
 
 const amount = 100;
-const address = "0x0..." // User address (from MetaMask)
+const account = "0x0..." // User address (from MetaMask)
 
 daisy
   .prepareToken(token)
-  .approve(amount, { from: address })
+  .approve(amount, { from: account })
   .on("transactionHash", blockHash => {})
   .on("confirmation", (confirmationNumber, receipt) => {})
   .on("receipt", receipt => {})
