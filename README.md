@@ -13,9 +13,11 @@ yarn add @tokenfoundry/daisy-sdk
 ```js
 import DaisySDK from "@tokenfoundry/daisy-sdk/browser";
 
-const daisy = new DaisySDK(web3); // web3 (from MetaMask)
-const token = daisy.loadToken("DAI");
+const manager = ... // from server-side SDK
 
+const daisy = new DaisySDK(web3, web3); // web3 (from MetaMask)
+
+const token = daisy.loadToken();
 const amount = 100;
 const account = "0x0..." // User address (from MetaMask)
 
@@ -27,7 +29,7 @@ daisy
   .on("receipt", receipt => {})
   .on("error", error => {});
 
-const signature = await daisy
+const { signature, nonce } = await daisy
   .prepareToken(token)
   .sign({ account, plan: this.props.plan });
 ```
@@ -127,19 +129,19 @@ const serviceSubscriptions = new ServiceSubscriptions({
 const app = express()
 
 app.get("/api/plans/", async (req, res) => {
-  const plans = await subscriptionService.getPlans();
+  const { plans } = await subscriptionService.getPlans();
   res.json(plans);
 });
 
 app.post("/api/subscriptions/", async (req, res) => {
   const { signature, account } = req.body;
 
+  const { plans } = await subscriptionService.getPlans();
   const plan = plans.find(p => ...);
 
   const subscription = await subscriptionService.submit({
     plan: plan, // the plan the user is subscribing should match with the signature
     account: account, // from web3 in the frontend
-    token: "DAI",
     // startDate: 0, // optional values (default: 0)
     // expires: 0, // optional values (default: 0)
     signature: signature, // from DaisySDK in the frontend
@@ -147,7 +149,7 @@ app.post("/api/subscriptions/", async (req, res) => {
 
   // TODO: SAVE `subscription` TO LOCAL DB
 
-  res.json(subscription);
+  res.json(subscription).status(201);
 });
 
 app.listen(3000);

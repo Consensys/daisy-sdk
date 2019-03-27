@@ -15,34 +15,37 @@ class ServiceSubscriptions extends Client {
   }
 
   async getPlans() {
-    const { data } = await this.request({
+    const { data: body } = await this.request({
       method: "get",
       url: "/plans/",
     });
-    return data;
+
+    return body.data;
   }
 
   async submit({
     plan,
     account,
-    token,
-    startDate = 0,
-    expires = 0,
+    startDate = "0",
+    maxExecutions = "0",
+    nonce,
+    receipt,
     signature,
   }) {
-    const { data } = await this.request({
+    const { data: body } = await this.request({
       method: "post",
       url: "/subscriptions/",
       data: {
-        planId: plan.id || plan,
+        planId: plan["id"] || plan,
         account,
-        token,
         startDate,
-        expires,
+        maxExecutions,
+        nonce,
+        receipt,
         signature,
       },
     });
-    return data;
+    return body;
   }
 }
 

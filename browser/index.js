@@ -2,41 +2,46 @@ import isString from "lodash/isString";
 import EventEmitter from "eventemitter3";
 
 import ERC20 from "../contracts/lite/ERC20.json";
-import * as networks from "../contracts";
-import { TYPES, getTypedData, signTypedData } from "../common/helpers";
+import { TYPES, signTypedData } from "../common/helpers";
 
 export default class DaisySDK {
-  constructor(web3, options = { network: "mainnet" }) {
+  constructor(web3, manager) {
     this.web3 = web3;
-    this.options = options;
-    this.addresses = networks[options.network];
+    this.manager = manager;
   }
 
-  loadToken(symbol) {
-    return new this.web3.eth.Contract(ERC20["abi"], this.addresses[symbol]);
+  loadToken({ symbol, address } = {}) {
+    if (address) {
+      return new this.web3.eth.Contract(ERC20["abi"], address);
+    } else if (symbol) {
+      throw new Error("Not implemented yet");
+    } else {
+      return new this.web3.eth.Contract(
+        ERC20["abi"],
+        this.manager["tokenAddress"]
+      );
+    }
   }
 
   prepareToken(token) {
-    return new DaisySDKToken(token, this.web3, this.options);
+    return new DaisySDKToken(token, this.web3, this.manager);
   }
 }
 
 class DaisySDKToken {
-  constructor(token, web3, options = { network: "mainnet" }) {
+  constructor(token, web3, manager) {
     this.token = token;
     this.web3 = web3;
-    this.options = options;
-    this.addresses = networks[options.network];
+    this.manager = manager;
   }
 
   approve(amount, sendArgs) {
     if (!sendArgs.from) {
       throw new Error();
     }
-    return this.token.methods["approve"](
-      this.addresses["subscription-manager"],
-      amount
-    ).send(sendArgs);
+    return this.token.methods["approve"](this.manager["address"], amount).send(
+      sendArgs
+    );
   }
 
   async resume(arg) {
@@ -55,52 +60,43 @@ class DaisySDKToken {
     return emitter;
   }
 
-  async sign({ account, plan }) {
-    const transferFromSelector = this.web3.eth.abi.encodeFunctionSignature(
-      "transferFrom(address,address,uint256)"
-    );
+  async sign({
+    account,
+    plan,
+    maxExecutions = "0",
+    start = "0",
+    nonce = undefined,
+  }) {
+    if (!account || !plan) {
+      throw new Error(`Missing required arguments.`);
+    }
 
-    const price = 10;
-    const wallet = "0xa7c32Fa000305CB2e5AA5d87B95560b4c14de045";
-    const transferParams = this.web3.eth.abi.encodeParameters(
-      ["address", "address", "uint256"],
-      [account, wallet, String(price)]
-    );
-
-    const tokenTransferData = `${transferFromSelector}${transferParams.slice(
-      2
-    )}`;
-
-    const meta = {
-      planId: this.web3.utils.soliditySha3(plan["name"] || plan),
-      startDate: 0,
-      expires: 0,
-    };
+    const [periods, periodUnit] = transformPeriod(
+      plan["period"],
+      plan["periodUnit"]
+    ); // compatible with contract
 
     // Subscription object
     const sub = {
-      to: this.token.options.address,
-      value: 0,
-      data: tokenTransferData,
-      operation: 0,
-      txGas: 100000,
-      dataGas: 0,
-      gasPrice: 0,
-      gasToken: "0x0000000000000000000000000000000000000000",
-      refundAddress: "0x0000000000000000000000000000000000000000",
-      meta,
+      token: this.token.options.address,
+      amount: plan["price"],
+      periodUnit,
+      periods,
+      maxExecutions,
+      start,
+      plan: plan["onChainId"],
+      nonce: nonce || this.web3.utils.randomHex(32),
     };
 
-    const subscriptionManager = this.addresses["subscription-manager"];
-    const typedData = getTypedData(
-      TYPES,
-      { verifyingContract: subscriptionManager },
-      "Subscription",
-      sub
-    );
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "Subscription",
+      message: sub,
+    };
 
     const signature = await signTypedData(this.web3, account, typedData);
-    return signature;
+    return { signature, nonce: sub.nonce };
   }
 }
 
@@ -169,5 +165,26 @@ class ResumeEventEmitter extends EventEmitter {
         setTimeout(this.execute.bind(this), 3000);
       }
     }
+  }
+}
+
+function transformPeriod(number, unit) {
+  // export enum PeriodUnit {
+  //   Days = "DAYS",
+  //   Weeks = "WEEKS",
+  //   Months = "MONTHS",
+  //   Years = "YEARS",
+  // }
+  switch (unit) {
+    case "DAYS":
+      return [number, "Day"];
+    case "WEEKS":
+      return [number, "Day"];
+    case "MONTHS":
+      return [number, "Month"];
+    case "YEARS":
+      return [number, "Year"];
+    default:
+      throw new Error();
   }
 }

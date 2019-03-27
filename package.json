@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "axios": "^0.18.0",
+    "eth-sig-util": "^2.1.2",
     "eventemitter3": "^3.1.0"
   },
   "peerDependencies": {

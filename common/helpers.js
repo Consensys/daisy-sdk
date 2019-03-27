@@ -1,46 +1,39 @@
 export const TYPES = {
-  EIP712Domain: { verifyingContract: "address" },
+  EIP712Domain: [{ name: "verifyingContract", type: "address" }],
 
-  // "Subscription(address to,uint256 value,bytes data,uint8 operation,uint256 txGas,uint256 dataGas,uint256 gasPrice,uint256 gasToken,address refundAddress,Meta meta)Meta(bytes32 planId,uint256 startDate,uint256 expires)"
-  Subscription: {
-    to: "address",
-    value: "uint256",
-    data: "bytes",
-    operation: "uint8",
-    txGas: "uint256",
-    dataGas: "uint256",
-    gasPrice: "uint256",
-    gasToken: "address",
-    refundAddress: "address",
-    meta: "Meta",
-  },
+  Subscription: [
+    { name: "token", type: "address" },
+    { name: "amount", type: "uint256" },
+    { name: "periodUnit", type: "string" },
+    { name: "periods", type: "uint256" },
+    { name: "maxExecutions", type: "uint256" },
+    { name: "start", type: "uint256" },
+    { name: "plan", type: "string" },
+    { name: "nonce", type: "bytes32" },
+  ],
 
-  // "Meta(bytes32 planId,uint256 startDate,uint256 expires)"
-  Meta: {
-    planId: "bytes32",
-    startDate: "uint256",
-    expires: "uint256",
-  },
+  PlanAuthorization: [
+    { name: "subscriptionHash", type: "bytes32" },
+    { name: "subscriber", type: "address" },
+  ],
+
+  AddPlan: [
+    { name: "plan", type: "string" },
+    { name: "price", type: "uint256" },
+    { name: "periodUnit", type: "string" },
+    { name: "periods", type: "uint256" },
+    { name: "maxExecutions", type: "uint256" },
+    { name: "private", type: "bool" },
+  ],
+
+  RemovePlan: [{ name: "plan", type: "string" }],
+
+  SetActive: [
+    { name: "plan", type: "string" },
+    { name: "active", type: "bool" },
+    { name: "nonce", type: "bytes32" },
+  ],
 };
-
-export function getTypedData(types, domain, primaryType, subscription) {
-  const eipTypes = {};
-
-  Object.keys(types).forEach(key => {
-    const type = types[key];
-    eipTypes[key] = Object.keys(type).map(name => ({
-      name,
-      type: type[name],
-    }));
-  });
-
-  return {
-    types: eipTypes,
-    domain,
-    primaryType,
-    message: subscription,
-  };
-}
 
 export async function signTypedData(web3, signer, data) {
   return new Promise((resolve, reject) => {
