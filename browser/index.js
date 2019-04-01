@@ -76,6 +76,15 @@ class DaisySDKToken {
       plan["periodUnit"]
     ); // compatible with contract
 
+    // TODO: https://github.com/ethereum/web3.js/issues/1490
+    const genNonce = () => {
+      let value = null;
+      do {
+        value = this.web3.utils.randomHex(32);
+      } while (value.length !== 66);
+      return value;
+    };
+
     // Subscription object
     const sub = {
       token: this.token.options.address,
@@ -85,7 +94,7 @@ class DaisySDKToken {
       maxExecutions,
       start,
       plan: plan["onChainId"],
-      nonce: nonce || this.web3.utils.randomHex(32),
+      nonce: nonce || genNonce(),
     };
 
     const typedData = {
