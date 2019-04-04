@@ -2,35 +2,50 @@ const Client = require("./Client");
 
 class ServiceSubscriptions extends Client {
   constructor(opts) {
-    const { name, secretKey } = opts;
+    const { identifier, secretKey } = opts;
     super({
       ...Client.DEFAULT_CONFIG,
       // TODO: safer url compose
       baseURL: `${Client.DEFAULT_CONFIG.baseURL}`,
       auth: {
-        username: name,
+        username: identifier,
         password: secretKey,
       },
     });
   }
 
   async getPlans() {
-    const { data } = await this.request({
+    const { data: body } = await this.request({
       method: "get",
       url: "/plans/",
     });
-    return data;
+
+    return body.data;
   }
 
-  async createNewSubscription({ plan }) {
-    const { data } = await this.request({
+  async submit({
+    plan,
+    account,
+    startDate = "0",
+    maxExecutions = "0",
+    nonce,
+    receipt,
+    signature,
+  }) {
+    const { data: body } = await this.request({
       method: "post",
       url: "/subscriptions/",
       data: {
-        planId: plan.id || plan,
+        planId: plan["id"] || plan,
+        account,
+        startDate,
+        maxExecutions,
+        nonce,
+        receipt,
+        signature,
       },
     });
-    return data;
+    return body;
   }
 }
 

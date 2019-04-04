@@ -30,7 +30,8 @@ class Client {
       // `error.response.data`
       // `error.response.status`
       // `error.response.headers`
-      return Promise.reject(new Error(error.response.data.message));
+      error.message = error.response.data.message; // eslint-disable-line no-param-reassign
+      return Promise.reject(error);
     } else if (error.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest

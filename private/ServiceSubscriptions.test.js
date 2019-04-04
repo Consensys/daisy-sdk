@@ -1,24 +1,16 @@
-const { ServiceSubscriptions } = require("..");
-
-function log(...args) {
-  console.log(...args);
-}
+const ServiceSubscriptions = require("./ServiceSubscriptions");
 
 describe("ServiceSubscriptions", () => {
   function createInstance(
-    credentials = { name: "margarita", secretKey: "key" }
+    credentials = { identifier: "margarita", secretKey: "key" }
   ) {
     return new ServiceSubscriptions(credentials);
   }
-  // const subscriptionService = null;
-
-  // beforeEach(() => {});
 
   test("Get plans and subscribe", async () => {
     const subscriptionService = createInstance();
 
     const { data: plans } = await subscriptionService.getPlans();
-    log(plans);
 
     expect(plans).toBeInstanceOf(Array);
     for (const plan of plans) {
