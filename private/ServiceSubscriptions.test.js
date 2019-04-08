@@ -6,9 +6,6 @@ describe("ServiceSubscriptions", () => {
   ) {
     return new ServiceSubscriptions(credentials);
   }
-  // const subscriptionService = null;
-
-  // beforeEach(() => {});
 
   test("Get plans and subscribe", async () => {
     const subscriptionService = createInstance();
