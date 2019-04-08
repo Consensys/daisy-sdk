@@ -1,4 +1,5 @@
 import babel from "rollup-plugin-babel";
+import resolve from "rollup-plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
 import json from "rollup-plugin-json";
 
@@ -19,12 +20,13 @@ export default {
     },
   ],
   plugins: [
+    resolve(),
     commonjs({
       include: ["contracts/**", "node_modules/**"],
     }),
     babel({
       exclude: "node_modules/**",
-      // runtimeHelpers: true,
+      runtimeHelpers: true,
       // externalHelpers: true,
     }),
     json(),
