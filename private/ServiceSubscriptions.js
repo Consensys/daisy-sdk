@@ -1,3 +1,4 @@
+const querystring = require("querystring");
 const Client = require("./Client");
 
 class ServiceSubscriptions extends Client {
@@ -21,6 +22,33 @@ class ServiceSubscriptions extends Client {
     });
 
     return body.data;
+  }
+
+  async getSubscriptions({ account }) {
+    const filter = { account };
+    const { data: body } = await this.request({
+      method: "get",
+      url: `/subscriptions/?${querystring.stringify(filter)}`,
+    });
+    return body.data;
+  }
+
+  async getSubscription({ id, subscriptionHash }) {
+    if (id) {
+      const { data: body } = await this.request({
+        method: "get",
+        url: `/subscriptions/${id}/`,
+      });
+      return body.data;
+    } else if (subscriptionHash) {
+      const { data: body } = await this.request({
+        method: "get",
+        url: `/subscriptions/hash/${subscriptionHash}/`,
+      });
+      return body.data;
+    } else {
+      throw new Error("Missing arguments");
+    }
   }
 
   async submit({
