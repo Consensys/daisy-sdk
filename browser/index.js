@@ -3,9 +3,18 @@ import EventEmitter from "eventemitter3";
 
 import ERC20 from "../contracts/lite/ERC20.json";
 import { TYPES, signTypedData } from "../common/helpers";
+import { Client } from "./Client";
 
-export default class DaisySDK {
-  constructor(web3, manager) {
+export default class DaisySDK extends Client {
+  constructor(identifier, web3, manager) {
+    super({
+      ...Client.DEFAULT_CONFIG,
+      // TODO: safer url compose
+      baseURL: `${Client.DEFAULT_CONFIG.baseURL}`,
+      auth: {
+        username: identifier,
+      },
+    });
     this.web3 = web3;
     this.manager = manager;
   }
@@ -25,6 +34,31 @@ export default class DaisySDK {
 
   prepareToken(token) {
     return new DaisySDKToken(token, this.web3, this.manager);
+  }
+
+  async submit({
+    plan,
+    account,
+    startDate = "0",
+    maxExecutions = "0",
+    nonce,
+    receipt,
+    signature,
+  }) {
+    const { data: body } = await this.request({
+      method: "post",
+      url: "/subscriptions/",
+      data: {
+        planId: plan["id"] || plan,
+        account,
+        startDate,
+        maxExecutions,
+        nonce,
+        receipt,
+        signature,
+      },
+    });
+    return body;
   }
 }
 
