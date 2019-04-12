@@ -2,12 +2,23 @@ import isString from "lodash/isString";
 import EventEmitter from "eventemitter3";
 
 import ERC20 from "../contracts/lite/ERC20.json";
-import { TYPES, signTypedData } from "../common/helpers";
+import { TYPES, signTypedData, transformPeriod } from "../common/helpers";
+import SubscriptionProductClient from "../common/SubscriptionProductClient";
 
-export default class DaisySDK {
+export default class DaisySDK extends SubscriptionProductClient {
   constructor(web3, manager) {
+    super(manager);
     this.web3 = web3;
     this.manager = manager;
+  }
+
+  async sync() {
+    const { data: body } = this.request({
+      method: "get",
+      url: "/",
+    });
+    this.manager = body["data"];
+    return this;
   }
 
   loadToken({ symbol, address } = {}) {
@@ -60,11 +71,27 @@ class DaisySDKToken {
     return emitter;
   }
 
+  async signCancel(account, subscriptionHash, signatureExpiresAt) {
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "SubscriptionAction",
+      message: {
+        action: "cancel",
+        subscriptionHash,
+        signatureExpiresAt,
+      },
+    };
+
+    const signature = await signTypedData(this.web3, account, typedData);
+    return { signature };
+  }
+
   async sign({
     account,
     plan,
+    signatureExpiresAt,
     maxExecutions = "0",
-    start = "0",
     nonce = undefined,
   }) {
     if (!account || !plan) {
@@ -85,14 +112,20 @@ class DaisySDKToken {
       return value;
     };
 
+    const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
+    const expiration =
+      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
+      1000; // unix timestamp in seconds
+
     // Subscription object
-    const sub = {
+    const agreement = {
+      subscriber: account,
       token: this.token.options.address,
       amount: plan["price"],
       periodUnit,
       periods,
       maxExecutions,
-      start,
+      signatureExpiresAt: String(Math.floor(expiration)),
       plan: plan["onChainId"],
       nonce: nonce || genNonce(),
     };
@@ -101,11 +134,11 @@ class DaisySDKToken {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "Subscription",
-      message: sub,
+      message: agreement,
     };
 
     const signature = await signTypedData(this.web3, account, typedData);
-    return { signature, nonce: sub.nonce };
+    return { signature, agreement };
   }
 }
 
@@ -174,26 +207,5 @@ class ResumeEventEmitter extends EventEmitter {
         setTimeout(this.execute.bind(this), 3000);
       }
     }
-  }
-}
-
-function transformPeriod(number, unit) {
-  // export enum PeriodUnit {
-  //   Days = "DAYS",
-  //   Weeks = "WEEKS",
-  //   Months = "MONTHS",
-  //   Years = "YEARS",
-  // }
-  switch (unit) {
-    case "DAYS":
-      return [number, "Day"];
-    case "WEEKS":
-      return [number, "Day"];
-    case "MONTHS":
-      return [number, "Month"];
-    case "YEARS":
-      return [number, "Year"];
-    default:
-      throw new Error();
   }
 }

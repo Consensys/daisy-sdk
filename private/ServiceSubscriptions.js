@@ -1,79 +1,56 @@
-const querystring = require("querystring");
-const Client = require("./Client");
+const sigUtil = require("eth-sig-util");
+const ethUtil = require("ethereumjs-util");
 
-class ServiceSubscriptions extends Client {
-  constructor(opts) {
-    const { identifier, secretKey } = opts;
-    super({
-      ...Client.DEFAULT_CONFIG,
-      // TODO: safer url compose
-      baseURL: `${Client.DEFAULT_CONFIG.baseURL}`,
-      auth: {
-        username: identifier,
-        password: secretKey,
-      },
-    });
-  }
+const SubscriptionProductClient = require("../common/SubscriptionProductClient");
+const { TYPES } = require("../common/helpers");
 
-  async getPlans() {
-    const { data: body } = await this.request({
-      method: "get",
-      url: "/plans/",
-    });
-
-    return body.data;
-  }
-
-  async getSubscriptions({ account }) {
-    const filter = { account };
-    const { data: body } = await this.request({
-      method: "get",
-      url: `/subscriptions/?${querystring.stringify(filter)}`,
-    });
-    return body.data;
-  }
-
-  async getSubscription({ id, subscriptionHash }) {
-    if (id) {
-      const { data: body } = await this.request({
-        method: "get",
-        url: `/subscriptions/${id}/`,
-      });
-      return body.data;
-    } else if (subscriptionHash) {
-      const { data: body } = await this.request({
-        method: "get",
-        url: `/subscriptions/hash/${subscriptionHash}/`,
-      });
-      return body.data;
-    } else {
-      throw new Error("Missing arguments");
+class ServiceSubscriptions extends SubscriptionProductClient {
+  /**
+   * Authorize a private plan. Using this over a non-private plan is safe.
+   * @param {Object} authorizer - Authorizer, must match the `authorizer` address in Daisy dashboard.
+   * @param {string} authorizer.privateKey - Buffer, use `Buffer.from("PRIVATE_KEY", "hex")`.
+   * @returns {string} - Signature. Use in `.submit()` as `authSignature`.
+   */
+  async authorize(authorizer, agreement) {
+    if (!authorizer || !authorizer.privateKey) {
+      throw new Error("Missing authorizer.privateKey");
     }
+    const manager = await this.getPlans();
+
+    // Sign private plan using authorizer private key.
+    const signer = new Signer(authorizer.privateKey, manager["address"]);
+    const subscriptionHash = signer.hash("Subscription", agreement);
+    const authSignature = await signer.signTypedData("PlanAuthorization", {
+      subscriptionHash,
+    });
+    return authSignature;
+  }
+}
+
+class Signer {
+  constructor(privateKey, subscriptionManagerAddress) {
+    this.privateKey = privateKey;
+    this.domain = {
+      verifyingContract: subscriptionManagerAddress,
+    };
   }
 
-  async submit({
-    plan,
-    account,
-    startDate = "0",
-    maxExecutions = "0",
-    nonce,
-    receipt,
-    signature,
-  }) {
-    const { data: body } = await this.request({
-      method: "post",
-      url: "/subscriptions/",
-      data: {
-        planId: plan["id"] || plan,
-        account,
-        startDate,
-        maxExecutions,
-        nonce,
-        receipt,
-        signature,
-      },
+  signTypedData(type, message) {
+    const data = {
+      types: TYPES,
+      domain: this.domain,
+      primaryType: type,
+      message,
+    };
+
+    return sigUtil.signTypedData(this.privateKey, {
+      data,
     });
-    return body;
+  }
+
+  hash(type, message) {
+    const buf = sigUtil.TypedDataUtils.hashStruct(type, message, TYPES);
+    return ethUtil.bufferToHex(buf);
   }
 }
 

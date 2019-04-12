@@ -29,7 +29,7 @@ daisy
   .on("receipt", receipt => {})
   .on("error", error => {});
 
-const { signature, nonce } = await daisy
+const { signature, agreement } = await daisy
   .prepareToken(token)
   .sign({ account, plan: this.props.plan });
 ```
@@ -134,17 +134,18 @@ app.get("/api/plans/", async (req, res) => {
 });
 
 app.post("/api/subscriptions/", async (req, res) => {
-  const { signature, account } = req.body;
+  const { signature, agreement } = req.body;
 
   const { plans } = await subscriptionService.getPlans();
   const plan = plans.find(p => ...);
 
+  const authSignature = plan["private"] && await subscriptionService.authorize({
+      privateKey: Buffer.from("PRIVATE_KEY", "hex")
+    }, agreement);
+  
   const subscription = await subscriptionService.submit({
-    plan: plan, // the plan the user is subscribing should match with the signature
-    account: account, // from web3 in the frontend
-    // startDate: 0, // optional values (default: 0)
-    // expires: 0, // optional values (default: 0)
-    signature: signature, // from DaisySDK in the frontend
+    signature,
+    agreement,
   });
 
   // TODO: SAVE `subscription` TO LOCAL DB

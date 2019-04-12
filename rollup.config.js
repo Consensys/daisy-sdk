@@ -22,7 +22,7 @@ export default {
   plugins: [
     resolve(),
     commonjs({
-      include: ["contracts/**", "node_modules/**"],
+      include: ["contracts/**", "common/**", "node_modules/**"],
     }),
     babel({
       exclude: "node_modules/**",

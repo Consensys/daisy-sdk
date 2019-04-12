@@ -1,21 +1,19 @@
-export const TYPES = {
+exports.TYPES = {
   EIP712Domain: [{ name: "verifyingContract", type: "address" }],
 
   Subscription: [
+    { name: "subscriber", type: "address" },
     { name: "token", type: "address" },
     { name: "amount", type: "uint256" },
     { name: "periodUnit", type: "string" },
     { name: "periods", type: "uint256" },
     { name: "maxExecutions", type: "uint256" },
-    { name: "start", type: "uint256" },
     { name: "plan", type: "string" },
     { name: "nonce", type: "bytes32" },
+    { name: "signatureExpiresAt", type: "uint256" },
   ],
 
-  PlanAuthorization: [
-    { name: "subscriptionHash", type: "bytes32" },
-    { name: "subscriber", type: "address" },
-  ],
+  PlanAuthorization: [{ name: "subscriptionHash", type: "bytes32" }],
 
   AddPlan: [
     { name: "plan", type: "string" },
@@ -24,18 +22,50 @@ export const TYPES = {
     { name: "periods", type: "uint256" },
     { name: "maxExecutions", type: "uint256" },
     { name: "private", type: "bool" },
+    { name: "signatureExpiresAt", type: "uint256" },
   ],
 
-  RemovePlan: [{ name: "plan", type: "string" }],
+  RemovePlan: [
+    { name: "plan", type: "string" },
+    { name: "signatureExpiresAt", type: "uint256" },
+  ],
 
   SetActive: [
     { name: "plan", type: "string" },
     { name: "active", type: "bool" },
     { name: "nonce", type: "bytes32" },
+    { name: "signatureExpiresAt", type: "uint256" },
+  ],
+
+  SubscriptionAction: [
+    { name: "action", type: "string" },
+    { name: "subscriptionHash", type: "bytes32" },
+    { name: "signatureExpiresAt", type: "uint256" },
   ],
 };
 
-export async function signTypedData(web3, signer, data) {
+exports.transformPeriod = function transformPeriod(number, unit) {
+  // export enum PeriodUnit {
+  //   Days = "DAYS",
+  //   Weeks = "WEEKS",
+  //   Months = "MONTHS",
+  //   Years = "YEARS",
+  // }
+  switch (unit) {
+    case "DAYS":
+      return [number, "Day"];
+    case "WEEKS":
+      return [number, "Day"];
+    case "MONTHS":
+      return [number, "Month"];
+    case "YEARS":
+      return [number, "Year"];
+    default:
+      throw new Error();
+  }
+};
+
+exports.signTypedData = async function signTypedData(web3, signer, data) {
   return new Promise((resolve, reject) => {
     web3.currentProvider.sendAsync(
       {
@@ -53,4 +83,4 @@ export async function signTypedData(web3, signer, data) {
       }
     );
   });
-}
+};
