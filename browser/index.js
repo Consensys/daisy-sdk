@@ -6,11 +6,15 @@ import { TYPES, signTypedData } from "../common/helpers";
 import { Client } from "./Client";
 
 export default class DaisySDK extends Client {
-  constructor(identifier, web3, manager) {
+  constructor(identifier, web3, manager, staging = false) {
+    const url = staging
+      ? "sdk.staging.daisypayments.com"
+      : Client.DEFAULT_CONFIG.baseURL;
+
     super({
       ...Client.DEFAULT_CONFIG,
       // TODO: safer url compose
-      baseURL: `${Client.DEFAULT_CONFIG.baseURL}`,
+      baseURL: `${url}`,
       auth: {
         username: identifier,
       },
