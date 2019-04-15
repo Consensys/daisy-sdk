@@ -3,7 +3,7 @@ const axios = require("axios");
 class Client {
   static get DEFAULT_CONFIG() {
     return {
-      baseURL: "http://localhost:8000",
+      baseURL: "https://sdk.daisypayments.com",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

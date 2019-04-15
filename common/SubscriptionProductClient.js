@@ -3,16 +3,15 @@ const querystring = require("querystring");
 const Client = require("./Client");
 
 class SubscriptionProductClient extends Client {
-  constructor(opts) {
-    const { identifier, secretKey } = opts;
+  constructor(manager, override) {
+    const { identifier, secretKey } = manager;
     super({
       ...Client.DEFAULT_CONFIG,
-      // TODO: safer url compose
-      baseURL: `${Client.DEFAULT_CONFIG.baseURL}`,
       auth: {
         username: identifier,
         password: secretKey,
       },
+      ...override,
     });
   }
 

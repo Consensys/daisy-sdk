@@ -6,10 +6,10 @@ import { TYPES, signTypedData, transformPeriod } from "../common/helpers";
 import SubscriptionProductClient from "../common/SubscriptionProductClient";
 
 export default class DaisySDK extends SubscriptionProductClient {
-  constructor(web3, manager) {
-    super(manager);
-    this.web3 = web3;
+  constructor(manager, web3, override) {
+    super(manager, override);
     this.manager = manager;
+    this.web3 = web3;
   }
 
   async sync() {
