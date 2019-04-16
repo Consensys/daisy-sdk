@@ -3,7 +3,7 @@
 ## Install
 
 ```sh
-yarn add @tokenfoundry/daisy-sdk
+yarn add daisy-sdk
 ```
 
 ## Usage
@@ -11,7 +11,7 @@ yarn add @tokenfoundry/daisy-sdk
 ### Client-side
 
 ```js
-import DaisySDK from "@tokenfoundry/daisy-sdk/browser";
+import DaisySDK from "daisy-sdk/browser";
 
 const manager = ... // from server-side SDK
 
@@ -119,7 +119,7 @@ export default class App extends Component {
 
 ```js
 const express = require("express");
-const { ServiceSubscriptions } = require("@tokenfoundry/daisy-sdk");
+const { ServiceSubscriptions } = require("daisy-sdk");
 
 const serviceSubscriptions = new ServiceSubscriptions({
   identifier: "margarita",
