@@ -15,7 +15,7 @@ import DaisySDK from "daisy-sdk/browser";
 
 const manager = ... // from server-side SDK
 
-const daisy = new DaisySDK(web3, web3); // web3 (from MetaMask)
+const daisy = new DaisySDK(manager, web3); // web3 (from MetaMask)
 
 const token = daisy.loadToken();
 const amount = 100;
@@ -24,7 +24,7 @@ const account = "0x0..." // User address (from MetaMask)
 daisy
   .prepareToken(token)
   .approve(amount, { from: account })
-  .on("transactionHash", blockHash => {})
+  .on("transactionHash", transactionHash => {})
   .on("confirmation", (confirmationNumber, receipt) => {})
   .on("receipt", receipt => {})
   .on("error", error => {});
@@ -32,6 +32,8 @@ daisy
 const { signature, agreement } = await daisy
   .prepareToken(token)
   .sign({ account, plan: this.props.plan });
+
+// SEND signature, agreement to server.
 ```
 
 #### MetaMask helper

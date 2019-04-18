@@ -1,15 +1,22 @@
+/** @module private */
+
 const sigUtil = require("eth-sig-util");
 const ethUtil = require("ethereumjs-util");
 
 const SubscriptionProductClient = require("../common/SubscriptionProductClient");
 const { TYPES } = require("../common/helpers");
 
+/**
+ * ServiceSubscriptions class
+ * @extends module:common~SubscriptionProductClient
+ */
 class ServiceSubscriptions extends SubscriptionProductClient {
   /**
    * Authorize a private plan. Using this over a non-private plan is safe.
    * @param {Object} authorizer - Authorizer, must match the `authorizer` address in Daisy dashboard.
    * @param {string} authorizer.privateKey - Buffer, use `Buffer.from("PRIVATE_KEY", "hex")`.
-   * @returns {string} - Signature. Use in `.submit()` as `authSignature`.
+   * @param {Object} agreement - From {@link module:browser.DaisySDKToken#sign}.
+   * @returns {string} - Signature. Use in {@link module:common~SubscriptionProductClient#submit} as `authSignature`.
    */
   async authorize(authorizer, agreement) {
     if (!authorizer || !authorizer.privateKey) {
@@ -27,6 +34,9 @@ class ServiceSubscriptions extends SubscriptionProductClient {
   }
 }
 
+/**
+ * @private
+ */
 class Signer {
   constructor(privateKey, subscriptionManagerAddress) {
     this.privateKey = privateKey;

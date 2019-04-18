@@ -1,5 +1,11 @@
+/** @module common */
+
 const axios = require("axios");
 
+/**
+ * Base HTTP client based on `axios`
+ * @see {@link https://github.com/axios/axios} for further information.
+ */
 class Client {
   static get DEFAULT_CONFIG() {
     return {
@@ -13,16 +19,28 @@ class Client {
     };
   }
 
-  constructor(config = Client.DEFAULT_CONFIG) {
-    this.config = config;
+  /**
+   * Create a Client instance with a `config` object for `axios`.
+   * @see {@link https://github.com/axios/axios#creating-an-instance} for further information.
+   * @param {Object} config - `axios` config object, will be merged with `Client.DEFAULT_CONFIG`.
+   */
+  constructor(config) {
+    this.config = { ...Client.DEFAULT_CONFIG, ...config };
     this.axios = axios.create(config);
     this.axios.interceptors.response.use(Client.preprocess, Client.catch);
   }
 
+  /**
+   * @private
+   */
   static preprocess(res) {
     return res;
   }
 
+  /**
+   * Make `error.message` match the error string from the server's `data.message`.
+   * @private
+   */
   static catch(error) {
     if (error.response) {
       // The request was made and the server responded with a status code
@@ -44,16 +62,21 @@ class Client {
     }
   }
 
-  /** Example: https://github.com/axios/axios#axiosconfig
-   {
-     method: 'post',
-     url: '/user/12345',
-     data: {
-       firstName: 'Fred',
-       lastName: 'Flintstone'
-      }
-    }
-  */
+  /**
+   * @see {@link https://github.com/axios/axios#axiosconfig}
+   * @private
+   *
+   * @example
+   *
+   * {
+   *   method: 'post',
+   *   url: '/user/12345',
+   *   data: {
+   *     firstName: 'Fred',
+   *     lastName: 'Flintstone'
+   *    }
+   *  }
+   */
   request(args) {
     return this.axios(args);
   }
