@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>daisy-sdk</h1><h2>Install</h2><pre class="prettyprint source lang-sh"><code>yarn add daisy-sdk</code></pre><h2>Usage</h2><h3>Client-side</h3><pre class="prettyprint source lang-js"><code>import DaisySDK from &quot;daisy-sdk/browser&quot;;
+
+const manager = ... // from server-side SDK
+
+const daisy = new DaisySDK(manager, web3); // web3 (from MetaMask)
+
+const token = daisy.loadToken();
+const amount = 100;
+const account = &quot;0x0...&quot; // User address (from MetaMask)
+
+daisy
+  .prepareToken(token)
+  .approve(amount, { from: account })
+  .on(&quot;transactionHash&quot;, transactionHash => {})
+  .on(&quot;confirmation&quot;, (confirmationNumber, receipt) => {})
+  .on(&quot;receipt&quot;, receipt => {})
+  .on(&quot;error&quot;, error => {});
+
+const { signature, agreement } = await daisy
+  .prepareToken(token)
+  .sign({ account, plan: this.props.plan });
+
+// SEND signature, agreement to server.</code></pre><h4>MetaMask helper</h4><p>The <code>web3</code> and <code>account</code> variables can be retrieve from MetaMask. We created a helper for this.</p>
+<pre class="prettyprint source lang-js"><code>// metamask.js
+import { createMetaMaskContext } from &quot;@tokenfoundry/metamask-context&quot;;
+
+const MetaMaskContext = createMetaMaskContext();
+export default MetaMaskContext;
+
+// App.js
+import React, { Component } from &quot;react&quot;;
+
+import MetaMaskContext from &quot;./metamask&quot;;
+
+export default class App extends Component {
+  handleButtonClick = (web3, account) => {
+    /// use DaisySDK here
+  }
+
+  render() {
+    &lt;MetaMaskContext.Provider immediate>
+      &lt;MetaMaskContext.Consumer>
+        {({ web3, accounts, error, awaiting, openMetaMask }) => (
+          &lt;div>
+            {/* MetaMask allowed and with an active account */}
+            {!error && web3 && accounts.length && (
+              &lt;button
+                onClick={() => this.handleButtonClick(web3, accounts[0])}
+              >
+                &lt;code>{accounts[0].slice(0, 16)}&lt;/code> 🦊
+              &lt;/button>
+            )}
+
+            {/* MetaMask allowed without account */}
+            {!error && web3 && accounts.length === 0 && (
+              &lt;span>No Wallet 🦊&lt;/span>
+            )}
+
+            {/* Loading */}
+            {!error && !web3 && !awaiting && (
+              &lt;a href=&quot;#&quot; onClick={openMetaMask}>
+                MetaMask loading...
+              &lt;/a>
+            )}
+
+            {/* Force open MetaMask */}
+            {!error && !web3 && !awaiting && (
+              &lt;a href=&quot;#&quot; onClick={openMetaMask}>
+                Please open and allow MetaMask
+              &lt;/a>
+            )}
+
+            {/* MetaMask not installed */}
+            {error && error.notInstalled && (
+              &lt;a
+                href=&quot;https://metamask.io/&quot;
+                target=&quot;_blank&quot;
+                rel=&quot;noopener noreferrer&quot;
+              >
+                Install MetaMask
+              &lt;/a>
+            )}
+
+            {/* MetaMask unhandled error */}
+            {error && !error.notInstalled && (
+              &lt;a href=&quot;#&quot; onClick={openMetaMask}>
+                {error.message}
+              &lt;/a>
+            )}
+          &lt;/div>
+        )}
+      &lt;/MetaMaskContext.Consumer>
+    &lt;/MetaMaskContext.Provider>
+  }
+}</code></pre><h3>Server-side</h3><blockquote>
+<p>Keep the API Key private</p>
+</blockquote>
+<pre class="prettyprint source lang-js"><code>const express = require(&quot;express&quot;);
+const { ServiceSubscriptions } = require(&quot;daisy-sdk&quot;);
+
+const serviceSubscriptions = new ServiceSubscriptions({
+  identifier: &quot;margarita&quot;,
+  secretKey: process.env.SUBSCRIPTION_SECRET || &quot;key&quot;,
+});
+
+const app = express()
+
+app.get(&quot;/api/plans/&quot;, async (req, res) => {
+  const { plans } = await subscriptionService.getPlans();
+  res.json(plans);
+});
+
+app.post(&quot;/api/subscriptions/&quot;, async (req, res) => {
+  const { signature, agreement } = req.body;
+
+  const { plans } = await subscriptionService.getPlans();
+  const plan = plans.find(p => ...);
+
+  const authSignature = plan[&quot;private&quot;] && await subscriptionService.authorize({
+      privateKey: Buffer.from(&quot;PRIVATE_KEY&quot;, &quot;hex&quot;)
+    }, agreement);
+
+  const subscription = await subscriptionService.submit({
+    signature,
+    agreement,
+  });
+
+  // TODO: SAVE `subscription` TO LOCAL DB
+
+  res.json(subscription).status(201);
+});
+
+app.listen(3000);</code></pre></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li><a href="module-private.html">private</a></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul><h3>Classes</h3><ul><li><a href="module-browser.DaisySDKToken.html">DaisySDKToken</a></li><li><a href="module-browser-DaisySDK.html">DaisySDK</a></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 18 2019 19:20:59 GMT-0300 (Chile Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

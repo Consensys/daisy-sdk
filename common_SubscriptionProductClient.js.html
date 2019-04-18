@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: common/SubscriptionProductClient.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: common/SubscriptionProductClient.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @module common */
+
+const querystring = require("querystring");
+
+const Client = require("./Client");
+
+/**
+ * @typedef {Object} Plan - Daisy's Plan object. Can be retrieved using {@link module:common~SubscriptionProductClient#getPlans}.
+ * @property {string} id - Daisy ID.
+ * @property {string} name - Plan name.
+ * @property {string} onChainId - Plan ID in the Ethereum blockchain (internal use of the SDK).
+ * @property {string} description - Plan description.
+ * @property {string} price - Plan price in tokens.
+ * @property {number} period - Number of periods in `periodUnit` between bill cycles.
+ * @property {string} periodUnit - Period unit: DAYS, WEEKS, MONTHS, YEARS.
+ * @property {string} maxExecutions - How many times the Plan is executed.
+ * @property {boolean} private - If a Plan is private it requires a signature (with a private key) from the `authorizer` defined in the Subscription Manager.
+ * @property {string} active - Is the plan enabled for subscriptions or disabled?.
+ */
+
+/**
+ * @typedef {Object} Subscription
+ * @property {string} id - Daisy ID.
+ * @property {string} state - Current subscription state. Options: NOT_STARTED PENDING CREATED ACTIVE ACTIVE_CANCELLED CANCELLED EXPIRED INVALID NOT_ENOUGH_FUNDS FAILED
+ * @property {string} subscriptionHash - Identifier in the blockchain.
+ */
+
+/**
+ * @typedef {Object} SubscriptionManager
+ * @property {string} identifier - DAISY_ID.
+ * @property {string} secretKey - DAISY_SECRET_LEY.
+ * @property {module:common~Plan[]} plans - Plans related to this manager.
+ */
+
+/**
+ * Create a instance of a Subscription manager based on the contract deployed at the Daisy Dashboard.
+ * The important data here is the `DAISY_ID`.
+ * @extends module:common~Client
+ */
+class SubscriptionProductClient extends Client {
+  /**
+   * Create an instance.
+   * @param {Object} manager - Object can be taken from `const manager = await instance.getPlans()` but only the `identifier` is the real important.
+   * @param {string} manager.identifier - Get it from the Daisy Dashboard as `DAISY_ID`.
+   * @param {string} manager.secretKey - Get it from the Daisy Dashboard as `DAISY_SECRET_KEY`. THIS SHOULD ONLY BE KEEP SECRET ON A SERVER. DO NOT USE ON BROWSERS.
+   * @param {Object} override - Override `axios` config. This is intended for development purposes.
+   */
+  constructor(manager, override) {
+    const { identifier, secretKey } = manager;
+    super({
+      ...Client.DEFAULT_CONFIG,
+      auth: {
+        username: identifier,
+        password: secretKey,
+      },
+      ...override,
+    });
+  }
+
+  /**
+   * Get plans and Subscription Manager.
+   * @returns {Promise&lt;SubscriptionManager>} - Subscription Manager and Plans given the manager in the constructor.
+   *
+   * @example
+   *
+   * const subscriptionProduct = new SubscriptionProductClient({
+   *   identifier: process.env.DAISY_ID,
+   * });
+   * const { plans, ...manager } = await subscriptionProduct.getPlans();
+   */
+  async getPlans() {
+    const { data: body } = await this.request({
+      method: "get",
+      url: "/plans/",
+    });
+
+    return body.data;
+  }
+
+  /**
+   * Get subscriptions.
+   * @param {Object} criteria - Filtering criteria.
+   * @param {string} criteria.account - Filter by Ethereum address.
+   * @returns {Promise&lt;Subscription[]>} - Subscriptions based on the filtering criteria.
+   *
+   * @example
+   *
+   * const subscriptionProduct = new SubscriptionProductClient({
+   *   identifier: process.env.DAISY_ID,
+   * });
+   * const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0..." });
+   */
+  async getSubscriptions({ account }) {
+    const filter = { account };
+    const { data: body } = await this.request({
+      method: "get",
+      url: `/subscriptions/?${querystring.stringify(filter)}`,
+    });
+    return body.data;
+  }
+
+  /**
+   * Get single subscription.
+   * @param {Object} criteria - Filtering criteria, only one field is required.
+   * @param {string} criteria.id - Find Subscription based on a Daisy ID.
+   * @param {string} criteria.subscriptionHash - Find Subscription based on a `subscriptionHash` in the blockchain.
+   * @returns {Promise&lt;?Subscription>} - Subscription found.
+   *
+   * @example
+   *
+   * const subscriptionProduct = new SubscriptionProductClient({
+   *   identifier: process.env.DAISY_ID,
+   * });
+   * const subscription = await subscriptionProduct.getSubscription({ id: "" });
+   */
+  async getSubscription({ id, subscriptionHash }) {
+    if (id) {
+      const { data: body } = await this.request({
+        method: "get",
+        url: `/subscriptions/${id}/`,
+      });
+      return body.data;
+    } else if (subscriptionHash) {
+      const { data: body } = await this.request({
+        method: "get",
+        url: `/subscriptions/hash/${subscriptionHash}/`,
+      });
+      return body.data;
+    } else {
+      throw new Error("Missing arguments");
+    }
+  }
+
+  /**
+   * Get single subscription.
+   * @param {Object} input - Input arguments
+   * @param {string} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#sign}.
+   * @param {string} input.receipt - The agreement is the return of {@link module:browser.DaisySDKToken#approve}.
+   * @param {string} input.signature - The agreement is the return of {@link module:browser.DaisySDKToken#sign}.
+   * @param {string} input.authSignature - Signature for private plans created from {@link module:private~ServiceSubscriptions#authorize}.
+   * @returns {Promise&lt;Subscription>} - Created {@link module:common~Subscription}, its {@link module:common~Subscription#state} will be `PENDING`.
+   *
+   * @example
+   *
+   * const subscriptionProduct = new SubscriptionProductClient({
+   *   identifier: process.env.DAISY_ID,
+   * });
+   * const subscription = await subscriptionProduct.submit({ });
+   */
+  async submit({ agreement, receipt, signature, authSignature }) {
+    const { plans } = await this.getPlans();
+    const plan = plans.find(p => p["onChainId"] === agreement["plan"]);
+    if (!plan) {
+      throw new Error("Plan not found");
+    }
+
+    const { data: body } = await this.request({
+      method: "post",
+      url: "/subscriptions/",
+      data: {
+        agreement,
+        receipt,
+        authSignature,
+        signature,
+      },
+    });
+    return body;
+  }
+}
+
+module.exports = SubscriptionProductClient;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li><a href="module-private.html">private</a></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul><h3>Classes</h3><ul><li><a href="module-browser.DaisySDKToken.html">DaisySDKToken</a></li><li><a href="module-browser-DaisySDK.html">DaisySDK</a></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 18 2019 19:20:59 GMT-0300 (Chile Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
