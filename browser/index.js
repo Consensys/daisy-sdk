@@ -46,6 +46,7 @@ class DaisySDK extends SubscriptionProductClient {
   /**
    * If this class is instantiated only with {@link module:common~SubscriptionManager#identifier}
    * this call is necessary to fetch the subscription's manager data.
+   * @async
    * @returns {this} - Return self instance.
    *
    * @example
@@ -58,13 +59,14 @@ class DaisySDK extends SubscriptionProductClient {
    * const daisy = new DaisySDK(manager, web3); // not required here.
    *
    */
-  async sync() {
-    const { data: body } = this.request({
+  sync() {
+    return this.request({
       method: "get",
       url: "/",
+    }).then(({ data: body }) => {
+      this.manager = body["data"];
+      return this;
     });
-    this.manager = body["data"];
-    return this;
   }
 
   /**
@@ -172,7 +174,7 @@ export class DaisySDKToken {
    * @param {Object} receipt - `receipt` or `transactionHash` from {@link module:browser.DaisySDKToken#approve} transaction.
    * @returns {EventEmitter} - Event emitter similar to {@link external:PromiEvent} but please only use event listeners (`.on(...)`).
    */
-  async resume(receipt) {
+  resume(receipt) {
     if (!receipt) {
       throw new Error("Missing argument.");
     }
@@ -185,13 +187,14 @@ export class DaisySDKToken {
 
   /**
    * Sign cancel agreement wit Metamask
+   * @async
    * @param {Object} input - Input object
    * @param {string} input.account - Ethereum address, beneficiary of the subscription.
    * @param {string} input.subscriptionHash - Comes from {@link module:common~Subscription#subscriptionHash}.
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
    * @returns {Object} Object with `signature` property.
    */
-  async signCancel(account, subscriptionHash, signatureExpiresAt) {
+  signCancel(account, subscriptionHash, signatureExpiresAt) {
     const typedData = {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
@@ -203,12 +206,14 @@ export class DaisySDKToken {
       },
     };
 
-    const signature = await signTypedData(this.web3, account, typedData);
-    return { signature };
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+    }));
   }
 
   /**
    * Sign agreement wit Metamask
+   * @async
    * @param {Object} input - Input object
    * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
    * @param {Plan} input.plan - The `Plan` object the user is going to sign for.
@@ -217,7 +222,7 @@ export class DaisySDKToken {
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
    * @returns {module:browser~SignResult} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~SubscriptionProductClient#submit}.
    */
-  async sign({
+  sign({
     account,
     plan,
     signatureExpiresAt,
@@ -248,7 +253,7 @@ export class DaisySDKToken {
       maxExecutions,
       signatureExpiresAt: String(Math.floor(expiration)),
       plan: plan["onChainId"],
-      nonce: nonce || genNonce(),
+      nonce: nonce || genNonce(this.web3),
     };
 
     const typedData = {
@@ -258,8 +263,10 @@ export class DaisySDKToken {
       message: agreement,
     };
 
-    const signature = await signTypedData(this.web3, account, typedData);
-    return { signature, agreement };
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
   }
 }
 
@@ -304,34 +311,44 @@ class ResumeEventEmitter extends EventEmitter {
     return this;
   }
 
-  async execute() {
+  /**
+   * @async
+   */
+  execute() {
     if (!this.started) {
       return;
     }
 
-    try {
-      const transaction = await this.web3.eth.getTransaction(
-        this.transactionHash
-      );
-      if (transaction === null || transaction.blockNumber === null) {
-        // not mined yet.
-        throw new Error("Not mined yet. Retry.");
-      }
-      const blockNumber = transaction["blockNumber"];
+    let receipt = null;
 
-      const currentBlock = await this.web3.eth.getBlockNumber();
-      const confirmationNumber = currentBlock - blockNumber;
+    /* eslint-disable consistent-return */
+    return this.web3.eth
+      .getTransaction(this.transactionHash)
+      .then(transaction => {
+        if (transaction === null || transaction.blockNumber === null) {
+          // not mined yet.
+          throw new Error("Not mined yet. Retry.");
+        }
+        receipt = transaction;
 
-      const receipt = transaction;
+        return this.web3.eth.getBlockNumber();
+      })
+      .then(currentBlock => {
+        const confirmationNumber = currentBlock - receipt["blockNumber"];
 
-      this.emit("confirmation", confirmationNumber, receipt);
-    } catch (error) {
-      this.emit("error", error);
-    } finally {
-      if (this.started) {
-        setTimeout(this.execute.bind(this), 3000);
-      }
-    }
+        this.emit("confirmation", confirmationNumber, receipt);
+        return receipt;
+      })
+      .catch(error => {
+        this.emit("error", error);
+        return null;
+      })
+      .then(value => {
+        if (this.started) {
+          setTimeout(this.execute.bind(this), 3000);
+        }
+        return value;
+      });
   }
 }
 

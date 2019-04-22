@@ -26,13 +26,13 @@ export default {
     }),
     babel({
       exclude: "node_modules/**",
-      runtimeHelpers: true,
+      // runtimeHelpers: true,
       // externalHelpers: true,
     }),
     json(),
   ],
   external: id => {
-    const externals = ["web3"];
+    const externals = ["web3", "axios", "eventemitter3", "querystring"];
     return externals.includes(id);
   },
 };

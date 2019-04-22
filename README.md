@@ -2,6 +2,8 @@
 
 ## Install
 
+> You may also require some extra dependencies like `axios`, `web3`, `eventemitter3`, and `querystring`.
+
 ```sh
 yarn add daisy-sdk
 ```
@@ -46,7 +48,9 @@ import { createMetaMaskContext } from "@tokenfoundry/metamask-context";
 
 const MetaMaskContext = createMetaMaskContext();
 export default MetaMaskContext;
+```
 
+```js
 // App.js
 import React, { Component } from "react";
 
@@ -67,7 +71,7 @@ export default class App extends Component {
               <button
                 onClick={() => this.handleButtonClick(web3, accounts[0])}
               >
-                <code>{accounts[0].slice(0, 16)}</code> 🦊
+                <code>{accounts[0]}</code> 🦊
               </button>
             )}
 

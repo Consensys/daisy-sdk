@@ -65,7 +65,11 @@ exports.transformPeriod = function transformPeriod(number, unit) {
   }
 };
 
-exports.signTypedData = async function signTypedData(web3, signer, data) {
+/**
+ * @async
+ * @private
+ */
+exports.signTypedData = function signTypedData(web3, signer, data) {
   return new Promise((resolve, reject) => {
     web3.currentProvider.sendAsync(
       {
@@ -92,10 +96,10 @@ exports.signTypedData = async function signTypedData(web3, signer, data) {
  * @param {number} [len=32] - nonce expected length.
  * @returns {string} nonce with length.
  */
-exports.genNonce = function genNonce(len = 32) {
+exports.genNonce = function genNonce(web3, len = 32) {
   let value = null;
   do {
-    value = this.web3.utils.randomHex(len);
+    value = web3.utils.randomHex(len);
   } while (value.length !== len * 2 + 2); // +2 because of "0x"
   return value;
 };

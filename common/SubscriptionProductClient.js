@@ -59,6 +59,7 @@ class SubscriptionProductClient extends Client {
 
   /**
    * Get plans and Subscription Manager.
+   * @async
    * @returns {Promise<SubscriptionManager>} - Subscription Manager and Plans given the manager in the constructor.
    *
    * @example
@@ -68,17 +69,16 @@ class SubscriptionProductClient extends Client {
    * });
    * const { plans, ...manager } = await subscriptionProduct.getPlans();
    */
-  async getPlans() {
-    const { data: body } = await this.request({
+  getPlans() {
+    return this.request({
       method: "get",
       url: "/plans/",
-    });
-
-    return body.data;
+    }).then(({ data: body }) => body.data);
   }
 
   /**
    * Get subscriptions.
+   * @async
    * @param {Object} criteria - Filtering criteria.
    * @param {string} criteria.account - Filter by Ethereum address.
    * @returns {Promise<Subscription[]>} - Subscriptions based on the filtering criteria.
@@ -90,17 +90,17 @@ class SubscriptionProductClient extends Client {
    * });
    * const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0..." });
    */
-  async getSubscriptions({ account }) {
+  getSubscriptions({ account }) {
     const filter = { account };
-    const { data: body } = await this.request({
+    return this.request({
       method: "get",
       url: `/subscriptions/?${querystring.stringify(filter)}`,
-    });
-    return body.data;
+    }).then(({ data: body }) => body.data);
   }
 
   /**
    * Get single subscription.
+   * @async
    * @param {Object} criteria - Filtering criteria, only one field is required.
    * @param {string} criteria.id - Find Subscription based on a Daisy ID.
    * @param {string} criteria.subscriptionHash - Find Subscription based on a `subscriptionHash` in the blockchain.
@@ -113,19 +113,17 @@ class SubscriptionProductClient extends Client {
    * });
    * const subscription = await subscriptionProduct.getSubscription({ id: "" });
    */
-  async getSubscription({ id, subscriptionHash }) {
+  getSubscription({ id, subscriptionHash }) {
     if (id) {
-      const { data: body } = await this.request({
+      return this.request({
         method: "get",
         url: `/subscriptions/${id}/`,
-      });
-      return body.data;
+      }).then(({ data: body }) => body.data);
     } else if (subscriptionHash) {
-      const { data: body } = await this.request({
+      return this.request({
         method: "get",
         url: `/subscriptions/hash/${subscriptionHash}/`,
-      });
-      return body.data;
+      }).then(({ data: body }) => body.data);
     } else {
       throw new Error("Missing arguments");
     }
@@ -133,6 +131,7 @@ class SubscriptionProductClient extends Client {
 
   /**
    * Get single subscription.
+   * @async
    * @param {Object} input - Input arguments
    * @param {string} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#sign}.
    * @param {string} input.receipt - The agreement is the return of {@link module:browser.DaisySDKToken#approve}.
@@ -147,24 +146,28 @@ class SubscriptionProductClient extends Client {
    * });
    * const subscription = await subscriptionProduct.submit({ });
    */
-  async submit({ agreement, receipt, signature, authSignature }) {
-    const { plans } = await this.getPlans();
-    const plan = plans.find(p => p["onChainId"] === agreement["plan"]);
-    if (!plan) {
-      throw new Error("Plan not found");
-    }
-
-    const { data: body } = await this.request({
-      method: "post",
-      url: "/subscriptions/",
-      data: {
-        agreement,
-        receipt,
-        authSignature,
-        signature,
-      },
-    });
-    return body;
+  submit({ agreement, receipt, signature, authSignature }) {
+    return this.getPlans()
+      .then(({ plans }) => {
+        const plan = plans.find(p => p["onChainId"] === agreement["plan"]);
+        if (!plan) {
+          throw new Error("Plan not found");
+        }
+        return this.request({
+          method: "post",
+          url: "/subscriptions/",
+          data: {
+            agreement,
+            receipt,
+            authSignature,
+            signature,
+          },
+        });
+      })
+      .then(({ data: body }) => {
+        console.log({ body });
+        return body;
+      });
   }
 }
 
