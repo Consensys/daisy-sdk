@@ -19,6 +19,7 @@
     }
   },
   "files": [
+    "contracts",
     "dist",
     "common",
     "private"
@@ -29,11 +30,7 @@
     "ethereumjs-util": "^6.1.0",
     "eventemitter3": "^3.1.0"
   },
-  "peerDependencies": {
-    "apollo-boost": "^0.1.27",
-    "graphql": "^14.1.1",
-    "graphql-tag": "^2.10.1"
-  },
+  "peerDependencies": {},
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/plugin-external-helpers": "^7.2.0",
