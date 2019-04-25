@@ -106,25 +106,25 @@ exports.genNonce = function genNonce(web3, len = 32) {
 
 exports.withNetworkCheck = function withNetworkCheck(SDK) {
   function checkNetwork(SDK, fn) {
-    SDK.fn = function() {
-      console.log("Wrapped fn called!!!!!!!!!!!!");
+    const oldFn = SDK.prototype[fn];
+    SDK.prototype[fn] = function() {
+      console.log(`Wrapped ${fn} called`);
       if (this.web3) {
         const networks = {
           "https://sdk.daisypayments.com": "main",
           "https://sdk.staging.daisypayments.com": "rinkeby",
           "http://localhost:8000": "private",
         };
-        this.web3.eth.net.getNetworkType().then(network => {
+        return this.web3.eth.net.getNetworkType().then(network => {
           const { baseURL } = this.config;
-          if (network === networks[baseURL]) {
-            fn(...arguments);
-          } else {
+          if (network !== networks[baseURL]) {
             console.error(
-              `DaisySDK: Requests failing because web3 object is connected to the incorrect
-              network: ${network}. DaisySDK was instantiatd to make API calls to ${baseURL},
-              which requires MetaMask to be pointed to ${networks[baseURL]}`
+              `DaisySDK: Requests failing because web3 object is connected to the incorrect network: ${network}. DaisySDK was instantiatd to make API calls to ${baseURL}, which requires MetaMask to be pointed to ${
+                networks[baseURL]
+              }`
             );
           }
+          return oldFn.bind(this)(...arguments);
         });
       }
     };
@@ -138,11 +138,6 @@ exports.withNetworkCheck = function withNetworkCheck(SDK) {
   methods = methods.concat(
     Object.getOwnPropertyNames(Object.getPrototypeOf(SDK.prototype))
   );
-  debugger;
-  for (const method in methods) {
-    // if (typeof DaisySDK[method] === "function") {
-    checkNetwork(SDK, fn);
-    // }
-  }
+  methods.forEach(method => checkNetwork(SDK, method));
   return SDK;
 };

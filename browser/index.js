@@ -28,7 +28,7 @@ import SubscriptionProductClient from "../common/SubscriptionProductClient";
 /**
  * @typedef {Object} SignResult
  * @property {Object} agreement Object required in the {@link module:private~ServiceSubscriptions#authorize} and {@link module:common~SubscriptionProductClient#submit}.
- * @property {string} signature The `agreement` after being signed by the user using Metamask.
+ * @property {string} signature The `agreement` after being signed by the user using MetaMask.
  */
 
 /**
@@ -139,7 +139,7 @@ export class DaisySDKToken {
   }
 
   /**
-   * Approve a token with Metamask
+   * Approve a token with MetaMask
    * @param {string|number} amount - Amounts of tokens to approve. It can be more tokens than the current amount the user has.
    * @param {Object} [sendArgs] - Optional Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
    * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. See the example for the returned values.
@@ -187,7 +187,7 @@ export class DaisySDKToken {
   }
 
   /**
-   * Sign cancel agreement wit Metamask
+   * Sign cancel agreement with MetaMask
    * @async
    * @param {Object} input - Input object
    * @param {string} input.account - Ethereum address, beneficiary of the subscription.
@@ -213,7 +213,7 @@ export class DaisySDKToken {
   }
 
   /**
-   * Sign agreement wit Metamask
+   * Sign agreement with MetaMask
    * @async
    * @param {Object} input - Input object
    * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
