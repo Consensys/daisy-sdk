@@ -103,3 +103,46 @@ exports.genNonce = function genNonce(web3, len = 32) {
   } while (value.length !== len * 2 + 2); // +2 because of "0x"
   return value;
 };
+
+exports.withNetworkCheck = function withNetworkCheck(SDK) {
+  function checkNetwork(SDK, fn) {
+    SDK.fn = function() {
+      console.log("Wrapped fn called!!!!!!!!!!!!");
+      if (this.web3) {
+        const networks = {
+          "https://sdk.daisypayments.com": "main",
+          "https://sdk.staging.daisypayments.com": "rinkeby",
+          "http://localhost:8000": "private",
+        };
+        this.web3.eth.net.getNetworkType().then(network => {
+          const { baseURL } = this.config;
+          if (network === networks[baseURL]) {
+            fn(...arguments);
+          } else {
+            console.error(
+              `DaisySDK: Requests failing because web3 object is connected to the incorrect
+              network: ${network}. DaisySDK was instantiatd to make API calls to ${baseURL},
+              which requires MetaMask to be pointed to ${networks[baseURL]}`
+            );
+          }
+        });
+      }
+    };
+  }
+
+  let methods = [];
+  // do {
+  //   methods = methods.concat(Object.getOwnPropertyNames(DaisySDK));
+  // } while (DaisySDK = Object.getPrototypeOf(DaisySDK));
+  methods = methods.concat(Object.getOwnPropertyNames(SDK.prototype));
+  methods = methods.concat(
+    Object.getOwnPropertyNames(Object.getPrototypeOf(SDK.prototype))
+  );
+  debugger;
+  for (const method in methods) {
+    // if (typeof DaisySDK[method] === "function") {
+    checkNetwork(SDK, fn);
+    // }
+  }
+  return SDK;
+};

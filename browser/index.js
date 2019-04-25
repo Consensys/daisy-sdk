@@ -8,6 +8,7 @@ import {
   signTypedData,
   transformPeriod,
   genNonce,
+  withNetworkCheck,
 } from "../common/helpers";
 import SubscriptionProductClient from "../common/SubscriptionProductClient";
 
@@ -352,4 +353,4 @@ class ResumeEventEmitter extends EventEmitter {
   }
 }
 
-export default DaisySDK;
+export default withNetworkCheck(DaisySDK);

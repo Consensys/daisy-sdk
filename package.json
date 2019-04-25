@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "build": "rollup -c",
-    "lint": "eslint --cache",
+    "lint": "eslint . --cache",
     "jsdoc:deploy": "gh-pages -d docs",
     "jsdoc": "jsdoc -c jsdoc.conf.js",
     "test": "jest"
