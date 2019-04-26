@@ -104,12 +104,18 @@ exports.genNonce = function genNonce(web3, len = 32) {
   return value;
 };
 
+/**
+ * Wraps all functions of SDK with a check that current web3 network matches config of instance. Wrapped functions are all async
+ * @private
+ * @param {DaisySDK}
+ * @returns {DaisySDK}
+ */
 exports.withNetworkCheck = function withNetworkCheck(SDK) {
-  function checkNetwork(SDK, fn) {
+  function wrapNetworkCheck(fn) {
     const oldFn = SDK.prototype[fn];
-    SDK.prototype[fn] = function() {
-      console.log(`Wrapped ${fn} called`);
-      if (this.web3) {
+    // eslint-disable-next-line no-param-reassign
+    SDK.prototype[fn] = function checkNetwork(...args) {
+      try {
         const networks = {
           "https://sdk.daisypayments.com": "main",
           "https://sdk.staging.daisypayments.com": "rinkeby",
@@ -117,27 +123,41 @@ exports.withNetworkCheck = function withNetworkCheck(SDK) {
         };
         return this.web3.eth.net.getNetworkType().then(network => {
           const { baseURL } = this.config;
+
+          /**
+           * In the future, if subscriptions created in the admin panel can define the network they're deployed to, this check will have to be extended to be:
+           *
+           * if ((baseURL === "https://sdk.daisypayments.com" && network !== this.manager.network)
+           *     || (baseURL !== "https://sdk.daisypayments.com" && network !== networks[baseURL])) {}
+           *
+           * Or something like that
+           */
+
           if (network !== networks[baseURL]) {
             console.error(
-              `DaisySDK: Requests failing because web3 object is connected to the incorrect network: ${network}. DaisySDK was instantiatd to make API calls to ${baseURL}, which requires MetaMask to be pointed to ${
-                networks[baseURL]
-              }`
+              `DaisySDK: web3 requests will fail because web3 is connected to the incorrect network: ${network.toUpperCase()}. DaisySDK was instantiated to make API calls to ${baseURL}, which requires MetaMask to be pointed to ${networks[
+                baseURL
+              ].toUpperCase()}. You likely just need to change the network MetaMask is pointed to, or add/update/remove the override argument supplied to the DaisySDK constructor.`
             );
           }
-          return oldFn.bind(this)(...arguments);
+          return oldFn.bind(this)(...args);
         });
+      } catch (e) {
+        console.error(e);
+        return oldFn.bind(this)(...args);
       }
     };
   }
 
   let methods = [];
-  // do {
-  //   methods = methods.concat(Object.getOwnPropertyNames(DaisySDK));
-  // } while (DaisySDK = Object.getPrototypeOf(DaisySDK));
-  methods = methods.concat(Object.getOwnPropertyNames(SDK.prototype));
-  methods = methods.concat(
-    Object.getOwnPropertyNames(Object.getPrototypeOf(SDK.prototype))
-  );
-  methods.forEach(method => checkNetwork(SDK, method));
+  let sdkPrototypes = SDK.prototype;
+
+  // Get all methods, including inherited
+  // eslint-disable-next-line no-cond-assign
+  do {
+    methods = methods.concat(Object.getOwnPropertyNames(sdkPrototypes));
+  } while ((sdkPrototypes = Object.getPrototypeOf(sdkPrototypes).prototype));
+
+  methods.forEach(method => wrapNetworkCheck(method));
   return SDK;
 };
