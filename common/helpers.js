@@ -1,3 +1,5 @@
+/** @module common */
+
 exports.TYPES = {
   EIP712Domain: [{ name: "verifyingContract", type: "address" }],
 

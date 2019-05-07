@@ -10,7 +10,7 @@ describe("ServiceSubscriptions", () => {
   test("Get plans and subscribe", async () => {
     const subscriptionService = createInstance();
 
-    const { data: plans } = await subscriptionService.getPlans();
+    const { data: plans } = await subscriptionService.getData();
 
     expect(plans).toBeInstanceOf(Array);
     for (const plan of plans) {

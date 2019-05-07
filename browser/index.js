@@ -212,6 +212,51 @@ export class DaisySDKToken {
   }
 
   /**
+   * Sign new plan with Metamask
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Ethereum address must match {@link module:common~SubscriptionManager#authorizer}.
+   * @param {Plan} input.plan - The `Plan` object the authorizer is going to sign for.
+   * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
+   * @returns {Promise<Object>} Object with `signature` and the raw `agreement` that was signed.
+   */
+  signNewPlan({ account, plan, signatureExpiresAt }) {
+    // TODO: check if `account` is the same as `authorizer`.
+
+    const [periods, periodUnit] = transformPeriod(
+      plan["period"],
+      plan["periodUnit"]
+    ); // compatible with contract
+
+    const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
+    const expiration =
+      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
+      1000; // unix timestamp in seconds
+
+    const agreement = {
+      plan: plan["onChainId"],
+      price: plan["price"],
+      periods,
+      periodUnit,
+      maxExecutions: plan["maxExecutions"],
+      private: plan["private"],
+      signatureExpiresAt: String(Math.floor(expiration)),
+    };
+
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "AddPlan",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
+  }
+
+  /**
    * Sign agreement wit Metamask
    * @async
    * @param {Object} input - Input object
@@ -220,7 +265,7 @@ export class DaisySDKToken {
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
    * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAYS` as {@link module:common~Plan#period} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
-   * @returns {module:browser~SignResult} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~SubscriptionProductClient#submit}.
+   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~SubscriptionProductClient#submit}.
    */
   sign({
     account,

@@ -135,14 +135,14 @@ const serviceSubscriptions = new ServiceSubscriptions({
 const app = express()
 
 app.get("/api/plans/", async (req, res) => {
-  const { plans } = await subscriptionService.getPlans();
+  const { plans } = await subscriptionService.getData();
   res.json(plans);
 });
 
 app.post("/api/subscriptions/", async (req, res) => {
   const { signature, agreement } = req.body;
 
-  const { plans } = await subscriptionService.getPlans();
+  const { plans } = await subscriptionService.getData();
   const plan = plans.find(p => ...);
 
   const authSignature = plan["private"] && await subscriptionService.authorize({

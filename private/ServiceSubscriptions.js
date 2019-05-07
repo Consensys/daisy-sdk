@@ -1,10 +1,7 @@
 /** @module private */
 
-const sigUtil = require("eth-sig-util");
-const ethUtil = require("ethereumjs-util");
-
+const Signer = require("./Signer");
 const SubscriptionProductClient = require("../common/SubscriptionProductClient");
-const { TYPES } = require("../common/helpers");
 
 /**
  * ServiceSubscriptions class
@@ -23,7 +20,7 @@ class ServiceSubscriptions extends SubscriptionProductClient {
     if (!authorizer || !authorizer.privateKey) {
       throw new Error("Missing authorizer.privateKey");
     }
-    return this.getPlans().then(manager => {
+    return this.getData().then(manager => {
       // Sign private plan using authorizer private key.
       const signer = new Signer(authorizer.privateKey, manager["address"]);
       const subscriptionHash = signer.hash("Subscription", agreement);
@@ -31,36 +28,6 @@ class ServiceSubscriptions extends SubscriptionProductClient {
         subscriptionHash,
       });
     });
-  }
-}
-
-/**
- * @private
- */
-class Signer {
-  constructor(privateKey, subscriptionManagerAddress) {
-    this.privateKey = privateKey;
-    this.domain = {
-      verifyingContract: subscriptionManagerAddress,
-    };
-  }
-
-  signTypedData(type, message) {
-    const data = {
-      types: TYPES,
-      domain: this.domain,
-      primaryType: type,
-      message,
-    };
-
-    return sigUtil.signTypedData(this.privateKey, {
-      data,
-    });
-  }
-
-  hash(type, message) {
-    const buf = sigUtil.TypedDataUtils.hashStruct(type, message, TYPES);
-    return ethUtil.bufferToHex(buf);
   }
 }
 
