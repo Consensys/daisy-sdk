@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: private/ServiceSubscriptions.js</title>
+    <title>JSDoc: Source: private/Signer.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: private/ServiceSubscriptions.js</h1>
+    <h1 class="page-title">Source: private/Signer.js</h1>
 
     
 
@@ -28,38 +28,41 @@
         <article>
             <pre class="prettyprint source linenums"><code>/** @module private */
 
-const Signer = require("./Signer");
-const SubscriptionProductClient = require("../common/SubscriptionProductClient");
+const sigUtil = require("eth-sig-util");
+const ethUtil = require("ethereumjs-util");
+const { TYPES } = require("../common/helpers");
 
 /**
- * ServiceSubscriptions class
- * @extends module:common~SubscriptionProductClient
+ * @private
  */
-class ServiceSubscriptions extends SubscriptionProductClient {
-  /**
-   * Authorize a private plan. Using this over a non-private plan is safe.
-   * @async
-   * @param {Object} authorizer - Authorizer, must match the `authorizer` address in Daisy dashboard.
-   * @param {string} authorizer.privateKey - Buffer, use `Buffer.from("PRIVATE_KEY", "hex")`.
-   * @param {Object} agreement - From {@link module:browser.DaisySDKToken#sign}.
-   * @returns {string} - authSignature. Use in {@link module:common~SubscriptionProductClient#submit} as `authSignature`.
-   */
-  authorize(authorizer, agreement) {
-    if (!authorizer || !authorizer.privateKey) {
-      throw new Error("Missing authorizer.privateKey");
-    }
-    return this.getData().then(manager => {
-      // Sign private plan using authorizer private key.
-      const signer = new Signer(authorizer.privateKey, manager["address"]);
-      const subscriptionHash = signer.hash("Subscription", agreement);
-      return signer.signTypedData("PlanAuthorization", {
-        subscriptionHash,
-      });
+class Signer {
+  constructor(privateKey, subscriptionManagerAddress) {
+    this.privateKey = privateKey;
+    this.domain = {
+      verifyingContract: subscriptionManagerAddress,
+    };
+  }
+
+  signTypedData(type, message) {
+    const data = {
+      types: TYPES,
+      domain: this.domain,
+      primaryType: type,
+      message,
+    };
+
+    return sigUtil.signTypedData(this.privateKey, {
+      data,
     });
+  }
+
+  hash(type, message) {
+    const buf = sigUtil.TypedDataUtils.hashStruct(type, message, TYPES);
+    return ethUtil.bufferToHex(buf);
   }
 }
 
-module.exports = ServiceSubscriptions;
+module.exports = Signer;
 </code></pre>
         </article>
     </section>

@@ -107,7 +107,7 @@ The important data here is the <code>DAISY_ID</code>.</p></div>
 
             
 
-            <td class="description last"><p>Object can be taken from <code>const manager = await instance.getPlans()</code> but only the <code>identifier</code> is the real important.</p>
+            <td class="description last"><p>Object can be taken from <code>const manager = await instance.getData()</code> but only the <code>identifier</code> is the real important.</p>
                 <h6>Properties</h6>
                 
 
@@ -243,7 +243,7 @@ The important data here is the <code>DAISY_ID</code>.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line40">line 40</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -308,7 +308,7 @@ The important data here is the <code>DAISY_ID</code>.</p></div>
     
 
     
-    <h4 class="name" id="getPlans"><span class="type-signature">(async) </span>getPlans<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;SubscriptionManager>}</span></h4>
+    <h4 class="name" id="getData"><span class="type-signature">(async) </span>getData<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;SubscriptionManager>}</span></h4>
     
 
     
@@ -316,7 +316,7 @@ The important data here is the <code>DAISY_ID</code>.</p></div>
 
 
 <div class="description">
-    <p>Get plans and Subscription Manager.</p>
+    <p>Get Subscription Manager data and plans.</p>
 </div>
 
 
@@ -360,7 +360,7 @@ The important data here is the <code>DAISY_ID</code>.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line72">line 72</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -416,7 +416,322 @@ The important data here is the <code>DAISY_ID</code>.</p></div>
     <pre class="prettyprint"><code>const subscriptionProduct = new SubscriptionProductClient({
   identifier: process.env.DAISY_ID,
 });
-const { plans, ...manager } = await subscriptionProduct.getPlans();</code></pre>
+const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getPlans"><span class="type-signature"></span>getPlans<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <dt class="important tag-deprecated">Deprecated:</dt><dd><ul class="dummy"><li>Renamed to <a href="module-common-SubscriptionProductClient.html#getData">module:common~SubscriptionProductClient#getData</a>.</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line93">line 93</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getReceipts"><span class="type-signature">(async) </span>getReceipts<span class="signature">(criteria)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Receipt>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get receipts from single subscription.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>criteria</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Filtering criteria, only one field is required.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Find Subscription based on a Daisy ID.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subscriptionHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Find Subscription based on a <code>subscriptionHash</code> in the blockchain.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line159">line 159</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>Receipts.</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array.&lt;Receipt>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
 
 
@@ -599,7 +914,7 @@ const { plans, ...manager } = await subscriptionProduct.getPlans();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line116">line 116</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line135">line 135</a>
     </li></ul></dd>
     
 
@@ -815,7 +1130,7 @@ const subscription = await subscriptionProduct.getSubscription({ id: "" });</cod
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line93">line 93</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line112">line 112</a>
     </li></ul></dd>
     
 
@@ -1100,7 +1415,7 @@ const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line149">line 149</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -1182,7 +1497,7 @@ const subscription = await subscriptionProduct.submit({ });</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 22 2019 15:12:49 GMT-0300 (Chile Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 07 2019 13:32:41 GMT-0300 (Chile Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

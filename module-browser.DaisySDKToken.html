@@ -547,7 +547,7 @@ See example.</p>
     
 
     
-    <h4 class="name" id="sign"><span class="type-signature">(async) </span>sign<span class="signature">(input)</span><span class="type-signature"> &rarr; {<a href="module-browser.html#~SignResult">module:browser~SignResult</a>}</span></h4>
+    <h4 class="name" id="sign"><span class="type-signature">(async) </span>sign<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="module-browser.html#~SignResult">module:browser~SignResult</a>>}</span></h4>
     
 
     
@@ -871,7 +871,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line225">line 225</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line270">line 270</a>
     </li></ul></dd>
     
 
@@ -909,7 +909,7 @@ See example.</p>
     </dt>
     <dd>
         
-<span class="param-type"><a href="module-browser.html#~SignResult">module:browser~SignResult</a></span>
+<span class="param-type">Promise.&lt;<a href="module-browser.html#~SignResult">module:browser~SignResult</a>></span>
 
 
     </dd>
@@ -1221,6 +1221,305 @@ See example.</p>
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="signNewPlan"><span class="type-signature">(async) </span>signNewPlan<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Sign new plan with Metamask</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Input object</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>account</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Ethereum address must match module:common~SubscriptionManager#authorizer.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>plan</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Plan</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The <code>Plan</code> object the authorizer is going to sign for.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signatureExpiresAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Date.now() + 600000
+                
+                </td>
+            
+
+            <td class="description last"><p>Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line223">line 223</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Object with <code>signature</code> and the raw <code>agreement</code> that was signed.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -1242,7 +1541,7 @@ See example.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Apr 22 2019 15:12:49 GMT-0300 (Chile Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 07 2019 13:32:41 GMT-0300 (Chile Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
