@@ -16,6 +16,10 @@ const Client = require("./Client");
  * @property {string} maxExecutions - How many times the Plan is executed.
  * @property {boolean} private - If a Plan is private it requires a signature (with a private key) from the `authorizer` defined in the Subscription Manager.
  * @property {string} active - Is the plan enabled for subscriptions or disabled?.
+ * @property {string} state - Enum: `DRAFT`, `PENDING`, `DEPLOYED`, `FAILED`.
+ * @property {string} txHash - Transaction hash when it was deployed.
+ * @property {Date|string} createdAt - Timestamp.
+ * @property {Date|string} updatedAt - Timestamp.
  */
 
 /**
@@ -37,9 +41,20 @@ const Client = require("./Client");
 
 /**
  * @typedef {Object} SubscriptionManager
+ * @property {string} name - Name.
+ * @property {string} wallet - Where the billed tokens are transferer.
+ * @property {string} publisher - Ethereum address of the publisher of this contract (can edit data and plans).
+ * @property {string} tokenAddress - ERC20 Token address.
+ * @property {Date|string} deployedAt - When the contract was deployed.
+ * @property {string} address - Contract address.
+ * @property {string} authorizer - Ethereum address of the manager of this contract.
+ * @property {string} txHash - Transaction hash when it was deployed.
+ * @property {string} state - Enum: `DRAFT`, `PENDING`, `DEPLOYED`, `FAILED`.
  * @property {string} identifier - DAISY_ID.
  * @property {string} secretKey - DAISY_SECRET_LEY.
- * @property {string} authorizer - Ethereum address of the manager of this contract.
+ * @property {Date|string} createdAt - Timestamp.
+ * @property {Date|string} updatedAt - Timestamp.
+ 
  * @property {module:common~Plan[]} plans - Plans related to this manager.
  */
 
