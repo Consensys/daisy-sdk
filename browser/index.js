@@ -267,6 +267,48 @@ export class DaisySDKToken {
   }
 
   /**
+   * Sign payload to (de)activate a plan
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Ethereum address must match {@link module:common~SubscriptionManager#publisher}.
+   * @param {Plan} input.plan - The `Plan` object the publisher is going to sign for.
+   * @param {boolean} input.active - True if setting the plan as active or false if inactive.
+   * @param {string|number|Date} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
+   * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
+   * @returns {Promise<Object>} Object with `signature` and the raw `agreement` that was signed.
+   */
+  signSetPlanActive({
+    account,
+    plan,
+    active,
+    signatureExpiresAt,
+    nonce = undefined,
+  }) {
+    // TODO: check if `account` is the same as `publisher`.
+
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
+
+    const agreement = {
+      plan: plan["onChainId"],
+      active,
+      nonce: nonce || genNonce(this.web3),
+      signatureExpiresAt: expiration,
+    };
+
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "SetActive",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
+  }
+
+  /**
    * Sign agreement wit Metamask
    * @async
    * @param {Object} input - Input object
