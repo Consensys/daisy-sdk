@@ -11,6 +11,17 @@ import {
 } from "../common/helpers";
 import SubscriptionProductClient from "../common/SubscriptionProductClient";
 
+const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+function getExpirationInSeconds(signatureExpiresAt) {
+  return String(
+    Math.floor(
+      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
+        1000
+    )
+  ); // unix timestamp in seconds
+}
+
 /**
  * Web3 uses a hybrid Promise/Callback/EventEmitter mechanism.
  * @external PromiEvent
@@ -192,21 +203,23 @@ export class DaisySDKToken {
    * @param {string} input.account - Ethereum address, beneficiary of the subscription.
    * @param {string} input.subscriptionHash - Comes from {@link module:common~Subscription#subscriptionHash}.
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
-   * @returns {Object} Object with `signature` property.
+   * @returns {Promise<Object>} Object with `signature` property.
    */
-  signCancel(account, subscriptionHash, signatureExpiresAt) {
+  signCancel({ account, subscriptionHash, signatureExpiresAt }) {
+    const agreement = {
+      action: "cancel",
+      subscriptionHash,
+      signatureExpiresAt: getExpirationInSeconds(signatureExpiresAt),
+    };
     const typedData = {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "SubscriptionAction",
-      message: {
-        action: "cancel",
-        subscriptionHash,
-        signatureExpiresAt,
-      },
+      message: agreement,
     };
 
     return signTypedData(this.web3, account, typedData).then(signature => ({
+      agreement,
       signature,
     }));
   }
@@ -217,7 +230,7 @@ export class DaisySDKToken {
    * @param {Object} input - Input object
    * @param {string} input.account - Ethereum address must match {@link module:common~SubscriptionManager#authorizer}.
    * @param {Plan} input.plan - The `Plan` object the authorizer is going to sign for.
-   * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
+   * @param {string|number|Date} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
    * @returns {Promise<Object>} Object with `signature` and the raw `agreement` that was signed.
    */
   signNewPlan({ account, plan, signatureExpiresAt }) {
@@ -228,10 +241,7 @@ export class DaisySDKToken {
       plan["periodUnit"]
     ); // compatible with contract
 
-    const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const expiration =
-      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
-      1000; // unix timestamp in seconds
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
 
     const agreement = {
       plan: plan["onChainId"],
@@ -240,7 +250,7 @@ export class DaisySDKToken {
       periodUnit,
       maxExecutions: plan["maxExecutions"],
       private: plan["private"],
-      signatureExpiresAt: String(Math.floor(expiration)),
+      signatureExpiresAt: expiration,
     };
 
     const typedData = {
@@ -283,10 +293,7 @@ export class DaisySDKToken {
       plan["periodUnit"]
     ); // compatible with contract
 
-    const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const expiration =
-      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
-      1000; // unix timestamp in seconds
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
 
     // Subscription object
     const agreement = {
@@ -296,7 +303,7 @@ export class DaisySDKToken {
       periodUnit,
       periods,
       maxExecutions,
-      signatureExpiresAt: String(Math.floor(expiration)),
+      signatureExpiresAt: expiration,
       plan: plan["onChainId"],
       nonce: nonce || genNonce(this.web3),
     };
