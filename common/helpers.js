@@ -15,7 +15,12 @@ exports.TYPES = {
     { name: "signatureExpiresAt", type: "uint256" },
   ],
 
-  PlanAuthorization: [{ name: "subscriptionHash", type: "bytes32" }],
+  PlanAuthorization: [
+    { name: "subscriber", type: "address" },
+    { name: "plan", type: "string" },
+    { name: "nonce", type: "bytes32" },
+    { name: "signatureexpiresat", type: "uint256" },
+  ],
 
   AddPlan: [
     { name: "plan", type: "string" },
