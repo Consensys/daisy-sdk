@@ -394,6 +394,41 @@ export class DaisySDKToken {
       agreement,
     }));
   }
+
+  /**
+   * Sign agreement wit Metamask with the `authorizer` account.
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
+   * @param {Object} input.agreement - The `agreement` object from the `sign` step.
+   * @param {Object} [input.opts] - Optional.
+   * @param {boolean} [input.opts.allowAnyAddress=false] - Wildcard.
+   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~SubscriptionProductClient#submit}.
+   */
+  signAuthorization({
+    account,
+    agreement: prev,
+    opts = { allowAnyAddress: false },
+  }) {
+    const agreement = {
+      ...prev,
+      subscriber: opts.allowAnyAddress
+        ? SubscriptionProductClient.ZERO_ADDRESS
+        : prev["subscriber"],
+    };
+
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "Subscription",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
+  }
 }
 
 /**

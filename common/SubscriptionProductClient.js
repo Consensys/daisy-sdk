@@ -228,4 +228,6 @@ class SubscriptionProductClient extends Client {
   }
 }
 
+SubscriptionProductClient.ZERO_ADDRESS = "0x00000000000000000000";
+
 module.exports = SubscriptionProductClient;

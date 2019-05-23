@@ -1,6 +1,6 @@
 {
   "name": "daisy-sdk",
-  "version": "0.4.0",
+  "version": "0.4.1-rc",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
@@ -27,7 +27,6 @@
   "dependencies": {
     "axios": "^0.18.0",
     "eth-sig-util": "^2.1.2",
-    "ethereumjs-util": "^6.1.0",
     "eventemitter3": "^3.1.2"
   },
   "peerDependencies": {},

@@ -1,7 +1,6 @@
 /** @module private */
 
 const sigUtil = require("eth-sig-util");
-const ethUtil = require("ethereumjs-util");
 const { TYPES } = require("../common/helpers");
 
 /**
@@ -26,11 +25,6 @@ class Signer {
     return sigUtil.signTypedData(this.privateKey, {
       data,
     });
-  }
-
-  hash(type, message) {
-    const buf = sigUtil.TypedDataUtils.hashStruct(type, message, TYPES);
-    return ethUtil.bufferToHex(buf);
   }
 }
 

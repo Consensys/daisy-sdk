@@ -3,8 +3,6 @@
 const Signer = require("./Signer");
 const SubscriptionProductClient = require("../common/SubscriptionProductClient");
 
-const ZERO_ADDRESS = "0x00000000000000000000";
-
 /**
  * ServiceSubscriptions class
  * @extends module:common~SubscriptionProductClient
@@ -27,11 +25,11 @@ class ServiceSubscriptions extends SubscriptionProductClient {
     return this.getData().then(manager => {
       // Sign private plan using authorizer private key.
       const signer = new Signer(authorizer.privateKey, manager["address"]);
-      return signer.signTypedData("PlanAuthorization", {
-        subscriber: opts.allowAnyAddress ? ZERO_ADDRESS : agreement.subscriber,
-        plan: agreement.plan,
-        nonce: agreement.nonce,
-        signatureExpiresAt: agreement.signatureExpiresAt,
+      return signer.signTypedData("Subscription", {
+        ...agreement,
+        subscriber: opts.allowAnyAddress
+          ? SubscriptionProductClient.ZERO_ADDRESS
+          : agreement.subscriber,
       });
     });
   }
