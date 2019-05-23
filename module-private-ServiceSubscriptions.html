@@ -159,7 +159,7 @@
     
 
     
-    <h4 class="name" id="authorize"><span class="type-signature">(async) </span>authorize<span class="signature">(authorizer, agreement)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="authorize"><span class="type-signature">(async) </span>authorize<span class="signature">(authorizer, agreement, opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -191,6 +191,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -215,6 +217,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -288,10 +298,120 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>From <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>opts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Additional options.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>allowAnyAddress</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>True if any address can use the authorizer signature to join a private plan.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -332,7 +452,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="private_ServiceSubscriptions.js.html">private/ServiceSubscriptions.js</a>, <a href="private_ServiceSubscriptions.js.html#line19">line 19</a>
+        <a href="private_ServiceSubscriptions.js.html">private/ServiceSubscriptions.js</a>, <a href="private_ServiceSubscriptions.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -447,7 +567,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line83">line 83</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line98">line 98</a>
     </li></ul></dd>
     
 
@@ -568,7 +688,7 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line93">line 93</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line108">line 108</a>
     </li></ul></dd>
     
 
@@ -780,7 +900,7 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line159">line 159</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line174">line 174</a>
     </li></ul></dd>
     
 
@@ -1016,7 +1136,7 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line135">line 135</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line150">line 150</a>
     </li></ul></dd>
     
 
@@ -1237,7 +1357,7 @@ const subscription = await subscriptionProduct.getSubscription({ id: "" });</cod
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line112">line 112</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -1527,7 +1647,7 @@ const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line192">line 192</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line207">line 207</a>
     </li></ul></dd>
     
 
@@ -1609,7 +1729,7 @@ const subscription = await subscriptionProduct.submit({ });</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 07 2019 13:32:41 GMT-0300 (Chile Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 14:35:00 GMT-0400 (Chile Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

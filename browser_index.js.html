@@ -39,6 +39,17 @@ import {
 } from "../common/helpers";
 import SubscriptionProductClient from "../common/SubscriptionProductClient";
 
+const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+function getExpirationInSeconds(signatureExpiresAt) {
+  return String(
+    Math.floor(
+      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
+        1000
+    )
+  ); // unix timestamp in seconds
+}
+
 /**
  * Web3 uses a hybrid Promise/Callback/EventEmitter mechanism.
  * @external PromiEvent
@@ -220,21 +231,23 @@ export class DaisySDKToken {
    * @param {string} input.account - Ethereum address, beneficiary of the subscription.
    * @param {string} input.subscriptionHash - Comes from {@link module:common~Subscription#subscriptionHash}.
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
-   * @returns {Object} Object with `signature` property.
+   * @returns {Promise&lt;Object>} Object with `signature` and `agreement` property.
    */
-  signCancel(account, subscriptionHash, signatureExpiresAt) {
+  signCancel({ account, subscriptionHash, signatureExpiresAt }) {
+    const agreement = {
+      action: "cancel",
+      subscriptionHash,
+      signatureExpiresAt: getExpirationInSeconds(signatureExpiresAt),
+    };
     const typedData = {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "SubscriptionAction",
-      message: {
-        action: "cancel",
-        subscriptionHash,
-        signatureExpiresAt,
-      },
+      message: agreement,
     };
 
     return signTypedData(this.web3, account, typedData).then(signature => ({
+      agreement,
       signature,
     }));
   }
@@ -243,23 +256,20 @@ export class DaisySDKToken {
    * Sign new plan with Metamask
    * @async
    * @param {Object} input - Input object
-   * @param {string} input.account - Ethereum address must match {@link module:common~SubscriptionManager#authorizer}.
-   * @param {Plan} input.plan - The `Plan` object the authorizer is going to sign for.
-   * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
+   * @param {string} input.account - Ethereum address must match {@link module:common~SubscriptionManager#publisher}.
+   * @param {Plan} input.plan - The `Plan` object the publisher is going to sign for.
+   * @param {string|number|Date} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
    * @returns {Promise&lt;Object>} Object with `signature` and the raw `agreement` that was signed.
    */
   signNewPlan({ account, plan, signatureExpiresAt }) {
-    // TODO: check if `account` is the same as `authorizer`.
+    // TODO: check if `account` is the same as `publisher`.
 
     const [periods, periodUnit] = transformPeriod(
       plan["period"],
       plan["periodUnit"]
     ); // compatible with contract
 
-    const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const expiration =
-      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
-      1000; // unix timestamp in seconds
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
 
     const agreement = {
       plan: plan["onChainId"],
@@ -268,13 +278,87 @@ export class DaisySDKToken {
       periodUnit,
       maxExecutions: plan["maxExecutions"],
       private: plan["private"],
-      signatureExpiresAt: String(Math.floor(expiration)),
+      signatureExpiresAt: expiration,
     };
 
     const typedData = {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "AddPlan",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
+  }
+
+  /**
+   * Sign payload to (de)activate a plan
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Ethereum address must match {@link module:common~SubscriptionManager#publisher}.
+   * @param {Plan} input.plan - The `Plan` object the publisher is going to sign for.
+   * @param {boolean} input.active - True if setting the plan as active or false if inactive.
+   * @param {string|number|Date} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
+   * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
+   * @returns {Promise&lt;Object>} Object with `signature` and the raw `agreement` that was signed.
+   */
+  signSetPlanActive({
+    account,
+    plan,
+    active,
+    signatureExpiresAt,
+    nonce = undefined,
+  }) {
+    // TODO: check if `account` is the same as `publisher`.
+
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
+
+    const agreement = {
+      plan: plan["onChainId"],
+      active,
+      nonce: nonce || genNonce(this.web3),
+      signatureExpiresAt: expiration,
+    };
+
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "SetActive",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
+  }
+
+  /**
+   * Sign payload to remove a plan
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Ethereum address must match {@link module:common~SubscriptionManager#publisher}.
+   * @param {Plan} input.plan - The `Plan` object the publisher is going to sign for.
+   * @param {string|number|Date} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
+   * @returns {Promise&lt;Object>} Object with `signature` and the raw `agreement` that was signed.
+   */
+  signRemovePlan({ account, plan, signatureExpiresAt }) {
+    // TODO: check if `account` is the same as `publisher`.
+
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
+
+    const agreement = {
+      plan: plan["onChainId"],
+      signatureExpiresAt: expiration,
+    };
+
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "RemovePlan",
       message: agreement,
     };
 
@@ -311,10 +395,7 @@ export class DaisySDKToken {
       plan["periodUnit"]
     ); // compatible with contract
 
-    const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const expiration =
-      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
-      1000; // unix timestamp in seconds
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
 
     // Subscription object
     const agreement = {
@@ -324,9 +405,44 @@ export class DaisySDKToken {
       periodUnit,
       periods,
       maxExecutions,
-      signatureExpiresAt: String(Math.floor(expiration)),
+      signatureExpiresAt: expiration,
       plan: plan["onChainId"],
       nonce: nonce || genNonce(this.web3),
+    };
+
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "Subscription",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
+  }
+
+  /**
+   * Sign agreement wit Metamask with the `authorizer` account.
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
+   * @param {Object} input.agreement - The `agreement` object from the `sign` step.
+   * @param {Object} [input.opts] - Optional.
+   * @param {boolean} [input.opts.allowAnyAddress=false] - Wildcard.
+   * @returns {Promise&lt;module:browser~SignResult>} This result is going to be used in {@link module:common~SubscriptionProductClient#submit}.
+   */
+  signAuthorization({
+    account,
+    agreement: prev,
+    opts = { allowAnyAddress: false },
+  }) {
+    const agreement = {
+      ...prev,
+      subscriber: opts.allowAnyAddress
+        ? SubscriptionProductClient.ZERO_ADDRESS
+        : prev["subscriber"],
     };
 
     const typedData = {
@@ -442,7 +558,7 @@ export default DaisySDK;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 07 2019 13:32:41 GMT-0300 (Chile Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 14:35:00 GMT-0400 (Chile Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
