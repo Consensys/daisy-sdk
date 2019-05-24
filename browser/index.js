@@ -399,7 +399,7 @@ export class DaisySDKToken {
    * Sign agreement wit Metamask with the `authorizer` account.
    * @async
    * @param {Object} input - Input object
-   * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
+   * @param {string} input.account - Signer address.
    * @param {Object} input.agreement - The `agreement` object from the `sign` step.
    * @param {Object} [input.opts] - Optional.
    * @param {boolean} [input.opts.allowAnyAddress=false] - Wildcard.
@@ -421,6 +421,75 @@ export class DaisySDKToken {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "Subscription",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
+  }
+
+  /**
+   * Sign set wallet agreement wit Metamask with the `owner` account.
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Signer address.
+   * @param {Object} input.wallet - The wallet to be set.
+   * @param {Object} input.signatureExpiresAt - The timestamp in miliseconds in which the signature is no longer valid.
+   * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
+   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~SubscriptionProductClient#submit}.
+   */
+  signSetWallet({ account, wallet, signatureExpiresAt, nonce = undefined }) {
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
+
+    const agreement = {
+      wallet,
+      nonce: nonce || genNonce(this.web3),
+      signatureExpiresAt: expiration,
+    };
+
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "SetWallet",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
+  }
+
+  /**
+   * Sign set authorizer agreement wit Metamask with the `owner` account.
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Signer address.
+   * @param {Object} input.authorizer - The authorizer to be set.
+   * @param {Object} input.signatureExpiresAt - The timestamp in miliseconds in which the signature is no longer valid.
+   * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
+   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~SubscriptionProductClient#submit}.
+   */
+  signSetAuthorizer({
+    account,
+    authorizer,
+    signatureExpiresAt,
+    nonce = undefined,
+  }) {
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
+
+    const agreement = {
+      authorizer,
+      nonce: nonce || genNonce(this.web3),
+      signatureExpiresAt: expiration,
+    };
+
+    const typedData = {
+      types: TYPES,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "SetAuthorizer",
       message: agreement,
     };
 

@@ -42,6 +42,18 @@ exports.TYPES = {
     { name: "subscriptionHash", type: "bytes32" },
     { name: "signatureExpiresAt", type: "uint256" },
   ],
+
+  SetAuthorizer: [
+    { name: "authorizer", type: "address" },
+    { name: "nonce", type: "bytes32" },
+    { name: "signatureExpiresAt", type: "uint256" },
+  ],
+
+  SetWallet: [
+    { name: "wallet", type: "address" },
+    { name: "nonce", type: "bytes32" },
+    { name: "signatureExpiresAt", type: "uint256" },
+  ],
 };
 
 exports.transformPeriod = function transformPeriod(number, unit) {
