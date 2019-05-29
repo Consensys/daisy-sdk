@@ -1039,7 +1039,7 @@ See example.</p>
 
             
 
-            <td class="description last"><p>Ethereum address it is going to benefit from the subscription.</p></td>
+            <td class="description last"><p>Signer address.</p></td>
         </tr>
 
     
@@ -2179,6 +2179,341 @@ See example.</p>
     
 
     
+    <h4 class="name" id="signSetAuthorizer"><span class="type-signature">(async) </span>signSetAuthorizer<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="module-browser.html#~SignResult">module:browser~SignResult</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Sign set authorizer agreement wit Metamask with the <code>owner</code> account.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Input object</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>account</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Signer address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authorizer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The authorizer to be set.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signatureExpiresAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Date.now() + 600000
+                
+                </td>
+            
+
+            <td class="description last"><p>The timestamp in miliseconds in which the signature is no longer valid.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nonce</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    web3.utils.randomHex(32)
+                
+                </td>
+            
+
+            <td class="description last"><p>Computed. Open for development purposes only.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line475">line 475</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This result is going to be used in <a href="module-common-SubscriptionProductClient.html#submit">module:common~SubscriptionProductClient#submit</a>.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="module-browser.html#~SignResult">module:browser~SignResult</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="signSetPlanActive"><span class="type-signature">(async) </span>signSetPlanActive<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
@@ -2550,6 +2885,341 @@ See example.</p>
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="signSetWallet"><span class="type-signature">(async) </span>signSetWallet<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="module-browser.html#~SignResult">module:browser~SignResult</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Sign set wallet agreement wit Metamask with the <code>owner</code> account.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Input object</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>account</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Signer address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wallet</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The wallet to be set.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signatureExpiresAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Date.now() + 600000
+                
+                </td>
+            
+
+            <td class="description last"><p>The timestamp in miliseconds in which the signature is no longer valid.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nonce</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    web3.utils.randomHex(32)
+                
+                </td>
+            
+
+            <td class="description last"><p>Computed. Open for development purposes only.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line443">line 443</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This result is going to be used in <a href="module-common-SubscriptionProductClient.html#submit">module:common~SubscriptionProductClient#submit</a>.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="module-browser.html#~SignResult">module:browser~SignResult</a>></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -2571,7 +3241,7 @@ See example.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu May 23 2019 14:35:00 GMT-0400 (Chile Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed May 29 2019 15:07:36 GMT-0400 (Chile Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
