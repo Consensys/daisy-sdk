@@ -436,7 +436,7 @@ export class DaisySDKToken {
    * @param {Object} input - Input object
    * @param {string} input.account - Signer address.
    * @param {Object} input.wallet - The wallet to be set.
-   * @param {Object} input.signatureExpiresAt - The timestamp in miliseconds in which the signature is no longer valid.
+   * @param {Object} [input.signatureExpiresAt=Date.now() + 600000] - The timestamp in miliseconds in which the signature is no longer valid.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
    * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~SubscriptionProductClient#submit}.
    */
@@ -468,7 +468,7 @@ export class DaisySDKToken {
    * @param {Object} input - Input object
    * @param {string} input.account - Signer address.
    * @param {Object} input.authorizer - The authorizer to be set.
-   * @param {Object} input.signatureExpiresAt - The timestamp in miliseconds in which the signature is no longer valid.
+   * @param {Object} [input.signatureExpiresAt=Date.now() + 600000] - The timestamp in miliseconds in which the signature is no longer valid.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
    * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~SubscriptionProductClient#submit}.
    */
