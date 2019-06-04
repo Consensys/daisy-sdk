@@ -192,8 +192,8 @@ class SubscriptionProductClient extends Client {
    * @async
    * @param {Object} input - Input arguments
    * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#sign}.
-   * @param {Object} input.receipt - The agreement is the return of {@link module:browser.DaisySDKToken#approve}.
-   * @param {string} input.signature - The agreement is the return of {@link module:browser.DaisySDKToken#sign}.
+   * @param {Object} [input.receipt] - Optional. The receipt is the return of {@link module:browser.DaisySDKToken#approve}.
+   * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#sign}.
    * @param {string} input.authSignature - Signature for private plans created from {@link module:private~ServiceSubscriptions#authorize}.
    * @returns {Promise<Subscription>} - Created {@link module:common~Subscription}, its {@link module:common~Subscription#state} will be `PENDING`.
    *
@@ -220,11 +220,29 @@ class SubscriptionProductClient extends Client {
   }
 
   /**
+   * Submit signature and agreement from the beneficiary user to cancel a subscription.
+   * @async
+   * @param {Object} input - Input arguments
+   * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#signCancel}.
+   * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#signCancel}.
+   * @returns {Promise<Subscription>} - Pending for cancellation {@link module:common~Subscription} object.
+   */
+  submitCancel({ agreement, signature }) {
+    return this.request({
+      method: "post",
+      url: "/subscriptions/cancel/",
+      data: { agreement, signature },
+    }).then(({ data: body }) => {
+      return body;
+    });
+  }
+
+  /**
    * Submit signature and agreement (from the {@link module:private~ServiceSubscriptions#publisher}) to activate/deactivate plan.
    * @async
    * @param {Object} input - Input arguments
-   * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#sign}.
-   * @param {string} input.signature - The agreement is the return of {@link module:browser.DaisySDKToken#sign}.
+   * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#signSetPlanActive}.
+   * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#signSetPlanActive}.
    * @returns {Promise<Plan>} - Updated {@link module:common~Plan} object.
    */
   submitSetPlanActive({ agreement, signature }) {
