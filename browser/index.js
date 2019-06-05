@@ -178,6 +178,30 @@ export class DaisySDKToken {
   }
 
   /**
+   * Check allowance that spender has given to subscription manager
+   * @param {Object} [sendArgs] - Optional Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. See the example for the returned values.
+   *
+   * @example
+   *
+   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/tokenfoundry/react-metamask)
+   * const token = daisy.loadToken(); // web3 contract instance.
+   *
+   * daisy
+   *   .prepareToken(token)
+   *   .allowance({ tokenOwner: account })
+   */
+  allowance(sendArgs) {
+    if (!sendArgs.tokenOwner) {
+      throw new Error();
+    }
+    return this.token.methods["allowance"](
+      sendArgs.tokenOwner,
+      this.manager["address"]
+    ).call();
+  }
+
+  /**
    * Allows you to resume a {@link module:browser.DaisySDKToken#approve} transaction.
    * You need to store the `receipt` from the `.on("confirmation", (confirmationNumber, receipt) => {})` handler and pass it here as the first argument.
    * Also you can use the `transactionHash` from `.on("transactionHash", transactionHash => {})`.
