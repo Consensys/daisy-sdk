@@ -188,12 +188,12 @@ class SubscriptionProductClient extends Client {
   }
 
   /**
-   * Get single subscription.
+   * Create single subscription.
    * @async
    * @param {Object} input - Input arguments
-   * @param {string} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#sign}.
-   * @param {string} input.receipt - The agreement is the return of {@link module:browser.DaisySDKToken#approve}.
-   * @param {string} input.signature - The agreement is the return of {@link module:browser.DaisySDKToken#sign}.
+   * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#sign}.
+   * @param {Object} [input.receipt] - Optional. The receipt is the return of {@link module:browser.DaisySDKToken#approve}.
+   * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#sign}.
    * @param {string} input.authSignature - Signature for private plans created from {@link module:private~ServiceSubscriptions#authorize}.
    * @returns {Promise<Subscription>} - Created {@link module:common~Subscription}, its {@link module:common~Subscription#state} will be `PENDING`.
    *
@@ -205,26 +205,54 @@ class SubscriptionProductClient extends Client {
    * const subscription = await subscriptionProduct.submit({ });
    */
   submit({ agreement, receipt, signature, authSignature }) {
-    return this.getData()
-      .then(({ plans }) => {
-        const plan = plans.find(p => p["onChainId"] === agreement["plan"]);
-        if (!plan) {
-          throw new Error("Plan not found");
-        }
-        return this.request({
-          method: "post",
-          url: "/subscriptions/",
-          data: {
-            agreement,
-            receipt,
-            authSignature,
-            signature,
-          },
-        });
-      })
-      .then(({ data: body }) => {
-        return body;
-      });
+    return this.request({
+      method: "post",
+      url: "/subscriptions/",
+      data: {
+        agreement,
+        receipt,
+        authSignature,
+        signature,
+      },
+    }).then(({ data: body }) => {
+      return body;
+    });
+  }
+
+  /**
+   * Submit signature and agreement from the beneficiary user to cancel a subscription.
+   * @async
+   * @param {Object} input - Input arguments
+   * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#signCancel}.
+   * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#signCancel}.
+   * @returns {Promise<Subscription>} - Pending for cancellation {@link module:common~Subscription} object.
+   */
+  submitCancel({ agreement, signature }) {
+    return this.request({
+      method: "post",
+      url: "/subscriptions/cancel/",
+      data: { agreement, signature },
+    }).then(({ data: body }) => {
+      return body;
+    });
+  }
+
+  /**
+   * Submit signature and agreement (from the {@link module:private~ServiceSubscriptions#publisher}) to activate/deactivate plan.
+   * @async
+   * @param {Object} input - Input arguments
+   * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#signSetPlanActive}.
+   * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#signSetPlanActive}.
+   * @returns {Promise<Plan>} - Updated {@link module:common~Plan} object.
+   */
+  submitSetPlanActive({ agreement, signature }) {
+    return this.request({
+      method: "post",
+      url: "/plans/set_active/",
+      data: { agreement, signature },
+    }).then(({ data: body }) => {
+      return body;
+    });
   }
 }
 
