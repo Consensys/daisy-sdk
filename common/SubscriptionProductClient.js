@@ -113,8 +113,9 @@ class SubscriptionProductClient extends Client {
   /**
    * Get subscriptions.
    * @async
-   * @param {Object} criteria - Filtering criteria.
-   * @param {string} criteria.account - Filter by Ethereum address.
+   * @param {Object} filter - Filtering criteria.
+   * @param {string} filter.account - Filter by Ethereum address.
+   * @param {string} filter.state - Filter by subscription state.
    * @returns {Promise<Subscription[]>} - Subscriptions based on the filtering criteria.
    *
    * @example
@@ -124,8 +125,7 @@ class SubscriptionProductClient extends Client {
    * });
    * const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0..." });
    */
-  getSubscriptions({ account }) {
-    const filter = { account };
+  getSubscriptions(filter = {}) {
     return this.request({
       method: "get",
       url: `/subscriptions/?${querystring.stringify(filter)}`,
