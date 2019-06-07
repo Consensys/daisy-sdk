@@ -75,7 +75,7 @@ class DaisySDK extends SubscriptionProductClient {
       method: "get",
       url: "/",
     }).then(({ data: body }) => {
-      this.manager = body["data"];
+      this.manager = { ...this.manager, ...body["data"] };
       return this;
     });
   }
