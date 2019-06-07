@@ -165,6 +165,187 @@ console.log(token instanceof DaisySDKToken);
     
 
     
+    <h4 class="name" id="allowance"><span class="type-signature"></span>allowance<span class="signature">(sendArgs<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="external-PromiEvent.html">external:PromiEvent</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Check allowance that spender has given to subscription manager</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sendArgs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Optional Web3 arguments for transactions. @see <a href="https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send">web3js.readthedocs</a></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line194">line 194</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li><code>web3</code>'s return value for actions on the Blockchain. See the example for the returned values.</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="external-PromiEvent.html">external:PromiEvent</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/tokenfoundry/react-metamask)
+const token = daisy.loadToken(); // web3 contract instance.
+
+daisy
+  .prepareToken(token)
+  .allowance({ tokenOwner: account })</code></pre>
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="approve"><span class="type-signature"></span>approve<span class="signature">(amount, sendArgs<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="external-PromiEvent.html">external:PromiEvent</a>}</span></h4>
     
 
@@ -489,7 +670,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line188">line 188</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line212">line 212</a>
     </li></ul></dd>
     
 
@@ -871,7 +1052,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line354">line 354</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line378">line 378</a>
     </li></ul></dd>
     
 
@@ -1220,7 +1401,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line408">line 408</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line432">line 432</a>
     </li></ul></dd>
     
 
@@ -1519,7 +1700,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line208">line 208</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line232">line 232</a>
     </li></ul></dd>
     
 
@@ -1821,7 +2002,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line236">line 236</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line260">line 260</a>
     </li></ul></dd>
     
 
@@ -2123,7 +2304,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line320">line 320</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line344">line 344</a>
     </li></ul></dd>
     
 
@@ -2458,7 +2639,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line475">line 475</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line499">line 499</a>
     </li></ul></dd>
     
 
@@ -2834,7 +3015,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line280">line 280</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line304">line 304</a>
     </li></ul></dd>
     
 
@@ -3169,7 +3350,7 @@ See example.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line443">line 443</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line467">line 467</a>
     </li></ul></dd>
     
 
@@ -3241,7 +3422,7 @@ See example.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed May 29 2019 15:07:36 GMT-0400 (Chile Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Jun 07 2019 13:50:34 GMT-0400 (Chile Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

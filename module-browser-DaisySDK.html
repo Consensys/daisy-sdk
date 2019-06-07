@@ -859,7 +859,7 @@ const subscription = await subscriptionProduct.getSubscription({ id: "" });</cod
     
 
     
-    <h4 class="name" id="getSubscriptions"><span class="type-signature">(async) </span>getSubscriptions<span class="signature">(criteria)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Subscription>>}</span></h4>
+    <h4 class="name" id="getSubscriptions"><span class="type-signature">(async) </span>getSubscriptions<span class="signature">(filter)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Subscription>>}</span></h4>
     
 
     
@@ -903,7 +903,7 @@ const subscription = await subscriptionProduct.getSubscription({ id: "" });</cod
 
         <tr>
             
-                <td class="name"><code>criteria</code></td>
+                <td class="name"><code>filter</code></td>
             
 
             <td class="type">
@@ -965,6 +965,29 @@ const subscription = await subscriptionProduct.getSubscription({ id: "" });</cod
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Filter by subscription state.</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1014,7 +1037,7 @@ const subscription = await subscriptionProduct.getSubscription({ id: "" });</cod
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line127">line 127</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line128">line 128</a>
     </li></ul></dd>
     
 
@@ -1528,7 +1551,7 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
 
 
 <div class="description">
-    <p>Get single subscription.</p>
+    <p>Create single subscription.</p>
 </div>
 
 
@@ -1594,6 +1617,8 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1612,12 +1637,20 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1635,17 +1668,27 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Object</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>The agreement is the return of <a href="module-browser.DaisySDKToken.html#approve">module:browser.DaisySDKToken#approve</a>.</p></td>
+            <td class="description last"><p>Optional. The receipt is the return of <a href="module-browser.DaisySDKToken.html#approve">module:browser.DaisySDKToken#approve</a>.</p></td>
         </tr>
 
     
@@ -1665,10 +1708,18 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>The agreement is the return of <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
+            <td class="description last"><p>The signature is the return of <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
         </tr>
 
     
@@ -1687,6 +1738,14 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -1801,6 +1860,478 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
   identifier: process.env.DAISY_ID,
 });
 const subscription = await subscriptionProduct.submit({ });</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="submitCancel"><span class="type-signature">(async) </span>submitCancel<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;Subscription>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Submit signature and agreement from the beneficiary user to cancel a subscription.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Input arguments</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>agreement</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <code>agreement</code> is the return of <a href="module-browser.DaisySDKToken.html#signCancel">module:browser.DaisySDKToken#signCancel</a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signature</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The signature is the return of <a href="module-browser.DaisySDKToken.html#signCancel">module:browser.DaisySDKToken#signCancel</a>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="module-common-SubscriptionProductClient.html#submitCancel">module:common~SubscriptionProductClient#submitCancel</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line230">line 230</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>Pending for cancellation <a href="module-common.html#~Subscription">module:common~Subscription</a> object.</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Subscription></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="submitSetPlanActive"><span class="type-signature">(async) </span>submitSetPlanActive<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;Plan>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Submit signature and agreement (from the module:private~ServiceSubscriptions#publisher) to activate/deactivate plan.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Input arguments</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>agreement</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <code>agreement</code> is the return of <a href="module-browser.DaisySDKToken.html#signSetPlanActive">module:browser.DaisySDKToken#signSetPlanActive</a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signature</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The signature is the return of <a href="module-browser.DaisySDKToken.html#signSetPlanActive">module:browser.DaisySDKToken#signSetPlanActive</a>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="module-common-SubscriptionProductClient.html#submitSetPlanActive">module:common~SubscriptionProductClient#submitSetPlanActive</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line248">line 248</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>Updated <a href="module-common.html#~Plan">module:common~Plan</a> object.</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Plan></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
 
 
@@ -1945,7 +2476,7 @@ await daisy.sync() // required</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed May 29 2019 15:07:36 GMT-0400 (Chile Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Jun 07 2019 13:50:34 GMT-0400 (Chile Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
