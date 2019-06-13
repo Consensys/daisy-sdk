@@ -179,8 +179,8 @@ export class DaisySDKToken {
 
   /**
    * Check allowance that spender has given to subscription manager
-   * @param {Object} [sendArgs] - Optional Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
-   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. See the example for the returned values.
+   * @param {Object} [sendArgs] - Optional Web3 arguments for transactions. Must have tokenOwner field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. Promise resolves to string representing how much of the ERC20 token the tokenOwner has approved the subscription manager to spend.
    *
    * @example
    *
@@ -199,6 +199,27 @@ export class DaisySDKToken {
       sendArgs.tokenOwner,
       this.manager["address"]
     ).call();
+  }
+
+  /**
+   * Check balance of spender. Useful to prevent subscriber from submitting a signed agreement if they do not have sufficient funds
+   * @param {Object} [sendArgs] - Optional Web3 arguments for transactions. Must have tokenOwner field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. Promise resolves to string representing account's balance of ERC20 token.
+   *
+   * @example
+   *
+   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/tokenfoundry/react-metamask)
+   * const token = daisy.loadToken(); // web3 contract instance.
+   *
+   * daisy
+   *   .prepareToken(token)
+   *   .balanceOf({ tokenOwner: account })
+   */
+  balanceOf(sendArgs) {
+    if (!sendArgs.tokenOwner) {
+      throw new Error();
+    }
+    return this.token.methods["balanceOf"](sendArgs.tokenOwner).call();
   }
 
   /**
