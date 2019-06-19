@@ -9,7 +9,7 @@
   "scripts": {
     "build": "rollup -c",
     "lint": "eslint --cache",
-    "jsdoc:deploy": "gh-pages -d docs",
+    "jsdoc:deploy": "gh-pages --add CNAME -d docs",
     "jsdoc": "jsdoc -c jsdoc.conf.js",
     "test": "jest"
   },
