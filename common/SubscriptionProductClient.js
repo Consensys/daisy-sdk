@@ -10,14 +10,17 @@ const Client = require("./Client");
  * @property {string} name - Plan name.
  * @property {string} onChainId - Plan ID in the Ethereum blockchain (internal use of the SDK).
  * @property {string} description - Plan description.
- * @property {string} price - Plan price in tokens.
+ * @property {string} price - Plan price in tokens (stored as string).
  * @property {number} period - Number of periods in `periodUnit` between bill cycles.
  * @property {string} periodUnit - Period unit: DAYS, WEEKS, MONTHS, YEARS.
  * @property {string} maxExecutions - How many times the Plan is executed.
  * @property {boolean} private - If a Plan is private it requires a signature (with a private key) from the `authorizer` defined in the Subscription Manager.
- * @property {string} active - Is the plan enabled for subscriptions or disabled?.
+ * @property {boolean} active - Is the plan enabled for subscriptions or disabled?.
+ * @property {string} [txHash] - Transaction hash when it was deployed.
+ * @property {Error|string} [error] - Error message (if any).
  * @property {string} state - Enum: `DRAFT`, `PENDING`, `DEPLOYED`, `FAILED`.
- * @property {string} txHash - Transaction hash when it was deployed.
+ * @property {string} removalState - Enum: `OK`, `PENDING`, `FAILED`.
+ * @property {string} setActiveState - Enum: `OK`, `PENDING`, `FAILED`.
  * @property {Date|string} createdAt - Timestamp.
  * @property {Date|string} updatedAt - Timestamp.
  */
@@ -25,8 +28,26 @@ const Client = require("./Client");
 /**
  * @typedef {Object} Subscription
  * @property {string} id - Daisy ID.
- * @property {string} state - Current subscription state. Options: NOT_STARTED PENDING CREATED ACTIVE ACTIVE_CANCELLED CANCELLED EXPIRED INVALID NOT_ENOUGH_FUNDS FAILED
- * @property {string} subscriptionHash - Identifier in the blockchain.
+ * @property {string} account - Subscriber ethereum address.
+ * @property {string} token - Token address.
+ * @property {number|string} amount - Approved tokens.
+ * @property {number} periodUnit
+ * @property {number} periods
+ * @property {string} [signature] - Created when user signs the agreement at {@link module:browser.DaisySDKToken#sign}.
+ * @property {string} signatureExpiresAt - UNIX Timestamp (in seconds for blockchain usage) when the `signature` field expires.
+ * @property {number|string} maxExecutions - How many periods the subscription is for.
+ * @property {string} [nextPayment] - UNIX Timestamp (in seconds for blockchain usage) when its the next billing cycle (approximation).
+ * @property {Date|string} [nextPaymentDate] - Normal Date object representing the next billing cycle.
+ * @property {string} [subscriptionHash] - Identifier in the blockchain.
+ * @property {string} [txHash] - Transaction hash after deploying the subscription.
+ * @property {Error|string} [error] - Error message (if any).
+ * @property {Date|string} [errorAt] - When the error ocurred (if any).
+ * @property {string} state - Current subscription state. Enum: `NOT_STARTED`, `PENDING`, `ACTIVE`, `ACTIVE_CANCELLED`, `CANCELLED`, `EXPIRED`, `INVALID`, `NOT_ENOUGH_FUNDS`, `FAILED`.
+ * @property {string} cancelState - Enum: `OK`, `PENDING`, `FAILED`.
+ * @property {Date|string} [startedAt] - When the subscription started (off-chain value).
+ * @property {string} [endedAt] - When the subscription ended (off-chain value).
+ * @property {Date|string} updatedAt - Timestamp.
+ * @property {Date|string} createdAt -  Timestamp.
  */
 
 /**
@@ -34,28 +55,28 @@ const Client = require("./Client");
  * @property {string} id - Daisy ID.
  * @property {string} txHash - Transaction hash.
  * @property {string} action - What happened in this billing cycle.
- * @property {?string} nextPayment - When is the next billing cycle.
- * @property {?string} reason - If failed, this is the error message.
- * @property {Date} createdAt - When was executed.
+ * @property {string} [nextPayment] - When is the next billing cycle.
+ * @property {Error|string} [reason] - If failed, this is the error message.
+ * @property {Date|string} createdAt - When was executed.
  */
 
 /**
  * @typedef {Object} SubscriptionManager
+ * @property {number|string} networkId - Ethereum network identifier.
  * @property {string} name - Name.
  * @property {string} wallet - Where the billed tokens are transferer.
  * @property {string} publisher - Ethereum address of the publisher of this contract (can edit data and plans).
  * @property {string} tokenAddress - ERC20 Token address.
- * @property {Date|string} deployedAt - When the contract was deployed.
- * @property {string} address - Contract address.
+ * @property {Date|string} [deployedAt] - When the contract was deployed.
+ * @property {string} [address] - Contract address.
  * @property {string} authorizer - Ethereum address of the manager of this contract.
- * @property {string} txHash - Transaction hash when it was deployed.
+ * @property {string} [txHash] - Transaction hash when it was deployed.
  * @property {string} state - Enum: `DRAFT`, `PENDING`, `DEPLOYED`, `FAILED`.
  * @property {string} identifier - DAISY_ID.
- * @property {string} secretKey - DAISY_SECRET_LEY.
+ * @property {string} [secretKey] - DAISY_SECRET_LEY.
  * @property {Date|string} createdAt - Timestamp.
  * @property {Date|string} updatedAt - Timestamp.
- 
- * @property {module:common~Plan[]} plans - Plans related to this manager.
+ * @property {module:common~Plan[]} [plans] - Plans related to this manager.
  */
 
 /**

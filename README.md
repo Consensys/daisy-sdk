@@ -1,163 +1,328 @@
-# daisy-sdk
+# Daisy SDK & Docs
 
 ## Install
 
 > You may also require some extra dependencies like `axios`, `web3`, `eventemitter3`, and `querystring`.
 
 ```sh
-yarn add daisy-sdk
+yarn add daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
 ```
+
+## MetaMask helper
+
+To help you handle web3 instances and the current account we recommended [tokenfoundry/react-metamask](https://github.com/tokenfoundry/react-metamask#readme).
 
 ## Usage
 
-### Client-side
+### 1. Standard private and public plans with DaisySDK
 
-```js
-import DaisySDK from "daisy-sdk/browser";
+This is the default flow with standardized plans. This requires the implementation of a front-end with integration of Daisy Widget or Daisy SDK (advanced).
 
-const manager = ... // from server-side SDK
+#### 1.1 Create a Subscription Product and Plans
 
-const daisy = new DaisySDK(manager, web3); // web3 (from MetaMask)
+After deploying a Subscription Product to the blockchain go to the *API Integration* tab and get the `DAISY_ID` and `DAISY_SECRET_KEY`.
 
-const token = daisy.loadToken();
-const amount = 100;
-const account = "0x0..." // User address (from MetaMask)
-
-daisy
-  .prepareToken(token)
-  .approve(amount, { from: account })
-  .on("transactionHash", transactionHash => {})
-  .on("confirmation", (confirmationNumber, receipt) => {})
-  .on("receipt", receipt => {})
-  .on("error", error => {});
-
-const { signature, agreement } = await daisy
-  .prepareToken(token)
-  .sign({ account, plan: this.props.plan });
-
-// SEND signature, agreement to server.
+```txt
+# Example values
+DAISY_ID=margarita
+DAISY_SECRET_KEY=key
 ```
 
-#### MetaMask helper
+#### 1.2 Integration in the server
 
-The `web3` and `account` variables can be retrieve from MetaMask. We created a helper for this.
-
-```js
-// metamask.js
-import { createMetaMaskContext } from "@tokenfoundry/metamask-context";
-
-const MetaMaskContext = createMetaMaskContext();
-export default MetaMaskContext;
-```
+Create an instance of `ServiceSubscriptions` from the `daisy-sdk/private` sub-module.
+It is extremely important to keep `DAISY_SECRET_KEY` **private**.
 
 ```js
-// App.js
-import React, { Component } from "react";
+const { ServiceSubscriptions } = require("daisy-sdk/private");
 
-import MetaMaskContext from "./metamask";
-
-export default class App extends Component {
-  handleButtonClick = (web3, account) => {
-    /// use DaisySDK here
-  }
-
-  render() {
-    <MetaMaskContext.Provider immediate>
-      <MetaMaskContext.Consumer>
-        {({ web3, accounts, error, awaiting, openMetaMask }) => (
-          <div>
-            {/* MetaMask allowed and with an active account */}
-            {!error && web3 && accounts.length && (
-              <button
-                onClick={() => this.handleButtonClick(web3, accounts[0])}
-              >
-                <code>{accounts[0]}</code> 🦊
-              </button>
-            )}
-
-            {/* MetaMask allowed without account */}
-            {!error && web3 && accounts.length === 0 && (
-              <span>No Wallet 🦊</span>
-            )}
-
-            {/* Loading */}
-            {!error && !web3 && !awaiting && (
-              <a href="#" onClick={openMetaMask}>
-                MetaMask loading...
-              </a>
-            )}
-
-            {/* Force open MetaMask */}
-            {!error && !web3 && !awaiting && (
-              <a href="#" onClick={openMetaMask}>
-                Please open and allow MetaMask
-              </a>
-            )}
-
-            {/* MetaMask not installed */}
-            {error && error.notInstalled && (
-              <a
-                href="https://metamask.io/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Install MetaMask
-              </a>
-            )}
-
-            {/* MetaMask unhandled error */}
-            {error && !error.notInstalled && (
-              <a href="#" onClick={openMetaMask}>
-                {error.message}
-              </a>
-            )}
-          </div>
-        )}
-      </MetaMaskContext.Consumer>
-    </MetaMaskContext.Provider>
-  }
-}
+const subscriptionService = new ServiceSubscriptions({
+  identifier: process.env.DAISY_ID,
+  secretKey: process.env.DAISY_SECRET_KEY,
+});
 ```
 
-### Server-side
-
-> Keep the API Key private
+Create and endpoint to retrieve information from your servers back to the frontend.
+Here is an example using Express.js:
 
 ```js
 const express = require("express");
-const { ServiceSubscriptions } = require("daisy-sdk");
+const h = require("express-async-handler");
 
-const serviceSubscriptions = new ServiceSubscriptions({
-  identifier: "margarita",
-  secretKey: process.env.SUBSCRIPTION_SECRET || "key",
-});
+const app = express();
 
-const app = express()
-
-app.get("/api/plans/", async (req, res) => {
+// GET /api/plans/ -> Fetch plans from the frontend
+app.get("/api/plans/", h(async (req, res) => {
   const { plans } = await subscriptionService.getData();
-  res.json(plans);
-});
+  res.json({ plans });
+}));
 
-app.post("/api/subscriptions/", async (req, res) => {
-  const { signature, agreement } = req.body;
+// POST /api/plan/:pid/subscriptions/ -> Submit a subscription to Daisy
+app.post("/api/plan/:pid/subscriptions/", h(async (req, res) => {
+  const user = req.session;
+  const { agreement, signature } = req.body;
 
   const { plans } = await subscriptionService.getData();
-  const plan = plans.find(p => ...);
+  const plan = plans.find(p => p["id"] === req.params["pid"]);
+  if (!plan) {
+    throw // ...
+  }
 
-  const authSignature = plan["private"] && await subscriptionService.authorize({
-      privateKey: Buffer.from("PRIVATE_KEY", "hex")
-    }, agreement);
-  
-  const subscription = await subscriptionService.submit({
-    signature,
+  let authSignature = null; // not required for public plans.
+  if (plan.private) {
+    // TODO: Add conditions for `user` to use private plan.
+
+    const authorizer = {
+      privateKey: Buffer.from(process.env.PRIVATE_KEYS, "hex"),
+    };
+    authSignature = await subscriptionService.authorize(
+      authorizer,
+      agreement,
+    );
+  }
+
+  const { data: subscription } = await subscriptionService.submit({
     agreement,
+    authSignature,
+    signature,
   });
 
-  // TODO: SAVE `subscription` TO LOCAL DB
+  // Save and associate subscription["id"] AKA DaisyID to an user.
+  const DaisyID = subscription["id"];
+  await user.patch({ DaisyID });
 
-  res.json(subscription).status(201);
+  res.send("ok");
+}));
+```
+
+##### 1.2.1 Get plans from the frontend (not recommended)
+
+This will only expose `private: false` plans.
+
+```js
+import DaisySDK from "daisy-sdk";
+
+const daisy = new DaisySDK({ identifier: "margarita" }, web3)
+
+const { plans } = await daisy.getData();
+```
+
+#### 1.3 Approving tokens
+
+It is required to approve tokens before signing the subscription agreement.
+
+```js
+const daisy = new DaisySDK({ identifier: "margarita" }, web3)
+await daisy.sync();
+
+const token = daisy.loadToken(); // web3.js contract instance
+
+const approvalAmount = "9000000000000000";
+const account = "0x..." // from MetaMask.
+
+const eventemitter = daisy
+  .prepareToken(token)
+  .approve(approvalAmount, { from: account });
+
+const eventemitter
+  .on("transactionHash", handleApprove_transactionHash)
+  .on("confirmation", handleApprove_confirmation)
+  .on("receipt", handleApprove_receipt)
+  .on("error", handleApprove_error);
+
+function handleApprove_transactionHash(transactionHash) {
+  // ...
+};
+function handleApprove_confirmation(confirmationNumber, receipt) {
+  // ...
+};
+function handleApprove_receipt(receipt) {
+  // Here you can assume this task is complete.
+  // If you want to resume this transaction, save the `receipt` object.
+};
+function handleApprove_error(error) {
+  // ...
+};
+```
+
+#### 1.4 Signing subscription agreement
+
+```js
+const daisy = new DaisySDK({ identifier: "margarita" }, web3)
+await daisy.sync();
+
+const token = daisy.loadToken(); // web3.js contract instance
+
+const { signature, agreement } = await daisy
+  .prepareToken(token)
+  .sign({ account, plan });
+
+// Send `signature` and `agreement` back to the server
+// TODO: replace `:pid` with Plan ID.
+const response = await fetch("/api/plan/:pid/subscriptions/", {
+  method: "post",
+  credentials: "same-origin",
+  body: JSON.stringify({ signature, agreement }),
 });
 
-app.listen(3000);
+const data = await response.json();
+```
+
+##### 1.4.1 Submit subscription from the frontend (only for public plans) (not recommended)
+
+```js
+const { data: subscription } = await daisy.submit({
+  agreement,
+  signature,
+});
+```
+
+#### 1.5 Verify Daisy subscription state
+
+Verify subscription state with:
+
+```js
+const subscription = await subscriptionService.getSubscription({
+  id: DaisyID,
+});
+console.log(subscription["state"]);
+
+const subscriptions = await subscriptionService.getSubscriptions({
+  account: "0x...",
+});
+```
+
+### 2. Invitations
+
+Daisy Invitation allows client to externalize the flow to Daisy's domain.
+
+#### 2.1 Recommended usage: WebHooks
+
+Let's say you created a Daisy Invitation with the following id:
+
+```txt
+identifier: "/i/af4cff8c"
+callbackURL: https://myapp.com/api/callback/daisy-invitation/
+callbackExtra: {}
+
+```
+
+Then we need to route `callbackURL` to your server URL (with HTTPS) and a path.
+This route must handle a HTTP POST request and return a `2XX` status code.
+
+```ts
+// TypeScript typing
+
+type ID = string;
+
+/**
+ * JSON Payload attached to the POST request to `callbackURL`
+ */
+interface WebhookFromInvitation {
+  /**
+   * Semver string
+   * Current version: 1.0.0
+   */
+  version: string;
+  subscription: {
+    /**
+     * DaisyID
+     */
+    id: ID;
+  };
+  plan: {
+    id: ID;
+    private: boolean;
+  };
+  invitation: {
+    id: ID;
+  };
+  agreement: SubscriptionAgreement;
+  extra: any;
+}
+
+// From Daisy SDK `sign` method.
+interface SubscriptionAgreement = {
+  /**
+   * Subscriber Ethereum address
+   */
+  subscriber: string;
+  /**
+   * Token address
+   */
+  token: string;
+  amount: string;
+  periodUnit: string;
+  periods: string;
+  maxExecutions: string;
+  signatureExpiresAt: string;
+  plan: string;
+  nonce: string;
+}
+```
+
+So a normal server should handle this POST request like:
+
+```js
+const express = require("express");
+const h = require("express-async-handler");
+
+const app = express();
+
+// GET /api/callback/daisy-invitation/ -> Daisy callback handler
+app.get("/api/callback/daisy-invitation/", h(async (req, res) => {
+  const { subscription, plan } = req.body
+
+  // TODO: Identify the user
+  await user.patch({ DaisyID: subscription["id"] });
+
+  let authSignature = null; // not required for public plans.
+  if (plan.private) {
+    // TODO: Add conditions for user to use private plan.
+
+    const authorizer = {
+      privateKey: Buffer.from(process.env.PRIVATE_KEYS, "hex"),
+    };
+    authSignature = await subscriptionService.authorize(
+      authorizer,
+      agreement,
+    );
+  }
+
+  // Optional redirect URL, may have custom tokens.
+  // Is not guaranteed the user is going to enter this URL.
+  const redirectURL = "https://myapp.com/checkount/finish/";
+
+  res.json({ authSignature, redirectURL })
+}));
+```
+
+#### 2.2 Identifying the user
+
+One way to identify an user after getting the callback is by knowing before-hand the user's Ethereum address.
+So it can be queried from `req.body["agreement"]["subscriber"]`
+
+A better way is setting the `callbackExtra` payload to something we can recognize in the backend.
+Example:
+
+```language
+identifier: "/i/af4cff8c"
+callbackURL: https://myapp.com/api/callback/daisy-invitation/
+callbackExtra: { "email": "user@daisypayments.com" }
+```
+
+```js
+// GET /api/callback/daisy-invitation/ -> Daisy callback handler
+app.get("/api/callback/daisy-invitation/", h(async (req, res) => {
+  const { subscription, plan, extra } = req.body
+
+  // TODO: Identify the user
+  await user.findById({ email: extra.email }).patch({ DaisyID: subscription["id"] });
+
+  // ...
+
+  const redirectURL = `https://myapp.com/checkount/finish/?user=${user.id}`;
+
+  res.json({ authSignature, redirectURL })
+}
 ```
