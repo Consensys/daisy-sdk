@@ -151,7 +151,8 @@ export class DaisySDKToken {
   /**
    * Approve a token with Metamask
    * @param {string|number} amount - Amounts of tokens to approve. It can be more tokens than the current amount the user has.
-   * @param {Object} [sendArgs] - Optional Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {Object} sendArgs - Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {string} sendArgs.from - User account Ethereum address.
    * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. See the example for the returned values.
    *
    * @example
@@ -170,7 +171,7 @@ export class DaisySDKToken {
    */
   approve(amount, sendArgs) {
     if (!sendArgs.from) {
-      throw new Error();
+      throw new Error("Missing `sendArgs.from` argument");
     }
     return this.token.methods["approve"](this.manager["address"], amount).send(
       sendArgs
@@ -179,7 +180,8 @@ export class DaisySDKToken {
 
   /**
    * Check allowance that spender has given to subscription manager
-   * @param {Object} [sendArgs] - Optional Web3 arguments for transactions. Must have tokenOwner field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {Object} sendArgs - Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {string} sendArgs.tokenOwner - User account Ethereum address.
    * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. Promise resolves to string representing how much of the ERC20 token the tokenOwner has approved the subscription manager to spend.
    *
    * @example
@@ -193,7 +195,7 @@ export class DaisySDKToken {
    */
   allowance(sendArgs) {
     if (!sendArgs.tokenOwner) {
-      throw new Error();
+      throw new Error("Missing `sendArgs.tokenOwner` argument");
     }
     return this.token.methods["allowance"](
       sendArgs.tokenOwner,
@@ -203,7 +205,8 @@ export class DaisySDKToken {
 
   /**
    * Check balance of spender. Useful to prevent subscriber from submitting a signed agreement if they do not have sufficient funds
-   * @param {Object} [sendArgs] - Optional Web3 arguments for transactions. Must have tokenOwner field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {Object} sendArgs - Web3 arguments for transactions. Must have tokenOwner field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {string} sendArgs.tokenOwner - User account Ethereum address.
    * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. Promise resolves to string representing account's balance of ERC20 token.
    *
    * @example
@@ -217,7 +220,7 @@ export class DaisySDKToken {
    */
   balanceOf(sendArgs) {
     if (!sendArgs.tokenOwner) {
-      throw new Error();
+      throw new Error("Missing `sendArgs.tokenOwner` argument");
     }
     return this.token.methods["balanceOf"](sendArgs.tokenOwner).call();
   }

@@ -6,7 +6,7 @@ const Client = require("./Client");
 
 /**
  * @typedef {Object} Plan - Daisy's Plan object. Can be retrieved using {@link module:common~SubscriptionProductClient#getData}.
- * @property {string} id - Daisy ID.
+ * @property {string} id - ID.
  * @property {string} name - Plan name.
  * @property {string} onChainId - Plan ID in the Ethereum blockchain (internal use of the SDK).
  * @property {string} description - Plan description.
@@ -27,7 +27,7 @@ const Client = require("./Client");
 
 /**
  * @typedef {Object} Subscription
- * @property {string} id - Daisy ID.
+ * @property {string} daisyId - Daisy ID.
  * @property {string} account - Subscriber ethereum address.
  * @property {string} token - Token address.
  * @property {number|string} amount - Approved tokens.
@@ -52,7 +52,7 @@ const Client = require("./Client");
 
 /**
  * @typedef {Object} Receipt
- * @property {string} id - Daisy ID.
+ * @property {string} id - ID.
  * @property {string} txHash - Transaction hash.
  * @property {string} action - What happened in this billing cycle.
  * @property {string} [nextPayment] - When is the next billing cycle.
@@ -157,7 +157,7 @@ class SubscriptionProductClient extends Client {
    * Get single subscription.
    * @async
    * @param {Object} criteria - Filtering criteria, only one field is required.
-   * @param {string} criteria.id - Find Subscription based on a Daisy ID.
+   * @param {string} criteria.daisyId - Find Subscription based on a Daisy ID.
    * @param {string} criteria.subscriptionHash - Find Subscription based on a `subscriptionHash` in the blockchain.
    * @returns {Promise<?Subscription>} - Subscription found.
    *
@@ -168,11 +168,11 @@ class SubscriptionProductClient extends Client {
    * });
    * const subscription = await subscriptionProduct.getSubscription({ id: "" });
    */
-  getSubscription({ id, subscriptionHash }) {
-    if (id) {
+  getSubscription({ daisyId, subscriptionHash }) {
+    if (daisyId) {
       return this.request({
         method: "get",
-        url: `/subscriptions/${id}/`,
+        url: `/subscriptions/${daisyId}/`,
       }).then(({ data: body }) => body.data);
     } else if (subscriptionHash) {
       return this.request({
@@ -188,15 +188,15 @@ class SubscriptionProductClient extends Client {
    * Get receipts from single subscription.
    * @async
    * @param {Object} criteria - Filtering criteria, only one field is required.
-   * @param {string} criteria.id - Find Subscription based on a Daisy ID.
+   * @param {string} criteria.daisyId - Find Subscription based on a Daisy ID.
    * @param {string} criteria.subscriptionHash - Find Subscription based on a `subscriptionHash` in the blockchain.
    * @returns {Promise<Receipt[]>} - Receipts.
    */
-  getReceipts({ id, subscriptionHash }) {
-    if (id) {
+  getReceipts({ daisyId, subscriptionHash }) {
+    if (daisyId) {
       return this.request({
         method: "get",
-        url: `/subscriptions/${id}/receipts/`,
+        url: `/subscriptions/${daisyId}/receipts/`,
       }).then(({ data: body }) => body.data);
     } else if (subscriptionHash) {
       return this.request({
