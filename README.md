@@ -87,9 +87,9 @@ app.post("/api/plan/:pid/subscriptions/", h(async (req, res) => {
     signature,
   });
 
-  // Save and associate subscription["id"] AKA DaisyID to an user.
-  const DaisyID = subscription["id"];
-  await user.patch({ DaisyID });
+  // Save and associate DaisyID from `subscription["daisyId"]` to an user.
+  const daisyId = subscription["daisyId"];
+  await user.patch({ daisyId });
 
   res.send("ok");
 }));
@@ -183,7 +183,7 @@ Verify subscription state with:
 
 ```js
 const subscription = await subscriptionService.getSubscription({
-  id: DaisyID,
+  id: daisyID,
 });
 console.log(subscription["state"]);
 
@@ -228,7 +228,7 @@ interface WebhookFromInvitation {
     /**
      * DaisyID
      */
-    id: ID;
+    daisyId: ID;
   };
   plan: {
     id: ID;
@@ -274,7 +274,7 @@ app.get("/api/callback/daisy-invitation/", h(async (req, res) => {
   const { subscription, plan } = req.body
 
   // TODO: Identify the user
-  await user.patch({ DaisyID: subscription["id"] });
+  await user.patch({ daisyID: subscription["daisyId"] });
 
   let authSignature = null; // not required for public plans.
   if (plan.private) {
@@ -317,7 +317,7 @@ app.get("/api/callback/daisy-invitation/", h(async (req, res) => {
   const { subscription, plan, extra } = req.body
 
   // TODO: Identify the user
-  await user.findById({ email: extra.email }).patch({ DaisyID: subscription["id"] });
+  await user.findById({ email: extra["email"] }).patch({ daisyId: subscription["daisyId"] });
 
   // ...
 
