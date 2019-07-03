@@ -111,6 +111,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -136,10 +138,16 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Daisy ID.</p></td>
+            <td class="description last"><p>ID.</p></td>
         </tr>
 
     
@@ -158,6 +166,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -182,6 +196,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -204,6 +224,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -228,10 +254,16 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Plan price in tokens.</p></td>
+            <td class="description last"><p>Plan price in tokens (stored as string).</p></td>
         </tr>
 
     
@@ -250,6 +282,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -274,6 +312,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -296,6 +340,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -320,6 +370,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -336,40 +392,23 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
 
             <td class="description last"><p>Is the plan enabled for subscriptions or disabled?.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>state</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Enum: <code>DRAFT</code>, <code>PENDING</code>, <code>DEPLOYED</code>, <code>FAILED</code>.</p></td>
         </tr>
 
     
@@ -389,10 +428,139 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Transaction hash when it was deployed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Error message (if any).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>DRAFT</code>, <code>PENDING</code>, <code>DEPLOYED</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>removalState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>OK</code>, <code>PENDING</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setActiveState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>OK</code>, <code>PENDING</code>, <code>FAILED</code>.</p></td>
         </tr>
 
     
@@ -414,6 +582,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -440,6 +614,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -572,7 +752,7 @@
 
             
 
-            <td class="description last"><p>Daisy ID.</p></td>
+            <td class="description last"><p>ID.</p></td>
         </tr>
 
     
@@ -652,9 +832,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
                 </td>
             
@@ -674,6 +854,9 @@
             <td class="type">
             
                 
+<span class="param-type">Error</span>
+|
+
 <span class="param-type">string</span>
 
 
@@ -683,9 +866,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
                 </td>
             
@@ -706,6 +889,9 @@
             
                 
 <span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
 
 
             
@@ -760,7 +946,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line32">line 32</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -813,6 +999,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -825,7 +1013,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>daisyId</code></td>
             
 
             <td class="type">
@@ -837,6 +1025,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -848,7 +1042,7 @@
 
         <tr>
             
-                <td class="name"><code>state</code></td>
+                <td class="name"><code>account</code></td>
             
 
             <td class="type">
@@ -861,10 +1055,292 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Current subscription state. Options: NOT_STARTED PENDING CREATED ACTIVE ACTIVE_CANCELLED CANCELLED EXPIRED INVALID NOT_ENOUGH_FUNDS FAILED</p></td>
+            <td class="description last"><p>Subscriber ethereum address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Token address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Approved tokens.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>periodUnit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>periods</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signature</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Created when user signs the agreement at <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signatureExpiresAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>UNIX Timestamp (in seconds for blockchain usage) when the <code>signature</code> field expires.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxExecutions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>How many periods the subscription is for.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nextPayment</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>UNIX Timestamp (in seconds for blockchain usage) when its the next billing cycle (approximation).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nextPaymentDate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Normal Date object representing the next billing cycle.</p></td>
         </tr>
 
     
@@ -884,10 +1360,304 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Identifier in the blockchain.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>txHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Transaction hash after deploying the subscription.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Error message (if any).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the error ocurred (if any).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Current subscription state. Enum: <code>NOT_STARTED</code>, <code>PENDING</code>, <code>ACTIVE</code>, <code>ACTIVE_CANCELLED</code>, <code>CANCELLED</code>, <code>EXPIRED</code>, <code>INVALID</code>, <code>NOT_ENOUGH_FUNDS</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cancelState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>OK</code>, <code>PENDING</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the subscription started (off-chain value).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>endedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the subscription ended (off-chain value).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>updatedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Timestamp.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>createdAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Timestamp.</p></td>
         </tr>
 
     
@@ -926,7 +1696,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line25">line 25</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -979,6 +1749,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -987,6 +1759,38 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>networkId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Ethereum network identifier.</p></td>
+        </tr>
+
     
 
         <tr>
@@ -1003,6 +1807,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -1027,6 +1837,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1050,6 +1866,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1072,6 +1894,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -1099,6 +1927,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
@@ -1121,6 +1957,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -1145,6 +1989,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1167,6 +2017,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -1191,6 +2049,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1214,6 +2078,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1236,6 +2106,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -1263,6 +2141,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1289,6 +2173,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1311,6 +2201,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -1354,7 +2252,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line42">line 42</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -1471,6 +2369,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -1496,10 +2396,16 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Daisy ID.</p></td>
+            <td class="description last"><p>ID.</p></td>
         </tr>
 
     
@@ -1518,6 +2424,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -1542,6 +2454,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1564,6 +2482,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -1588,10 +2512,16 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Plan price in tokens.</p></td>
+            <td class="description last"><p>Plan price in tokens (stored as string).</p></td>
         </tr>
 
     
@@ -1610,6 +2540,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -1634,6 +2570,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1656,6 +2598,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -1680,6 +2628,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -1696,40 +2650,23 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
 
             <td class="description last"><p>Is the plan enabled for subscriptions or disabled?.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>state</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Enum: <code>DRAFT</code>, <code>PENDING</code>, <code>DEPLOYED</code>, <code>FAILED</code>.</p></td>
         </tr>
 
     
@@ -1749,10 +2686,139 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Transaction hash when it was deployed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Error message (if any).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>DRAFT</code>, <code>PENDING</code>, <code>DEPLOYED</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>removalState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>OK</code>, <code>PENDING</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setActiveState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>OK</code>, <code>PENDING</code>, <code>FAILED</code>.</p></td>
         </tr>
 
     
@@ -1774,6 +2840,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -1800,6 +2872,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -1932,7 +3010,7 @@
 
             
 
-            <td class="description last"><p>Daisy ID.</p></td>
+            <td class="description last"><p>ID.</p></td>
         </tr>
 
     
@@ -2012,9 +3090,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
                 </td>
             
@@ -2034,6 +3112,9 @@
             <td class="type">
             
                 
+<span class="param-type">Error</span>
+|
+
 <span class="param-type">string</span>
 
 
@@ -2043,9 +3124,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
                 </td>
             
@@ -2066,6 +3147,9 @@
             
                 
 <span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
 
 
             
@@ -2120,7 +3204,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line32">line 32</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -2173,6 +3257,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -2185,7 +3271,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>daisyId</code></td>
             
 
             <td class="type">
@@ -2197,6 +3283,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -2208,7 +3300,7 @@
 
         <tr>
             
-                <td class="name"><code>state</code></td>
+                <td class="name"><code>account</code></td>
             
 
             <td class="type">
@@ -2221,10 +3313,292 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Current subscription state. Options: NOT_STARTED PENDING CREATED ACTIVE ACTIVE_CANCELLED CANCELLED EXPIRED INVALID NOT_ENOUGH_FUNDS FAILED</p></td>
+            <td class="description last"><p>Subscriber ethereum address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Token address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Approved tokens.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>periodUnit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>periods</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signature</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Created when user signs the agreement at <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signatureExpiresAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>UNIX Timestamp (in seconds for blockchain usage) when the <code>signature</code> field expires.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxExecutions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>How many periods the subscription is for.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nextPayment</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>UNIX Timestamp (in seconds for blockchain usage) when its the next billing cycle (approximation).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nextPaymentDate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Normal Date object representing the next billing cycle.</p></td>
         </tr>
 
     
@@ -2244,10 +3618,304 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Identifier in the blockchain.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>txHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Transaction hash after deploying the subscription.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Error message (if any).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the error ocurred (if any).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Current subscription state. Enum: <code>NOT_STARTED</code>, <code>PENDING</code>, <code>ACTIVE</code>, <code>ACTIVE_CANCELLED</code>, <code>CANCELLED</code>, <code>EXPIRED</code>, <code>INVALID</code>, <code>NOT_ENOUGH_FUNDS</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cancelState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>OK</code>, <code>PENDING</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the subscription started (off-chain value).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>endedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the subscription ended (off-chain value).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>updatedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Timestamp.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>createdAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Timestamp.</p></td>
         </tr>
 
     
@@ -2286,7 +3954,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line25">line 25</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -2339,6 +4007,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -2347,6 +4017,38 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>networkId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Ethereum network identifier.</p></td>
+        </tr>
+
     
 
         <tr>
@@ -2363,6 +4065,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -2387,6 +4095,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -2410,6 +4124,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -2432,6 +4152,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -2459,6 +4185,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
@@ -2481,6 +4215,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -2505,6 +4247,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -2527,6 +4275,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -2551,6 +4307,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -2574,6 +4336,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -2596,6 +4364,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -2623,6 +4399,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -2649,6 +4431,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -2671,6 +4459,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -2714,7 +4510,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line42">line 42</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -2831,6 +4627,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -2856,10 +4654,16 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Daisy ID.</p></td>
+            <td class="description last"><p>ID.</p></td>
         </tr>
 
     
@@ -2878,6 +4682,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -2902,6 +4712,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -2924,6 +4740,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -2948,10 +4770,16 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Plan price in tokens.</p></td>
+            <td class="description last"><p>Plan price in tokens (stored as string).</p></td>
         </tr>
 
     
@@ -2970,6 +4798,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -2994,6 +4828,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -3016,6 +4856,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -3040,6 +4886,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -3056,40 +4908,23 @@
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
 
             <td class="description last"><p>Is the plan enabled for subscriptions or disabled?.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>state</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Enum: <code>DRAFT</code>, <code>PENDING</code>, <code>DEPLOYED</code>, <code>FAILED</code>.</p></td>
         </tr>
 
     
@@ -3109,10 +4944,139 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Transaction hash when it was deployed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Error message (if any).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>DRAFT</code>, <code>PENDING</code>, <code>DEPLOYED</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>removalState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>OK</code>, <code>PENDING</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setActiveState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>OK</code>, <code>PENDING</code>, <code>FAILED</code>.</p></td>
         </tr>
 
     
@@ -3134,6 +5098,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -3160,6 +5130,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -3292,7 +5268,7 @@
 
             
 
-            <td class="description last"><p>Daisy ID.</p></td>
+            <td class="description last"><p>ID.</p></td>
         </tr>
 
     
@@ -3372,9 +5348,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
                 </td>
             
@@ -3394,6 +5370,9 @@
             <td class="type">
             
                 
+<span class="param-type">Error</span>
+|
+
 <span class="param-type">string</span>
 
 
@@ -3403,9 +5382,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
                 </td>
             
@@ -3426,6 +5405,9 @@
             
                 
 <span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
 
 
             
@@ -3480,7 +5462,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line32">line 32</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -3533,6 +5515,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -3545,7 +5529,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>daisyId</code></td>
             
 
             <td class="type">
@@ -3557,6 +5541,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -3568,7 +5558,7 @@
 
         <tr>
             
-                <td class="name"><code>state</code></td>
+                <td class="name"><code>account</code></td>
             
 
             <td class="type">
@@ -3581,10 +5571,292 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Current subscription state. Options: NOT_STARTED PENDING CREATED ACTIVE ACTIVE_CANCELLED CANCELLED EXPIRED INVALID NOT_ENOUGH_FUNDS FAILED</p></td>
+            <td class="description last"><p>Subscriber ethereum address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Token address.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Approved tokens.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>periodUnit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>periods</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signature</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Created when user signs the agreement at <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>signatureExpiresAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>UNIX Timestamp (in seconds for blockchain usage) when the <code>signature</code> field expires.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxExecutions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>How many periods the subscription is for.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nextPayment</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>UNIX Timestamp (in seconds for blockchain usage) when its the next billing cycle (approximation).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nextPaymentDate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Normal Date object representing the next billing cycle.</p></td>
         </tr>
 
     
@@ -3604,10 +5876,304 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Identifier in the blockchain.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>txHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Transaction hash after deploying the subscription.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Error</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Error message (if any).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the error ocurred (if any).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Current subscription state. Enum: <code>NOT_STARTED</code>, <code>PENDING</code>, <code>ACTIVE</code>, <code>ACTIVE_CANCELLED</code>, <code>CANCELLED</code>, <code>EXPIRED</code>, <code>INVALID</code>, <code>NOT_ENOUGH_FUNDS</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cancelState</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Enum: <code>OK</code>, <code>PENDING</code>, <code>FAILED</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the subscription started (off-chain value).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>endedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When the subscription ended (off-chain value).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>updatedAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Timestamp.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>createdAt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Date</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Timestamp.</p></td>
         </tr>
 
     
@@ -3646,7 +6212,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line25">line 25</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -3699,6 +6265,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -3707,6 +6275,38 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>networkId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Ethereum network identifier.</p></td>
+        </tr>
+
     
 
         <tr>
@@ -3723,6 +6323,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -3747,6 +6353,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -3770,6 +6382,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -3792,6 +6410,12 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+                </td>
             
 
             
@@ -3819,6 +6443,14 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
 
             
 
@@ -3841,6 +6473,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -3865,6 +6505,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -3887,6 +6533,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -3911,6 +6565,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -3934,6 +6594,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -3956,6 +6622,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -3983,6 +6657,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -4009,6 +6689,12 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+                </td>
+            
 
             
 
@@ -4031,6 +6717,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
             
 
             
@@ -4074,7 +6768,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line42">line 42</a>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -4104,13 +6798,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li><a href="module-private.html">private</a></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul><h3>Classes</h3><ul><li><a href="module-browser.DaisySDKToken.html">DaisySDKToken</a></li><li><a href="module-browser-DaisySDK.html">DaisySDK</a></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li><a href="module-private.html">private</a></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul><h3>Classes</h3><ul><li><a href="module-browser-DaisySDK.html">DaisySDK</a></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Jun 07 2019 13:50:34 GMT-0400 (Chile Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 09:33:23 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

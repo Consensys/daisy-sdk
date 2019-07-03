@@ -43,140 +43,279 @@
 
 
     <section>
-        <article><h1>daisy-sdk</h1><h2>Install</h2><blockquote>
+        <article><h1>Daisy SDK &amp; Docs</h1>
+<h2>Install</h2>
+<blockquote>
 <p>You may also require some extra dependencies like <code>axios</code>, <code>web3</code>, <code>eventemitter3</code>, and <code>querystring</code>.</p>
 </blockquote>
-<pre class="prettyprint source lang-sh"><code>yarn add daisy-sdk</code></pre><h2>Usage</h2><h3>Client-side</h3><pre class="prettyprint source lang-js"><code>import DaisySDK from &quot;daisy-sdk/browser&quot;;
+<pre class="prettyprint source lang-sh"><code>yarn add daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
+</code></pre>
+<h2>MetaMask helper</h2>
+<p>To help you handle web3 instances and the current account we recommended <a href="https://github.com/daisypayments/react-metamask#readme">daisypayments/react-metamask</a>.</p>
+<h2>Usage</h2>
+<h3>1. Standard private and public plans with DaisySDK</h3>
+<p>This is the default flow with standardized plans. This requires the implementation of a front-end with integration of Daisy Widget or Daisy SDK (advanced).</p>
+<h4>1.1 Create a Subscription Product and Plans</h4>
+<p>After deploying a Subscription Product to the blockchain go to the <em>API Integration</em> tab and get the <code>DAISY_ID</code> and <code>DAISY_SECRET_KEY</code>.</p>
+<pre class="prettyprint source lang-txt"><code># Example values
+DAISY_ID=margarita
+DAISY_SECRET_KEY=key
+</code></pre>
+<h4>1.2 Integration in the server</h4>
+<p>Create an instance of <code>ServiceSubscriptions</code> from the <code>daisy-sdk/private</code> sub-module.
+It is extremely important to keep <code>DAISY_SECRET_KEY</code> <strong>private</strong>.</p>
+<pre class="prettyprint source lang-js"><code>const { ServiceSubscriptions } = require(&quot;daisy-sdk/private&quot;);
 
-const manager = ... // from server-side SDK
+const subscriptionService = new ServiceSubscriptions({
+  identifier: process.env.DAISY_ID,
+  secretKey: process.env.DAISY_SECRET_KEY,
+});
+</code></pre>
+<p>Create and endpoint to retrieve information from your servers back to the frontend.
+Here is an example using Express.js:</p>
+<pre class="prettyprint source lang-js"><code>const express = require(&quot;express&quot;);
+const h = require(&quot;express-async-handler&quot;);
 
-const daisy = new DaisySDK(manager, web3); // web3 (from MetaMask)
+const app = express();
 
-const token = daisy.loadToken();
-const amount = 100;
-const account = &quot;0x0...&quot; // User address (from MetaMask)
+// GET /api/plans/ -> Fetch plans from the frontend
+app.get(&quot;/api/plans/&quot;, h(async (req, res) => {
+  const { plans } = await subscriptionService.getData();
+  res.json({ plans });
+}));
 
-daisy
+// POST /api/plan/:pid/subscriptions/ -> Submit a subscription to Daisy
+app.post(&quot;/api/plan/:pid/subscriptions/&quot;, h(async (req, res) => {
+  const user = req.session;
+  const { agreement, signature } = req.body;
+
+  const { plans } = await subscriptionService.getData();
+  const plan = plans.find(p => p[&quot;id&quot;] === req.params[&quot;pid&quot;]);
+  if (!plan) {
+    throw // ...
+  }
+
+  let authSignature = null; // not required for public plans.
+  if (plan.private) {
+    // TODO: Add conditions for `user` to use private plan.
+
+    const authorizer = {
+      privateKey: Buffer.from(process.env.PRIVATE_KEYS, &quot;hex&quot;),
+    };
+    authSignature = await subscriptionService.authorize(
+      authorizer,
+      agreement,
+    );
+  }
+
+  const { data: subscription } = await subscriptionService.submit({
+    agreement,
+    authSignature,
+    signature,
+  });
+
+  // Save and associate DaisyID from `subscription[&quot;daisyId&quot;]` to an user.
+  const daisyId = subscription[&quot;daisyId&quot;];
+  await user.patch({ daisyId });
+
+  res.send(&quot;ok&quot;);
+}));
+</code></pre>
+<h5>1.2.1 Get plans from the frontend (not recommended)</h5>
+<p>This will only expose <code>private: false</code> plans.</p>
+<pre class="prettyprint source lang-js"><code>import DaisySDK from &quot;daisy-sdk&quot;;
+
+const daisy = new DaisySDK({ identifier: &quot;margarita&quot; }, web3)
+
+const { plans } = await daisy.getData();
+</code></pre>
+<h4>1.3 Approving tokens</h4>
+<p>It is required to approve tokens before signing the subscription agreement.</p>
+<pre class="prettyprint source lang-js"><code>const daisy = new DaisySDK({ identifier: &quot;margarita&quot; }, web3)
+await daisy.sync();
+
+const token = daisy.loadToken(); // web3.js contract instance
+
+const approvalAmount = &quot;9000000000000000&quot;;
+const account = &quot;0x...&quot; // from MetaMask.
+
+const eventemitter = daisy
   .prepareToken(token)
-  .approve(amount, { from: account })
-  .on(&quot;transactionHash&quot;, transactionHash => {})
-  .on(&quot;confirmation&quot;, (confirmationNumber, receipt) => {})
-  .on(&quot;receipt&quot;, receipt => {})
-  .on(&quot;error&quot;, error => {});
+  .approve(approvalAmount, { from: account });
+
+const eventemitter
+  .on(&quot;transactionHash&quot;, handleApprove_transactionHash)
+  .on(&quot;confirmation&quot;, handleApprove_confirmation)
+  .on(&quot;receipt&quot;, handleApprove_receipt)
+  .on(&quot;error&quot;, handleApprove_error);
+
+function handleApprove_transactionHash(transactionHash) {
+  // ...
+};
+function handleApprove_confirmation(confirmationNumber, receipt) {
+  // ...
+};
+function handleApprove_receipt(receipt) {
+  // Here you can assume this task is complete.
+  // If you want to resume this transaction, save the `receipt` object.
+};
+function handleApprove_error(error) {
+  // ...
+};
+</code></pre>
+<h4>1.4 Signing subscription agreement</h4>
+<pre class="prettyprint source lang-js"><code>const daisy = new DaisySDK({ identifier: &quot;margarita&quot; }, web3)
+await daisy.sync();
+
+const token = daisy.loadToken(); // web3.js contract instance
 
 const { signature, agreement } = await daisy
   .prepareToken(token)
-  .sign({ account, plan: this.props.plan });
+  .sign({ account, plan });
 
-// SEND signature, agreement to server.</code></pre><h4>MetaMask helper</h4><p>The <code>web3</code> and <code>account</code> variables can be retrieve from MetaMask. We created a helper for this.</p>
-<pre class="prettyprint source lang-js"><code>// metamask.js
-import { createMetaMaskContext } from &quot;@tokenfoundry/metamask-context&quot;;
+// Send `signature` and `agreement` back to the server
+// TODO: replace `:pid` with Plan ID.
+const response = await fetch(&quot;/api/plan/:pid/subscriptions/&quot;, {
+  method: &quot;post&quot;,
+  credentials: &quot;same-origin&quot;,
+  body: JSON.stringify({ signature, agreement }),
+});
 
-const MetaMaskContext = createMetaMaskContext();
-export default MetaMaskContext;</code></pre><pre class="prettyprint source lang-js"><code>// App.js
-import React, { Component } from &quot;react&quot;;
+const data = await response.json();
+</code></pre>
+<h5>1.4.1 Submit subscription from the frontend (only for public plans) (not recommended)</h5>
+<pre class="prettyprint source lang-js"><code>const { data: subscription } = await daisy.submit({
+  agreement,
+  signature,
+});
+</code></pre>
+<h4>1.5 Verify Daisy subscription state</h4>
+<p>Verify subscription state with:</p>
+<pre class="prettyprint source lang-js"><code>const subscription = await subscriptionService.getSubscription({
+  id: daisyID,
+});
+console.log(subscription[&quot;state&quot;]);
 
-import MetaMaskContext from &quot;./metamask&quot;;
+const subscriptions = await subscriptionService.getSubscriptions({
+  account: &quot;0x...&quot;,
+});
+</code></pre>
+<h3>2. Invitations</h3>
+<p>Daisy Invitation allows client to externalize the flow to Daisy's domain.</p>
+<h4>2.1 Recommended usage: WebHooks</h4>
+<p>Let's say you created a Daisy Invitation with the following id:</p>
+<pre class="prettyprint source lang-txt"><code>identifier: &quot;/i/af4cff8c&quot;
+callbackURL: https://myapp.com/api/callback/daisy-invitation/
+callbackExtra: {}
 
-export default class App extends Component {
-  handleButtonClick = (web3, account) => {
-    /// use DaisySDK here
-  }
+</code></pre>
+<p>Then we need to route <code>callbackURL</code> to your server URL (with HTTPS) and a path.
+This route must handle a HTTP POST request and return a <code>2XX</code> status code.</p>
+<pre class="prettyprint source lang-ts"><code>// TypeScript typing
 
-  render() {
-    &lt;MetaMaskContext.Provider immediate>
-      &lt;MetaMaskContext.Consumer>
-        {({ web3, accounts, error, awaiting, openMetaMask }) => (
-          &lt;div>
-            {/* MetaMask allowed and with an active account */}
-            {!error && web3 && accounts.length && (
-              &lt;button
-                onClick={() => this.handleButtonClick(web3, accounts[0])}
-              >
-                &lt;code>{accounts[0]}&lt;/code> 🦊
-              &lt;/button>
-            )}
+type ID = string;
 
-            {/* MetaMask allowed without account */}
-            {!error && web3 && accounts.length === 0 && (
-              &lt;span>No Wallet 🦊&lt;/span>
-            )}
+/**
+ * JSON Payload attached to the POST request to `callbackURL`
+ */
+interface WebhookFromInvitation {
+  /**
+   * Semver string
+   * Current version: 1.0.0
+   */
+  version: string;
+  subscription: {
+    /**
+     * DaisyID
+     */
+    daisyId: ID;
+  };
+  plan: {
+    id: ID;
+    private: boolean;
+  };
+  invitation: {
+    id: ID;
+  };
+  agreement: SubscriptionAgreement;
+  extra: any;
+}
 
-            {/* Loading */}
-            {!error && !web3 && !awaiting && (
-              &lt;a href=&quot;#&quot; onClick={openMetaMask}>
-                MetaMask loading...
-              &lt;/a>
-            )}
-
-            {/* Force open MetaMask */}
-            {!error && !web3 && !awaiting && (
-              &lt;a href=&quot;#&quot; onClick={openMetaMask}>
-                Please open and allow MetaMask
-              &lt;/a>
-            )}
-
-            {/* MetaMask not installed */}
-            {error && error.notInstalled && (
-              &lt;a
-                href=&quot;https://metamask.io/&quot;
-                target=&quot;_blank&quot;
-                rel=&quot;noopener noreferrer&quot;
-              >
-                Install MetaMask
-              &lt;/a>
-            )}
-
-            {/* MetaMask unhandled error */}
-            {error && !error.notInstalled && (
-              &lt;a href=&quot;#&quot; onClick={openMetaMask}>
-                {error.message}
-              &lt;/a>
-            )}
-          &lt;/div>
-        )}
-      &lt;/MetaMaskContext.Consumer>
-    &lt;/MetaMaskContext.Provider>
-  }
-}</code></pre><h3>Server-side</h3><blockquote>
-<p>Keep the API Key private</p>
-</blockquote>
+// From Daisy SDK `sign` method.
+interface SubscriptionAgreement = {
+  /**
+   * Subscriber Ethereum address
+   */
+  subscriber: string;
+  /**
+   * Token address
+   */
+  token: string;
+  amount: string;
+  periodUnit: string;
+  periods: string;
+  maxExecutions: string;
+  signatureExpiresAt: string;
+  plan: string;
+  nonce: string;
+}
+</code></pre>
+<p>So a normal server should handle this POST request like:</p>
 <pre class="prettyprint source lang-js"><code>const express = require(&quot;express&quot;);
-const { ServiceSubscriptions } = require(&quot;daisy-sdk&quot;);
+const h = require(&quot;express-async-handler&quot;);
 
-const serviceSubscriptions = new ServiceSubscriptions({
-  identifier: &quot;margarita&quot;,
-  secretKey: process.env.SUBSCRIPTION_SECRET || &quot;key&quot;,
-});
+const app = express();
 
-const app = express()
+// GET /api/callback/daisy-invitation/ -> Daisy callback handler
+app.get(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
+  const { subscription, plan } = req.body
 
-app.get(&quot;/api/plans/&quot;, async (req, res) => {
-  const { plans } = await subscriptionService.getData();
-  res.json(plans);
-});
+  // TODO: Identify the user
+  await user.patch({ daisyID: subscription[&quot;daisyId&quot;] });
 
-app.post(&quot;/api/subscriptions/&quot;, async (req, res) => {
-  const { signature, agreement } = req.body;
+  let authSignature = null; // not required for public plans.
+  if (plan.private) {
+    // TODO: Add conditions for user to use private plan.
 
-  const { plans } = await subscriptionService.getData();
-  const plan = plans.find(p => ...);
+    const authorizer = {
+      privateKey: Buffer.from(process.env.PRIVATE_KEYS, &quot;hex&quot;),
+    };
+    authSignature = await subscriptionService.authorize(
+      authorizer,
+      agreement,
+    );
+  }
 
-  const authSignature = plan[&quot;private&quot;] && await subscriptionService.authorize({
-      privateKey: Buffer.from(&quot;PRIVATE_KEY&quot;, &quot;hex&quot;)
-    }, agreement);
+  // Optional redirect URL, may have custom tokens.
+  // Is not guaranteed the user is going to enter this URL.
+  const redirectURL = &quot;https://myapp.com/checkount/finish/&quot;;
 
-  const subscription = await subscriptionService.submit({
-    signature,
-    agreement,
-  });
+  res.json({ authSignature, redirectURL })
+}));
+</code></pre>
+<h4>2.2 Identifying the user</h4>
+<p>One way to identify an user after getting the callback is by knowing before-hand the user's Ethereum address.
+So it can be queried from <code>req.body[&quot;agreement&quot;][&quot;subscriber&quot;]</code></p>
+<p>A better way is setting the <code>callbackExtra</code> payload to something we can recognize in the backend.
+Example:</p>
+<pre class="prettyprint source lang-language"><code>identifier: &quot;/i/af4cff8c&quot;
+callbackURL: https://myapp.com/api/callback/daisy-invitation/
+callbackExtra: { &quot;email&quot;: &quot;user@daisypayments.com&quot; }
+</code></pre>
+<pre class="prettyprint source lang-js"><code>// GET /api/callback/daisy-invitation/ -> Daisy callback handler
+app.get(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
+  const { subscription, plan, extra } = req.body
 
-  // TODO: SAVE `subscription` TO LOCAL DB
+  // TODO: Identify the user
+  await user.findById({ email: extra[&quot;email&quot;] }).patch({ daisyId: subscription[&quot;daisyId&quot;] });
 
-  res.json(subscription).status(201);
-});
+  // ...
 
-app.listen(3000);</code></pre></article>
+  const redirectURL = `https://myapp.com/checkount/finish/?user=${user.id}`;
+
+  res.json({ authSignature, redirectURL })
+}
+</code></pre></article>
     </section>
 
 
@@ -187,13 +326,13 @@ app.listen(3000);</code></pre></article>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li><a href="module-private.html">private</a></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul><h3>Classes</h3><ul><li><a href="module-browser.DaisySDKToken.html">DaisySDKToken</a></li><li><a href="module-browser-DaisySDK.html">DaisySDK</a></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li><a href="module-private.html">private</a></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul><h3>Classes</h3><ul><li><a href="module-browser-DaisySDK.html">DaisySDK</a></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Jun 07 2019 13:50:34 GMT-0400 (Chile Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 09:33:23 GMT-0500 (Central Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
