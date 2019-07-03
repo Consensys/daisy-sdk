@@ -43,7 +43,7 @@ function getExpirationInSeconds(signatureExpiresAt) {
 
 /**
  * Browser SDK class. This requires a {@link module:common~SubscriptionManager} object to be instantiated and a `web3` instance.
- * The `web3` instance should come from [react-metamask](https://github.com/tokenfoundry/react-metamask).
+ * The `web3` instance should come from [react-metamask](https://github.com/consensys/react-metamask).
  * @see {@link module:browser~DaisySDK#sync} for info about syncing with Daisy services.
  * @extends module:common~SubscriptionProductClient
  */
@@ -127,7 +127,7 @@ class DaisySDK extends SubscriptionProductClient {
  *
  * import DaisySDK from "daisy-sdk/browser";
  *
- * const web3 = ...; // we recommend getting `web3` from [react-metamask](https://github.com/tokenfoundry/react-metamask)
+ * const web3 = ...; // we recommend getting `web3` from [react-metamask](https://github.com/consensys/react-metamask)
  * const daisy = new DaisySDK({
  *   identifier: process.env.DAISY_ID,
  * }, web3);
@@ -157,7 +157,7 @@ export class DaisySDKToken {
    *
    * @example
    *
-   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/tokenfoundry/react-metamask)
+   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
    * const token = daisy.loadToken(); // web3 contract instance.
    * const amount = 100000; // defined by user. We recommend a very big number.
    *
@@ -186,7 +186,7 @@ export class DaisySDKToken {
    *
    * @example
    *
-   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/tokenfoundry/react-metamask)
+   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
    * const token = daisy.loadToken(); // web3 contract instance.
    *
    * daisy
@@ -211,7 +211,7 @@ export class DaisySDKToken {
    *
    * @example
    *
-   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/tokenfoundry/react-metamask)
+   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
    * const token = daisy.loadToken(); // web3 contract instance.
    *
    * daisy

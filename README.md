@@ -10,7 +10,7 @@ yarn add daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
 
 ## MetaMask helper
 
-To help you handle web3 instances and the current account we recommended [tokenfoundry/react-metamask](https://github.com/tokenfoundry/react-metamask#readme).
+To help you handle web3 instances and the current account we recommended [daisypayments/react-metamask](https://github.com/daisypayments/react-metamask#readme).
 
 ## Usage
 
