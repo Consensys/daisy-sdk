@@ -251,9 +251,10 @@ interface SubscriptionAgreement = {
    * Token address
    */
   token: string;
-  amount: string;
+  price: string;
   periodUnit: string;
   periods: string;
+  credits: string;
   maxExecutions: string;
   signatureExpiresAt: string;
   plan: string;

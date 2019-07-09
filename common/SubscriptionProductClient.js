@@ -30,7 +30,7 @@ const Client = require("./Client");
  * @property {string} daisyId - Daisy ID.
  * @property {string} account - Subscriber ethereum address.
  * @property {string} token - Token address.
- * @property {number|string} amount - Approved tokens.
+ * @property {number|string} price - Approved tokens.
  * @property {number} periodUnit
  * @property {number} periods
  * @property {string} [signature] - Created when user signs the agreement at {@link module:browser.DaisySDKToken#sign}.
@@ -252,24 +252,6 @@ class SubscriptionProductClient extends Client {
     return this.request({
       method: "post",
       url: "/subscriptions/cancel/",
-      data: { agreement, signature },
-    }).then(({ data: body }) => {
-      return body;
-    });
-  }
-
-  /**
-   * Submit signature and agreement (from the {@link module:private~ServiceSubscriptions#publisher}) to activate/deactivate plan.
-   * @async
-   * @param {Object} input - Input arguments
-   * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#signSetPlanActive}.
-   * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#signSetPlanActive}.
-   * @returns {Promise<Plan>} - Updated {@link module:common~Plan} object.
-   */
-  submitSetPlanActive({ agreement, signature }) {
-    return this.request({
-      method: "post",
-      url: "/plans/set_active/",
       data: { agreement, signature },
     }).then(({ data: body }) => {
       return body;

@@ -3,18 +3,6 @@
 exports.TYPES = {
   EIP712Domain: [{ name: "verifyingContract", type: "address" }],
 
-  Subscription: [
-    { name: "subscriber", type: "address" },
-    { name: "token", type: "address" },
-    { name: "amount", type: "uint256" },
-    { name: "periodUnit", type: "string" },
-    { name: "periods", type: "uint256" },
-    { name: "maxExecutions", type: "uint256" },
-    { name: "plan", type: "string" },
-    { name: "nonce", type: "bytes32" },
-    { name: "signatureExpiresAt", type: "uint256" },
-  ],
-
   AddPlan: [
     { name: "plan", type: "string" },
     { name: "price", type: "uint256" },
