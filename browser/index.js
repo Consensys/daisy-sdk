@@ -374,10 +374,7 @@ export class DaisySDKToken {
    * @param {Object} input.agreement - The `agreement` object from the `sign` step.
    * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~SubscriptionProductClient#submit}.
    */
-  signAuthorization({
-    account,
-    agreement,
-  }) {
+  signAuthorization({ account, agreement }) {
     const typedData = {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
