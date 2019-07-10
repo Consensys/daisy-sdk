@@ -38,7 +38,7 @@ const Client = require("./Client");
  * @property {number|string} maxExecutions - How many periods the subscription is for.
  * @property {string} [nextPayment] - UNIX Timestamp (in seconds for blockchain usage) when its the next billing cycle (approximation).
  * @property {Date|string} [nextPaymentDate] - Normal Date object representing the next billing cycle.
- * @property {string} [subscriptionHash] - Identifier in the blockchain.
+ * @property {string} [onChainId] - Identifier in the blockchain.
  * @property {string} [txHash] - Transaction hash after deploying the subscription.
  * @property {Error|string} [error] - Error message (if any).
  * @property {Date|string} [errorAt] - When the error ocurred (if any).
@@ -177,7 +177,7 @@ class SubscriptionProductClient extends Client {
     } else if (subscriptionHash) {
       return this.request({
         method: "get",
-        url: `/subscriptions/hash/${subscriptionHash}/`,
+        url: `/subscriptions/onChainId/${subscriptionHash}/`,
       }).then(({ data: body }) => body.data);
     } else {
       throw new Error("Missing arguments");
@@ -201,7 +201,7 @@ class SubscriptionProductClient extends Client {
     } else if (subscriptionHash) {
       return this.request({
         method: "get",
-        url: `/subscriptions/hash/${subscriptionHash}/receipts/`,
+        url: `/subscriptions/onChainId/${subscriptionHash}/receipts/`,
       }).then(({ data: body }) => body.data);
     } else {
       throw new Error("Missing arguments");
@@ -215,7 +215,6 @@ class SubscriptionProductClient extends Client {
    * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#sign}.
    * @param {Object} [input.receipt] - Optional. The receipt is the return of {@link module:browser.DaisySDKToken#approve}.
    * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#sign}.
-   * @param {string} input.authSignature - Signature for private plans created from {@link module:private~ServiceSubscriptions#authorize}.
    * @returns {Promise<Subscription>} - Created {@link module:common~Subscription}, its {@link module:common~Subscription#state} will be `PENDING`.
    *
    * @example
@@ -225,14 +224,13 @@ class SubscriptionProductClient extends Client {
    * });
    * const subscription = await subscriptionProduct.submit({ });
    */
-  submit({ agreement, receipt, signature, authSignature }) {
+  submit({ agreement, receipt, signature }) {
     return this.request({
       method: "post",
       url: "/subscriptions/",
       data: {
         agreement,
         receipt,
-        authSignature,
         signature,
       },
     }).then(({ data: body }) => {
@@ -259,6 +257,6 @@ class SubscriptionProductClient extends Client {
   }
 }
 
-SubscriptionProductClient.ZERO_ADDRESS = "0x00000000000000000000";
+SubscriptionProductClient.ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 module.exports = SubscriptionProductClient;
