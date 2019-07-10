@@ -256,7 +256,7 @@ export class DaisySDKToken {
   signCancel({ account, subscriptionHash, signatureExpiresAt }) {
     const agreement = {
       action: "cancel",
-      subscriptionHash,
+      subscriptionId: subscriptionHash,
       signatureExpiresAt: getExpirationInSeconds(signatureExpiresAt),
     };
     const typedData = {
