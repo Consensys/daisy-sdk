@@ -214,7 +214,6 @@ class SubscriptionProductClient extends Client {
    * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#sign}.
    * @param {Object} [input.receipt] - Optional. The receipt is the return of {@link module:browser.DaisySDKToken#approve}.
    * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#sign}.
-   * @param {string} input.authSignature - Signature for private plans created from {@link module:private~ServiceSubscriptions#authorize}.
    * @returns {Promise<Subscription>} - Created {@link module:common~Subscription}, its {@link module:common~Subscription#state} will be `PENDING`.
    *
    * @example
@@ -224,14 +223,13 @@ class SubscriptionProductClient extends Client {
    * });
    * const subscription = await subscriptionProduct.submit({ });
    */
-  submit({ agreement, receipt, signature, authSignature }) {
+  submit({ agreement, receipt, signature }) {
     return this.request({
       method: "post",
       url: "/subscriptions/",
       data: {
         agreement,
         receipt,
-        authSignature,
         signature,
       },
     }).then(({ data: body }) => {
@@ -258,6 +256,7 @@ class SubscriptionProductClient extends Client {
   }
 }
 
-SubscriptionProductClient.ZERO_ADDRESS = "0x00000000000000000000";
+SubscriptionProductClient.ZERO_ADDRESS =
+  "0x0000000000000000000000000000000000000000";
 
 module.exports = SubscriptionProductClient;
