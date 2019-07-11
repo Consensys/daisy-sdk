@@ -125,7 +125,7 @@ class DaisySDK extends SubscriptionProductClient {
  *
  * @example
  *
- * import DaisySDK from "daisy-sdk/browser";
+ * import DaisySDK from "@daisypayments/daisy-sdk/browser";
  *
  * const web3 = ...; // we recommend getting `web3` from [react-metamask](https://github.com/consensys/react-metamask)
  * const daisy = new DaisySDK({

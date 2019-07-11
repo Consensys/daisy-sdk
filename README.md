@@ -5,7 +5,7 @@
 > You may also require some extra dependencies like `axios`, `web3`, `eventemitter3`, and `querystring`.
 
 ```sh
-yarn add daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
+yarn add @daisypayments/daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
 ```
 
 ## MetaMask helper
@@ -30,11 +30,11 @@ DAISY_SECRET_KEY=key
 
 #### 1.2 Integration in the server
 
-Create an instance of `ServiceSubscriptions` from the `daisy-sdk/private` sub-module.
+Create an instance of `ServiceSubscriptions` from the `@daisypayments/daisy-sdk/private` sub-module.
 It is extremely important to keep `DAISY_SECRET_KEY` **private**.
 
 ```js
-const { ServiceSubscriptions } = require("daisy-sdk/private");
+const { ServiceSubscriptions } = require("@daisypayments/daisy-sdk/private");
 
 const subscriptionService = new ServiceSubscriptions({
   identifier: process.env.DAISY_ID,
@@ -100,7 +100,7 @@ app.post("/api/plan/:pid/subscriptions/", h(async (req, res) => {
 This will only expose `private: false` plans.
 
 ```js
-import DaisySDK from "daisy-sdk";
+import DaisySDK from "@daisypayments/daisy-sdk";
 
 const daisy = new DaisySDK({ identifier: "margarita" }, web3)
 
