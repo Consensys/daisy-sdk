@@ -11,7 +11,7 @@ const Client = require("./Client");
  * @property {string} onChainId - Plan ID in the Ethereum blockchain (internal use of the SDK).
  * @property {string} description - Plan description.
  * @property {string} price - Plan price in tokens (stored as string).
- * @property {number} period - Number of periods in `periodUnit` between bill cycles.
+ * @property {number} periods - Number of periods in `periodUnit` between bill cycles.
  * @property {string} periodUnit - Period unit: DAYS, WEEKS, MONTHS, YEARS.
  * @property {string} maxExecutions - How many times the Plan is executed.
  * @property {boolean} private - If a Plan is private it requires a signature (with a private key) from the `authorizer` defined in the Subscription Manager.
@@ -20,7 +20,6 @@ const Client = require("./Client");
  * @property {Error|string} [error] - Error message (if any).
  * @property {string} state - Enum: `DRAFT`, `PENDING`, `DEPLOYED`, `FAILED`.
  * @property {string} removalState - Enum: `OK`, `PENDING`, `FAILED`.
- * @property {string} setActiveState - Enum: `OK`, `PENDING`, `FAILED`.
  * @property {Date|string} createdAt - Timestamp.
  * @property {Date|string} updatedAt - Timestamp.
  */
@@ -38,7 +37,7 @@ const Client = require("./Client");
  * @property {number|string} maxExecutions - How many periods the subscription is for.
  * @property {string} [nextPayment] - UNIX Timestamp (in seconds for blockchain usage) when its the next billing cycle (approximation).
  * @property {Date|string} [nextPaymentDate] - Normal Date object representing the next billing cycle.
- * @property {string} [subscriptionHash] - Identifier in the blockchain.
+ * @property {string} [onChainId] - Identifier in the blockchain.
  * @property {string} [txHash] - Transaction hash after deploying the subscription.
  * @property {Error|string} [error] - Error message (if any).
  * @property {Date|string} [errorAt] - When the error ocurred (if any).
@@ -158,7 +157,7 @@ class SubscriptionProductClient extends Client {
    * @async
    * @param {Object} criteria - Filtering criteria, only one field is required.
    * @param {string} criteria.daisyId - Find Subscription based on a Daisy ID.
-   * @param {string} criteria.subscriptionHash - Find Subscription based on a `subscriptionHash` in the blockchain.
+   * @param {string} criteria.onChainId - Find Subscription based on a `onChainId` in the blockchain.
    * @returns {Promise<?Subscription>} - Subscription found.
    *
    * @example
@@ -168,16 +167,16 @@ class SubscriptionProductClient extends Client {
    * });
    * const subscription = await subscriptionProduct.getSubscription({ id: "" });
    */
-  getSubscription({ daisyId, subscriptionHash }) {
+  getSubscription({ daisyId, onChainId }) {
     if (daisyId) {
       return this.request({
         method: "get",
         url: `/subscriptions/${daisyId}/`,
       }).then(({ data: body }) => body.data);
-    } else if (subscriptionHash) {
+    } else if (onChainId) {
       return this.request({
         method: "get",
-        url: `/subscriptions/hash/${subscriptionHash}/`,
+        url: `/subscriptions/hash/${onChainId}/`,
       }).then(({ data: body }) => body.data);
     } else {
       throw new Error("Missing arguments");
@@ -189,19 +188,19 @@ class SubscriptionProductClient extends Client {
    * @async
    * @param {Object} criteria - Filtering criteria, only one field is required.
    * @param {string} criteria.daisyId - Find Subscription based on a Daisy ID.
-   * @param {string} criteria.subscriptionHash - Find Subscription based on a `subscriptionHash` in the blockchain.
+   * @param {string} criteria.onChainId - Find Subscription based on a `onChainId` in the blockchain.
    * @returns {Promise<Receipt[]>} - Receipts.
    */
-  getReceipts({ daisyId, subscriptionHash }) {
+  getReceipts({ daisyId, onChainId }) {
     if (daisyId) {
       return this.request({
         method: "get",
         url: `/subscriptions/${daisyId}/receipts/`,
       }).then(({ data: body }) => body.data);
-    } else if (subscriptionHash) {
+    } else if (onChainId) {
       return this.request({
         method: "get",
-        url: `/subscriptions/hash/${subscriptionHash}/receipts/`,
+        url: `/subscriptions/hash/${onChainId}/receipts/`,
       }).then(({ data: body }) => body.data);
     } else {
       throw new Error("Missing arguments");
