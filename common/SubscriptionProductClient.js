@@ -12,7 +12,7 @@ const Client = require("./Client");
  * @property {string} description - Plan description.
  * @property {string} price - Plan price in tokens (stored as string).
  * @property {number} period - Number of periods in `periodUnit` between bill cycles.
- * @property {string} periodUnit - Period unit: DAYS, WEEKS, MONTHS, YEARS.
+ * @property {string} periodUnit - Period unit: DAYS, MONTHS, YEARS.
  * @property {string} maxExecutions - How many times the Plan is executed.
  * @property {boolean} private - If a Plan is private it requires a signature (with a private key) from the `authorizer` defined in the Subscription Manager.
  * @property {boolean} active - Is the plan enabled for subscriptions or disabled?.
