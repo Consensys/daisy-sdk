@@ -21,7 +21,7 @@ describe("SubscriptionProductClient", () => {
     for (const plan of plans) {
       expect(plan).toHaveProperty("id");
       expect(plan).toHaveProperty("name");
-      expect(plan).toHaveProperty("period");
+      expect(plan).toHaveProperty("periods");
       expect(plan).toHaveProperty("price");
     }
   });
@@ -47,7 +47,7 @@ describe("SubscriptionProductClient", () => {
       await subscriptionService.getSubscription(sample),
       await subscriptionService.getSubscription({ daisyId: sample["daisyId"] }),
       await subscriptionService.getSubscription({
-        subscriptionHash: sample["subscriptionHash"],
+        onChainId: sample["onChainId"],
       }),
     ];
     for (const match of matches) {

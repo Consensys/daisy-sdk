@@ -125,7 +125,7 @@ class DaisySDK extends SubscriptionProductClient {
  *
  * @example
  *
- * import DaisySDK from "daisy-sdk/browser";
+ * import DaisySDK from "@daisypayments/daisy-sdk/browser";
  *
  * const web3 = ...; // we recommend getting `web3` from [react-metamask](https://github.com/consensys/react-metamask)
  * const daisy = new DaisySDK({
@@ -249,14 +249,14 @@ export class DaisySDKToken {
    * @async
    * @param {Object} input - Input object
    * @param {string} input.account - Ethereum address, beneficiary of the subscription.
-   * @param {string} input.subscriptionHash - Comes from {@link module:common~Subscription#subscriptionHash}.
+   * @param {string} input.onChainId - Comes from {@link module:common~Subscription#onChainId}.
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
    * @returns {Promise<Object>} Object with `signature` and `agreement` property.
    */
-  signCancel({ account, subscriptionHash, signatureExpiresAt }) {
+  signCancel({ account, onChainId, signatureExpiresAt }) {
     const agreement = {
       action: "cancel",
-      subscriptionId: subscriptionHash,
+      subscriptionId: onChainId,
       signatureExpiresAt: getExpirationInSeconds(signatureExpiresAt),
     };
     const typedData = {
@@ -311,7 +311,7 @@ export class DaisySDKToken {
    * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
    * @param {Plan} input.plan - The `Plan` object the user is going to sign for.
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
-   * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAYS` as {@link module:common~Plan#period} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
+   * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAYS` as {@link module:common~Plan#periods} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
    * @param {string|number} [input.credits=0] - Amount of credits to add to the subscription.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
    * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~SubscriptionProductClient#submit}.
@@ -329,7 +329,7 @@ export class DaisySDKToken {
     }
 
     const [periods, periodUnit] = transformPeriod(
-      plan["period"],
+      plan["periods"],
       plan["periodUnit"]
     ); // compatible with contract
 
@@ -343,14 +343,13 @@ export class DaisySDKToken {
         price: plan["price"],
         periodUnit,
         periods,
-        credits,
         maxExecutions,
         plan: plan["onChainId"],
       },
       previousSubscriptionId: "0x0", // TODO: pass as parameter once it is implemented in the backend
       credits,
-      signatureExpiresAt: expiration,
       nonce: nonce || genNonce(this.web3),
+      signatureExpiresAt: expiration,
     };
 
     const typedData = {
