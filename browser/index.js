@@ -3,12 +3,7 @@
 import EventEmitter from "eventemitter3";
 
 import ERC20 from "../contracts/lite/ERC20.json";
-import {
-  TYPES,
-  signTypedData,
-  transformPeriod,
-  genNonce,
-} from "../common/helpers";
+import { TYPES, signTypedData, genNonce } from "../common/helpers";
 import SubscriptionProductClient from "../common/SubscriptionProductClient";
 
 const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
@@ -311,7 +306,7 @@ export class DaisySDKToken {
    * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
    * @param {Plan} input.plan - The `Plan` object the user is going to sign for.
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
-   * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAYS` as {@link module:common~Plan#periods} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
+   * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAY` as {@link module:common~Plan#periods} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
    * @param {string|number} [input.credits=0] - Amount of credits to add to the subscription.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
    * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~SubscriptionProductClient#submit}.
@@ -328,11 +323,6 @@ export class DaisySDKToken {
       throw new Error(`Missing required arguments.`);
     }
 
-    const [periods, periodUnit] = transformPeriod(
-      plan["periods"],
-      plan["periodUnit"]
-    ); // compatible with contract
-
     const expiration = getExpirationInSeconds(signatureExpiresAt);
 
     // Subscription object
@@ -341,8 +331,8 @@ export class DaisySDKToken {
         subscriber: account,
         token: this.token.options.address,
         price: plan["price"],
-        periodUnit,
-        periods,
+        periodUnit: plan["periodUnit"],
+        periods: plan["periods"],
         maxExecutions,
         plan: plan["onChainId"],
       },

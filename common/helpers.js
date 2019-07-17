@@ -45,27 +45,6 @@ exports.TYPES = {
   ],
 };
 
-exports.transformPeriod = function transformPeriod(number, unit) {
-  // export enum PeriodUnit {
-  //   Days = "DAYS",
-  //   Weeks = "WEEKS",
-  //   Months = "MONTHS",
-  //   Years = "YEARS",
-  // }
-  switch (unit) {
-    case "DAYS":
-      return [number, "Day"];
-    case "WEEKS":
-      return [number, "Day"];
-    case "MONTHS":
-      return [number, "Month"];
-    case "YEARS":
-      return [number, "Year"];
-    default:
-      throw new Error();
-  }
-};
-
 /**
  * @async
  * @private
