@@ -38,19 +38,27 @@ class ServiceSubscriptions extends SubscriptionProductClient {
    * Create an invitation link
    * @async
    * @param {Object|string} plan - Plan object or plan.id string.
-   * @param {Object} [params={}] - Plan attributes.
+   * @param {Object} [params={}] - Invitation attributes.
+   * @param {Boolean} [params.active=true] - Is public available or not.
+   * @param {Number} [params.maxUsages=0] - Invitation max allowed usages. Set to `0` for unlimited.
+   * @param {Object} [params.callbackExtra={}] - Extra payload, helpful to identify the user.
+   * @param {String} [params.callbackURL] - Callback URL to receive Daisy ID from the subscription
+   * @param {String} [params.redirectURLDefault] - On success default redirect button.
    * @returns {Promise<Invitation>} - Invitation object with public link and identifier.
    */
-  createInvitation(plan, params = {}) {
+  createInvitation(
+    plan,
+    params = { active: true, maxUsages: 0, callbackExtra: {} }
+  ) {
     if (!plan) {
       throw new Error("Missing first argument: plan");
     }
 
     const data = {
-      maxUsages: params["maxUsages"] ? String(params["maxUsages"]) : "0",
+      maxUsages: Number(params["maxUsages"]),
       active: params["active"],
+      callbackExtra: JSON.parse(JSON.stringify(params["callbackExtra"])), // TODO: check if plan JS Object.
       callbackURL: params["callbackURL"],
-      callbackExtra: params["callbackExtra"], // check if plan JS Object.
       redirectURLDefault: params["redirectURLDefault"],
     };
     const planId = plan["id"] || plan;
