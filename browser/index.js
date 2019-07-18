@@ -3,12 +3,7 @@
 import EventEmitter from "eventemitter3";
 
 import ERC20 from "../contracts/lite/ERC20.json";
-import {
-  TYPES,
-  signTypedData,
-  transformPeriod,
-  genNonce,
-} from "../common/helpers";
+import { TYPES, signTypedData, genNonce } from "../common/helpers";
 import SubscriptionProductClient from "../common/SubscriptionProductClient";
 
 const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
@@ -125,7 +120,7 @@ class DaisySDK extends SubscriptionProductClient {
  *
  * @example
  *
- * import DaisySDK from "daisy-sdk/browser";
+ * import DaisySDK from "@daisypayments/daisy-sdk/browser";
  *
  * const web3 = ...; // we recommend getting `web3` from [react-metamask](https://github.com/consensys/react-metamask)
  * const daisy = new DaisySDK({
@@ -249,14 +244,14 @@ export class DaisySDKToken {
    * @async
    * @param {Object} input - Input object
    * @param {string} input.account - Ethereum address, beneficiary of the subscription.
-   * @param {string} input.subscriptionHash - Comes from {@link module:common~Subscription#subscriptionHash}.
+   * @param {string} input.onChainId - Comes from {@link module:common~Subscription#onChainId}.
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
    * @returns {Promise<Object>} Object with `signature` and `agreement` property.
    */
-  signCancel({ account, subscriptionHash, signatureExpiresAt }) {
+  signCancel({ account, onChainId, signatureExpiresAt }) {
     const agreement = {
       action: "cancel",
-      subscriptionHash,
+      subscriptionId: onChainId,
       signatureExpiresAt: getExpirationInSeconds(signatureExpiresAt),
     };
     const typedData = {
@@ -269,90 +264,6 @@ export class DaisySDKToken {
     return signTypedData(this.web3, account, typedData).then(signature => ({
       agreement,
       signature,
-    }));
-  }
-
-  /**
-   * Sign new plan with Metamask
-   * @async
-   * @param {Object} input - Input object
-   * @param {string} input.account - Ethereum address must match {@link module:common~SubscriptionManager#publisher}.
-   * @param {Plan} input.plan - The `Plan` object the publisher is going to sign for.
-   * @param {string|number|Date} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
-   * @returns {Promise<Object>} Object with `signature` and the raw `agreement` that was signed.
-   */
-  signNewPlan({ account, plan, signatureExpiresAt }) {
-    // TODO: check if `account` is the same as `publisher`.
-
-    const [periods, periodUnit] = transformPeriod(
-      plan["period"],
-      plan["periodUnit"]
-    ); // compatible with contract
-
-    const expiration = getExpirationInSeconds(signatureExpiresAt);
-
-    const agreement = {
-      plan: plan["onChainId"],
-      price: plan["price"],
-      periods,
-      periodUnit,
-      maxExecutions: plan["maxExecutions"],
-      private: plan["private"],
-      signatureExpiresAt: expiration,
-    };
-
-    const typedData = {
-      types: TYPES,
-      domain: { verifyingContract: this.manager["address"] },
-      primaryType: "AddPlan",
-      message: agreement,
-    };
-
-    return signTypedData(this.web3, account, typedData).then(signature => ({
-      signature,
-      agreement,
-    }));
-  }
-
-  /**
-   * Sign payload to (de)activate a plan
-   * @async
-   * @param {Object} input - Input object
-   * @param {string} input.account - Ethereum address must match {@link module:common~SubscriptionManager#publisher}.
-   * @param {Plan} input.plan - The `Plan` object the publisher is going to sign for.
-   * @param {boolean} input.active - True if setting the plan as active or false if inactive.
-   * @param {string|number|Date} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
-   * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
-   * @returns {Promise<Object>} Object with `signature` and the raw `agreement` that was signed.
-   */
-  signSetPlanActive({
-    account,
-    plan,
-    active,
-    signatureExpiresAt,
-    nonce = undefined,
-  }) {
-    // TODO: check if `account` is the same as `publisher`.
-
-    const expiration = getExpirationInSeconds(signatureExpiresAt);
-
-    const agreement = {
-      plan: plan["onChainId"],
-      active,
-      nonce: nonce || genNonce(this.web3),
-      signatureExpiresAt: expiration,
-    };
-
-    const typedData = {
-      types: TYPES,
-      domain: { verifyingContract: this.manager["address"] },
-      primaryType: "SetActive",
-      message: agreement,
-    };
-
-    return signTypedData(this.web3, account, typedData).then(signature => ({
-      signature,
-      agreement,
     }));
   }
 
@@ -395,7 +306,8 @@ export class DaisySDKToken {
    * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
    * @param {Plan} input.plan - The `Plan` object the user is going to sign for.
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
-   * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAYS` as {@link module:common~Plan#period} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
+   * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAY` as {@link module:common~Plan#periods} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
+   * @param {string|number} [input.credits=0] - Amount of credits to add to the subscription.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
    * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~SubscriptionProductClient#submit}.
    */
@@ -404,36 +316,36 @@ export class DaisySDKToken {
     plan,
     signatureExpiresAt,
     maxExecutions = "0",
+    credits = "0",
     nonce = undefined,
   }) {
     if (!account || !plan) {
       throw new Error(`Missing required arguments.`);
     }
 
-    const [periods, periodUnit] = transformPeriod(
-      plan["period"],
-      plan["periodUnit"]
-    ); // compatible with contract
-
     const expiration = getExpirationInSeconds(signatureExpiresAt);
 
     // Subscription object
     const agreement = {
-      subscriber: account,
-      token: this.token.options.address,
-      amount: plan["price"],
-      periodUnit,
-      periods,
-      maxExecutions,
-      signatureExpiresAt: expiration,
-      plan: plan["onChainId"],
+      subscription: {
+        subscriber: account,
+        token: this.token.options.address,
+        price: plan["price"],
+        periodUnit: plan["periodUnit"],
+        periods: plan["periods"],
+        maxExecutions,
+        plan: plan["onChainId"],
+      },
+      previousSubscriptionId: "0x0", // TODO: pass as parameter once it is implemented in the backend
+      credits,
       nonce: nonce || genNonce(this.web3),
+      signatureExpiresAt: expiration,
     };
 
     const typedData = {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
-      primaryType: "Subscription",
+      primaryType: "CreateSubscription",
       message: agreement,
     };
 
@@ -449,26 +361,13 @@ export class DaisySDKToken {
    * @param {Object} input - Input object
    * @param {string} input.account - Signer address.
    * @param {Object} input.agreement - The `agreement` object from the `sign` step.
-   * @param {Object} [input.opts] - Optional.
-   * @param {boolean} [input.opts.allowAnyAddress=false] - Wildcard.
    * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~SubscriptionProductClient#submit}.
    */
-  signAuthorization({
-    account,
-    agreement: prev,
-    opts = { allowAnyAddress: false },
-  }) {
-    const agreement = {
-      ...prev,
-      subscriber: opts.allowAnyAddress
-        ? SubscriptionProductClient.ZERO_ADDRESS
-        : prev["subscriber"],
-    };
-
+  signAuthorization({ account, agreement }) {
     const typedData = {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
-      primaryType: "Subscription",
+      primaryType: "CreateSubscription",
       message: agreement,
     };
 
@@ -479,7 +378,7 @@ export class DaisySDKToken {
   }
 
   /**
-   * Sign set wallet agreement wit Metamask with the `owner` account.
+   * Sign set wallet agreement with Metamask with the `owner` account.
    * @async
    * @param {Object} input - Input object
    * @param {string} input.account - Signer address.

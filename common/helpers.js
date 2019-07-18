@@ -6,22 +6,18 @@ exports.TYPES = {
   Subscription: [
     { name: "subscriber", type: "address" },
     { name: "token", type: "address" },
-    { name: "amount", type: "uint256" },
-    { name: "periodUnit", type: "string" },
-    { name: "periods", type: "uint256" },
-    { name: "maxExecutions", type: "uint256" },
-    { name: "plan", type: "string" },
-    { name: "nonce", type: "bytes32" },
-    { name: "signatureExpiresAt", type: "uint256" },
-  ],
-
-  AddPlan: [
-    { name: "plan", type: "string" },
     { name: "price", type: "uint256" },
     { name: "periodUnit", type: "string" },
     { name: "periods", type: "uint256" },
     { name: "maxExecutions", type: "uint256" },
-    { name: "private", type: "bool" },
+    { name: "plan", type: "string" },
+  ],
+
+  CreateSubscription: [
+    { name: "subscription", type: "Subscription" },
+    { name: "previousSubscriptionId", type: "bytes32" },
+    { name: "credits", type: "uint256" },
+    { name: "nonce", type: "bytes32" },
     { name: "signatureExpiresAt", type: "uint256" },
   ],
 
@@ -30,16 +26,9 @@ exports.TYPES = {
     { name: "signatureExpiresAt", type: "uint256" },
   ],
 
-  SetActive: [
-    { name: "plan", type: "string" },
-    { name: "active", type: "bool" },
-    { name: "nonce", type: "bytes32" },
-    { name: "signatureExpiresAt", type: "uint256" },
-  ],
-
   SubscriptionAction: [
     { name: "action", type: "string" },
-    { name: "subscriptionHash", type: "bytes32" },
+    { name: "subscriptionId", type: "bytes32" },
     { name: "signatureExpiresAt", type: "uint256" },
   ],
 
@@ -54,27 +43,6 @@ exports.TYPES = {
     { name: "nonce", type: "bytes32" },
     { name: "signatureExpiresAt", type: "uint256" },
   ],
-};
-
-exports.transformPeriod = function transformPeriod(number, unit) {
-  // export enum PeriodUnit {
-  //   Days = "DAYS",
-  //   Weeks = "WEEKS",
-  //   Months = "MONTHS",
-  //   Years = "YEARS",
-  // }
-  switch (unit) {
-    case "DAYS":
-      return [number, "Day"];
-    case "WEEKS":
-      return [number, "Day"];
-    case "MONTHS":
-      return [number, "Month"];
-    case "YEARS":
-      return [number, "Year"];
-    default:
-      throw new Error();
-  }
 };
 
 /**
