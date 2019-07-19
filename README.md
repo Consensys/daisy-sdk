@@ -26,6 +26,7 @@ After deploying a Subscription Product to the blockchain go to the *API Integrat
 # Example values
 DAISY_ID=margarita
 DAISY_SECRET_KEY=key
+DAISY_CALLBACK_PUBLIC_KEY=key
 ```
 
 #### 1.2 Integration in the server
@@ -228,7 +229,7 @@ interface WebhookFromInvitation {
     /**
      * DaisyID
      */
-    daisyId: ID;
+    daisyId: string;
   };
   plan: {
     id: ID;
@@ -236,29 +237,58 @@ interface WebhookFromInvitation {
   };
   invitation: {
     id: ID;
+    automatic: boolean;
   };
-  agreement: SubscriptionAgreement;
+  agreement: CreateSubscriptionAgreement;
+  /**
+   * When pre-signed (maybe because automatic was set to `true`) this field contains the authorizer signature.
+   * To void a pre-signed subscription, return `{ authSignature: null }` from the webhook.
+   */
+  authSignature: string | null;
   extra: any;
+  /**
+   * Use SDK to verify this signature.
+   */
+  digest: string;
 }
 
-// From Daisy SDK `sign` method.
-interface SubscriptionAgreement = {
+interface CreateSubscriptionAgreement {
+  subscription: SubscriptionAgreement;
   /**
-   * Subscriber Ethereum address
+   * Ignore. this is for future compatibility
+   */
+  previousSubscriptionId: string;
+  /**
+   * Ignore. this is for future compatibility
+   */
+  credits: string;
+  nonce: string;
+  signatureExpiresAt: string;
+};
+
+interface SubscriptionAgreement {
+  /**
+   * Ethereum address (subscriber)
    */
   subscriber: string;
   /**
-   * Token address
+   * Ethereum address (ERC20 Token)
    */
   token: string;
   price: string;
+  /**
+   * DAY | MONTH | YEAR
+   */
   periodUnit: string;
+  /**
+   * Number as string (blockchain stuff)
+   */
   periods: string;
-  credits: string;
-  maxExecutions: string;
-  signatureExpiresAt: string;
+  maxExecutions: string; // 0 = infinite
+  /**
+   * Plan's onChainId
+   */
   plan: string;
-  nonce: string;
 }
 ```
 
@@ -270,25 +300,12 @@ const h = require("express-async-handler");
 
 const app = express();
 
-// GET /api/callback/daisy-invitation/ -> Daisy callback handler
-app.get("/api/callback/daisy-invitation/", h(async (req, res) => {
-  const { subscription, plan } = req.body
+// POST /api/callback/daisy-invitation/ -> Daisy callback handler
+app.post("/api/callback/daisy-invitation/", h(async (req, res) => {
+  const { subscription, plan, authSignature } = req.body
 
   // TODO: Identify the user
   await user.patch({ daisyID: subscription["daisyId"] });
-
-  let authSignature = null; // not required for public plans.
-  if (plan.private) {
-    // TODO: Add conditions for user to use private plan.
-
-    const authorizer = {
-      privateKey: Buffer.from(process.env.PRIVATE_KEYS, "hex"),
-    };
-    authSignature = await subscriptionService.authorize(
-      authorizer,
-      agreement,
-    );
-  }
 
   // Optional redirect URL, may have custom tokens.
   // Is not guaranteed the user is going to enter this URL.
@@ -298,7 +315,22 @@ app.get("/api/callback/daisy-invitation/", h(async (req, res) => {
 }));
 ```
 
-#### 2.2 Identifying the user
+#### 2.2 Voiding a subscription
+
+To void a subscription and prevent the blockchain transaction set `authSignature` to `null`.
+
+```js
+// POST /api/callback/daisy-invitation/ -> Daisy callback handler
+app.post("/api/callback/daisy-invitation/", h(async (req, res) => {
+  const { subscription, plan, authSignature } = req.body
+
+  /* Void logic */
+
+  res.json({ authSignature: null });
+}));
+```
+
+#### 2.3 Identifying the user
 
 One way to identify an user after getting the callback is by knowing before-hand the user's Ethereum address.
 So it can be queried from `req.body["agreement"]["subscriber"]`
@@ -313,8 +345,8 @@ callbackExtra: { "email": "user@daisypayments.com" }
 ```
 
 ```js
-// GET /api/callback/daisy-invitation/ -> Daisy callback handler
-app.get("/api/callback/daisy-invitation/", h(async (req, res) => {
+// POST /api/callback/daisy-invitation/ -> Daisy callback handler
+app.post("/api/callback/daisy-invitation/", h(async (req, res) => {
   const { subscription, plan, extra } = req.body
 
   // TODO: Identify the user
@@ -326,4 +358,30 @@ app.get("/api/callback/daisy-invitation/", h(async (req, res) => {
 
   res.json({ authSignature, redirectURL })
 }
+```
+
+#### 2.4 Verify authenticity
+
+To tell if the webhook POST actually came from Daisy servers you can verify its signature:
+
+```js
+const { verify } = require('@daisypayments/daisy-sdk/private/webhooks');
+
+// POST /api/callback/daisy-invitation/ -> Daisy callback handler
+app.post("/api/callback/daisy-invitation/", h(async (req, res) => {
+  const { digest, ...payload } = req.body
+
+  const isAuthentic = verify({
+    message: payload,
+    digest: digest,
+    publicKey: process.env.DAISY_CALLBACK_PUBLIC_KEY,
+  });
+
+  if (!isAuthentic) {
+    // ...
+    res.json({ authSignature: null });
+  }
+
+  // ...
+});
 ```
