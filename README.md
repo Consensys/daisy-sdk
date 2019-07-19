@@ -229,7 +229,7 @@ interface WebhookFromInvitation {
     /**
      * DaisyID
      */
-    daisyId: string;
+    daisyId: ID;
   };
   plan: {
     id: ID;
