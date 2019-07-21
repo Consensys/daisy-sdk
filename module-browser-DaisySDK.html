@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="utf-8">
-    <title>JSDoc: Class: DaisySDK</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <title>DaisySDK - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Class: DaisySDK</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    <header><a href="index.html"><img id="logo" src="https://s3.amazonaws.com/assets.daisypayments.com/white_logo.svg" alt="Home"/></a></header><section><div class="daisy-input-container"><input type="text" id="nav-search" class="daisy-input" placeholder="Search" /><span class="label">Search</span></div><h3>Classes</h3><ul><li><a href="module-browser-DaisySDK.html">DaisySDK</a><ul class='methods'><li data-type='method'><a href="module-browser-DaisySDK.html#getData">getData</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#getPlans">getPlans</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#getReceipts">getReceipts</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#getSubscription">getSubscription</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#getSubscriptions">getSubscriptions</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#loadToken">loadToken</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#prepareToken">prepareToken</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#submit">submit</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#submitCancel">submitCancel</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#sync">sync</a></li></ul></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a><ul class='methods'><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getData">getData</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getPlans">getPlans</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getReceipts">getReceipts</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getSubscription">getSubscription</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getSubscriptions">getSubscriptions</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#submit">submit</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#submitCancel">submitCancel</a></li></ul></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a><ul class='methods'><li data-type='method'><a href="module-private-ServiceSubscriptions.html#authorize">authorize</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#createInvitation">createInvitation</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getData">getData</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getPlans">getPlans</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getReceipts">getReceipts</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getSubscription">getSubscription</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getSubscriptions">getSubscriptions</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#submit">submit</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#submitCancel">submitCancel</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li></li><li></li><li><a href="module-private.html">private</a></li><li></li><li></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul></section>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">DaisySDK</h1>
+    
 
     
 
@@ -28,8 +43,11 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-browser.html">browser</a>~</span>DaisySDK<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2>
+            <span class="ancestors"><a href="module-browser.html">browser</a>~</span>
+        
+        DaisySDK
+        </h2>
         
             <div class="class-description"><p>Browser SDK class. This requires a <a href="module-common.html#~SubscriptionManager">module:common~SubscriptionManager</a> object to be instantiated and a <code>web3</code> instance.
 The <code>web3</code> instance should come from <a href="https://github.com/consensys/react-metamask">react-metamask</a>.</p></div>
@@ -38,30 +56,18 @@ The <code>web3</code> instance should come from <a href="https://github.com/cons
 </header>
 
 <article>
-    <div class="container-overview">
     
+        <div class="container-overview">
         
+            
 
     
     <h2>Constructor</h2>
     
 
-    
     <h4 class="name" id="DaisySDK"><span class="type-signature"></span>new DaisySDK<span class="signature">()</span><span class="type-signature"></span></h4>
-    
 
     
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -69,34 +75,34 @@ The <code>web3</code> instance should come from <a href="https://github.com/cons
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line51">line 51</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line46">line 46</a>
     </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
     
 
     
@@ -132,8 +138,21 @@ The <code>web3</code> instance should come from <a href="https://github.com/cons
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
     
-    </div>
 
     
         <h3 class="subsection-title">Extends</h3>
@@ -151,10 +170,10 @@ The <code>web3</code> instance should come from <a href="https://github.com/cons
     
 
     
-
+    
     
 
-    
+     
 
     
 
@@ -168,31 +187,21 @@ The <code>web3</code> instance should come from <a href="https://github.com/cons
 
     
 
-    
     <h4 class="name" id="getData"><span class="type-signature">(async) </span>getData<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;SubscriptionManager>}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    <p>Get Subscription Manager data and plans.</p>
-</div>
-
-
-
-
-
-
-
-
-
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line118">line 118</a>
+    </li></ul></dd>
+    
 
     
 
@@ -224,18 +233,37 @@ The <code>web3</code> instance should come from <a href="https://github.com/cons
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line119">line 119</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
     
 </dl>
+
+
+
+
+
+<div class="description">
+    <p>Get Subscription Manager data and plans.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const subscriptionProduct = new SubscriptionProductClient({
+  identifier: process.env.DAISY_ID,
+});
+const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
+
+
+
 
 
 
@@ -262,7 +290,7 @@ The <code>web3</code> instance should come from <a href="https://github.com/cons
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -278,42 +306,26 @@ The <code>web3</code> instance should come from <a href="https://github.com/cons
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const subscriptionProduct = new SubscriptionProductClient({
-  identifier: process.env.DAISY_ID,
-});
-const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="getPlans"><span class="type-signature"></span>getPlans<span class="signature">()</span><span class="type-signature"></span></h4>
-    
 
     
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
 
     
 
@@ -347,13 +359,6 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line129">line 129</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -379,157 +384,38 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
         
             
 
     
 
-    
     <h4 class="name" id="getReceipts"><span class="type-signature">(async) </span>getReceipts<span class="signature">(criteria)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Receipt>>}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    <p>Get receipts from single subscription.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>criteria</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Filtering criteria, only one field is required.</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>daisyId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Find Subscription based on a Daisy ID.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>subscriptionHash</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Find Subscription based on a <code>subscriptionHash</code> in the blockchain.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line194">line 194</a>
+    </li></ul></dd>
+    
 
     
 
@@ -561,18 +447,154 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line195">line 195</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
     
 </dl>
+
+
+
+
+
+<div class="description">
+    <p>Get receipts from single subscription.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>criteria</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">Object</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Filtering criteria, only one field is required.</p>
+                    <h6>Properties</h6>
+                    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>daisyId</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">string</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Find Subscription based on a Daisy ID.</p></td>
+            </tr>
+
+        
+
+            <tr>
+                
+                    <td class="name"><code>onChainId</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">string</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Find Subscription based on a <code>onChainId</code> in the blockchain.</p></td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
+                </td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
 
 
 
@@ -599,7 +621,7 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -615,159 +637,26 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id="getSubscription"><span class="type-signature">(async) </span>getSubscription<span class="signature">(criteria)</span><span class="type-signature"> &rarr; {Promise.&lt;?Subscription>}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    <p>Get single subscription.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>criteria</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Filtering criteria, only one field is required.</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>daisyId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Find Subscription based on a Daisy ID.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>subscriptionHash</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Find Subscription based on a <code>subscriptionHash</code> in the blockchain.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line170">line 170</a>
+    </li></ul></dd>
+    
 
     
 
@@ -799,18 +688,162 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line171">line 171</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
     
 </dl>
+
+
+
+
+
+<div class="description">
+    <p>Get single subscription.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const subscriptionProduct = new SubscriptionProductClient({
+  identifier: process.env.DAISY_ID,
+});
+const subscription = await subscriptionProduct.getSubscription({ id: "" });</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>criteria</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">Object</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Filtering criteria, only one field is required.</p>
+                    <h6>Properties</h6>
+                    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>daisyId</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">string</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Find Subscription based on a Daisy ID.</p></td>
+            </tr>
+
+        
+
+            <tr>
+                
+                    <td class="name"><code>onChainId</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">string</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Find Subscription based on a <code>onChainId</code> in the blockchain.</p></td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
+                </td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
 
 
 
@@ -837,7 +870,7 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -853,167 +886,26 @@ const { plans, ...manager } = await subscriptionProduct.getData();</code></pre>
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const subscriptionProduct = new SubscriptionProductClient({
-  identifier: process.env.DAISY_ID,
-});
-const subscription = await subscriptionProduct.getSubscription({ id: "" });</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="getSubscriptions"><span class="type-signature">(async) </span>getSubscriptions<span class="signature">(filter)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Subscription>>}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    <p>Get subscriptions.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>filter</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Filtering criteria.</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>account</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Filter by Ethereum address.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>state</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Filter by subscription state.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line148">line 148</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1045,18 +937,162 @@ const subscription = await subscriptionProduct.getSubscription({ id: "" });</cod
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line149">line 149</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
     
 </dl>
+
+
+
+
+
+<div class="description">
+    <p>Get subscriptions.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const subscriptionProduct = new SubscriptionProductClient({
+  identifier: process.env.DAISY_ID,
+});
+const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0..." });</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>filter</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">Object</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Filtering criteria.</p>
+                    <h6>Properties</h6>
+                    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>account</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">string</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Filter by Ethereum address.</p></td>
+            </tr>
+
+        
+
+            <tr>
+                
+                    <td class="name"><code>state</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">string</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Filter by subscription state.</p></td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
+                </td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
 
 
 
@@ -1083,7 +1119,7 @@ const subscription = await subscriptionProduct.getSubscription({ id: "" });</cod
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1099,26 +1135,59 @@ const subscription = await subscriptionProduct.getSubscription({ id: "" });</cod
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const subscriptionProduct = new SubscriptionProductClient({
-  identifier: process.env.DAISY_ID,
-});
-const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0..." });</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="loadToken"><span class="type-signature"></span>loadToken<span class="signature">(input<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="external-_web3.eth.Contract_.html">external:"web3.eth.Contract"</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line94">line 94</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1134,212 +1203,184 @@ const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0
 
 
 
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const daisy = new DaisySDK({
+  identifier: process.env.DAISY_ID,
+}, web3);
+await daisy.sync(); // load manager
+
+const token = daisy.loadToken(); // the token is taken from the `manager`.</code></pre>
+
+
+
+
     <h5>Parameters:</h5>
     
 
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+<div class="params-container">
+    <table class="params">
+        <thead>
         <tr>
             
-                <td class="name"><code>input</code></td>
+            <th>Name</th>
             
 
-            <td class="type">
+            <th>Type</th>
+
             
+            <th>Attributes</th>
+            
+
+            
+            <th>Default</th>
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
                 
+                    <td class="name"><code>input</code></td>
+                
+
+                <td class="type">
+                
+                    
 <span class="param-type">Object</span>
 
 
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
                 
                 </td>
-            
 
-            
-                <td class="default">
                 
-                    {}
+                    <td class="attributes">
+                    
+                        &lt;optional><br>
+                    
+
+                    
+
+                    
+                    </td>
                 
-                </td>
-            
 
-            <td class="description last"><p>Optional input argument.</p>
-                <h6>Properties</h6>
+                
+                    <td class="default">
+                    
+                        <code>{}</code>
+                    
+                    </td>
                 
 
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
+                <td class="description last"><p>Optional input argument.</p>
+                    <h6>Properties</h6>
+                    
 
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+<div class="params-container">
+    <table class="params">
+        <thead>
         <tr>
             
-                <td class="name"><code>symbol</code></td>
+            <th>Name</th>
             
 
-            <td class="type">
+            <th>Type</th>
+
             
+            <th>Attributes</th>
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
                 
+                    <td class="name"><code>symbol</code></td>
+                
+
+                <td class="type">
+                
+                    
 <span class="param-type">string</span>
 
 
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
                 
                 </td>
-            
 
-            
-
-            <td class="description last"><p>Load a ERC20 token with Web3 using its symbol.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>address</code></td>
-            
-
-            <td class="type">
-            
                 
+                    <td class="attributes">
+                    
+                        &lt;optional><br>
+                    
+
+                    
+
+                    
+                    </td>
+                
+
+                
+
+                <td class="description last"><p>Load a ERC20 token with Web3 using its symbol.</p></td>
+            </tr>
+
+        
+
+            <tr>
+                
+                    <td class="name"><code>address</code></td>
+                
+
+                <td class="type">
+                
+                    
 <span class="param-type">string</span>
 
 
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
                 
                 </td>
-            
 
-            
+                
+                    <td class="attributes">
+                    
+                        &lt;optional><br>
+                    
 
-            <td class="description last"><p>Load a ERC20 token with Web3 using its address.</p></td>
-        </tr>
+                    
 
-    
-    </tbody>
-</table>
+                    
+                    </td>
+                
 
-            </td>
-        </tr>
+                
 
-    
-    </tbody>
-</table>
+                <td class="description last"><p>Load a ERC20 token with Web3 using its address.</p></td>
+            </tr>
 
+        
+        </tbody>
+    </table>
+</div>
 
+                </td>
+            </tr>
 
+        
+        </tbody>
+    </table>
+</div>
 
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line99">line 99</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1366,7 +1407,7 @@ const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1382,28 +1423,59 @@ const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const daisy = new DaisySDK({
-  identifier: process.env.DAISY_ID,
-}, web3);
-await daisy.sync(); // load manager
-
-const token = daisy.loadToken(); // the token is taken from the `manager`.</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="prepareToken"><span class="type-signature"></span>prepareToken<span class="signature">(token)</span><span class="type-signature"> &rarr; {<a href="module-browser.DaisySDKToken.html">module:browser.DaisySDKToken</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line112">line 112</a>
+    </li></ul></dd>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
 
 
 
@@ -1419,98 +1491,58 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
 
 
 
+
+
     <h5>Parameters:</h5>
     
 
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
+<div class="params-container">
+    <table class="params">
+        <thead>
         <tr>
             
-                <td class="name"><code>token</code></td>
+            <th>Name</th>
             
 
-            <td class="type">
+            <th>Type</th>
+
             
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
                 
+                    <td class="name"><code>token</code></td>
+                
+
+                <td class="type">
+                
+                    
 <span class="param-type"><a href="external-_web3.eth.Contract_.html">external:"web3.eth.Contract"</a></span>
 
 
-            
-            </td>
+                
+                </td>
 
-            
+                
 
-            
+                
 
-            <td class="description last"><p>Web3's contract instance from <a href="module-browser-DaisySDK.html#loadToken">module:browser~DaisySDK#loadToken</a>.</p></td>
-        </tr>
+                <td class="description last"><p>Web3's contract instance from <a href="module-browser-DaisySDK.html#loadToken">module:browser~DaisySDK#loadToken</a>.</p></td>
+            </tr>
 
-    
-    </tbody>
-</table>
+        
+        </tbody>
+    </table>
+</div>
 
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line117">line 117</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1535,7 +1567,7 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1551,241 +1583,26 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
 
 
 
-
-
         
             
 
     
 
-    
     <h4 class="name" id="submit"><span class="type-signature">(async) </span>submit<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;Subscription>}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    <p>Create single subscription.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>input</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Input arguments</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>agreement</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The <code>agreement</code> is the return of <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>receipt</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Optional. The receipt is the return of <a href="module-browser.DaisySDKToken.html#approve">module:browser.DaisySDKToken#approve</a>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>signature</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The signature is the return of <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>authSignature</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Signature for private plans created from <a href="module-private-ServiceSubscriptions.html#authorize">module:private~ServiceSubscriptions#authorize</a>.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line226">line 226</a>
+    </li></ul></dd>
+    
 
     
 
@@ -1817,18 +1634,213 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line228">line 228</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
     
 </dl>
+
+
+
+
+
+<div class="description">
+    <p>Create single subscription.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const subscriptionProduct = new SubscriptionProductClient({
+  identifier: process.env.DAISY_ID,
+});
+const subscription = await subscriptionProduct.submit({ });</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>input</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">Object</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Input arguments</p>
+                    <h6>Properties</h6>
+                    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+            <th>Attributes</th>
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>agreement</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">Object</span>
+
+
+                
+                </td>
+
+                
+                    <td class="attributes">
+                    
+
+                    
+
+                    
+                    </td>
+                
+
+                
+
+                <td class="description last"><p>The <code>agreement</code> is the return of <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
+            </tr>
+
+        
+
+            <tr>
+                
+                    <td class="name"><code>receipt</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">Object</span>
+
+
+                
+                </td>
+
+                
+                    <td class="attributes">
+                    
+                        &lt;optional><br>
+                    
+
+                    
+
+                    
+                    </td>
+                
+
+                
+
+                <td class="description last"><p>Optional. The receipt is the return of <a href="module-browser.DaisySDKToken.html#approve">module:browser.DaisySDKToken#approve</a>.</p></td>
+            </tr>
+
+        
+
+            <tr>
+                
+                    <td class="name"><code>signature</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">string</span>
+
+
+                
+                </td>
+
+                
+                    <td class="attributes">
+                    
+
+                    
+
+                    
+                    </td>
+                
+
+                
+
+                <td class="description last"><p>The signature is the return of <a href="module-browser.DaisySDKToken.html#sign">module:browser.DaisySDKToken#sign</a>.</p></td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
+                </td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
 
 
 
@@ -1855,7 +1867,7 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -1871,167 +1883,26 @@ const token = daisy.loadToken(); // the token is taken from the `manager`.</code
 
 
 
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>const subscriptionProduct = new SubscriptionProductClient({
-  identifier: process.env.DAISY_ID,
-});
-const subscription = await subscriptionProduct.submit({ });</code></pre>
-
-
-
         
             
 
     
 
-    
     <h4 class="name" id="submitCancel"><span class="type-signature">(async) </span>submitCancel<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;Subscription>}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    <p>Submit signature and agreement from the beneficiary user to cancel a subscription.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>input</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Input arguments</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>agreement</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The <code>agreement</code> is the return of <a href="module-browser.DaisySDKToken.html#signCancel">module:browser.DaisySDKToken#signCancel</a>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>signature</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The signature is the return of <a href="module-browser.DaisySDKToken.html#signCancel">module:browser.DaisySDKToken#signCancel</a>.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
 
 <dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line248">line 248</a>
+    </li></ul></dd>
+    
 
     
 
@@ -2063,18 +1934,154 @@ const subscription = await subscriptionProduct.submit({ });</code></pre>
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line251">line 251</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
     
 </dl>
+
+
+
+
+
+<div class="description">
+    <p>Submit signature and agreement from the beneficiary user to cancel a subscription.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>input</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">Object</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>Input arguments</p>
+                    <h6>Properties</h6>
+                    
+
+<div class="params-container">
+    <table class="params">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            
+
+            <th>Type</th>
+
+            
+
+            
+
+            <th class="last">Description</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        
+
+            <tr>
+                
+                    <td class="name"><code>agreement</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">Object</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>The <code>agreement</code> is the return of <a href="module-browser.DaisySDKToken.html#signCancel">module:browser.DaisySDKToken#signCancel</a>.</p></td>
+            </tr>
+
+        
+
+            <tr>
+                
+                    <td class="name"><code>signature</code></td>
+                
+
+                <td class="type">
+                
+                    
+<span class="param-type">string</span>
+
+
+                
+                </td>
+
+                
+
+                
+
+                <td class="description last"><p>The signature is the return of <a href="module-browser.DaisySDKToken.html#signCancel">module:browser.DaisySDKToken#signCancel</a>.</p></td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
+                </td>
+            </tr>
+
+        
+        </tbody>
+    </table>
+</div>
+
 
 
 
@@ -2101,7 +2108,7 @@ const subscription = await subscriptionProduct.submit({ });</code></pre>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -2117,154 +2124,14 @@ const subscription = await subscriptionProduct.submit({ });</code></pre>
 
 
 
-
-
         
             
 
     
 
-    
-    <h4 class="name" id="submitSetPlanActive"><span class="type-signature">(async) </span>submitSetPlanActive<span class="signature">(input)</span><span class="type-signature"> &rarr; {Promise.&lt;Plan>}</span></h4>
-    
+    <h4 class="name" id="sync"><span class="type-signature">(async) </span>sync<span class="signature">()</span><span class="type-signature"> &rarr; {this}</span></h4>
 
     
-
-
-
-<div class="description">
-    <p>Submit signature and agreement (from the module:private~ServiceSubscriptions#publisher) to activate/deactivate plan.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>input</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Input arguments</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>agreement</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The <code>agreement</code> is the return of <a href="module-browser.DaisySDKToken.html#signSetPlanActive">module:browser.DaisySDKToken#signSetPlanActive</a>.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>signature</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The signature is the return of <a href="module-browser.DaisySDKToken.html#signSetPlanActive">module:browser.DaisySDKToken#signSetPlanActive</a>.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
@@ -2272,38 +2139,9 @@ const subscription = await subscriptionProduct.submit({ });</code></pre>
 <dl class="details">
 
     
-
-    
-
-    
-
-    
-    <dt class="tag-overrides">Overrides:</dt>
-    <dd class="tag-overrides"><ul class="dummy"><li>
-        <a href="module-common-SubscriptionProductClient.html#submitSetPlanActive">module:common~SubscriptionProductClient#submitSetPlanActive</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="common_SubscriptionProductClient.js.html">common/SubscriptionProductClient.js</a>, <a href="common_SubscriptionProductClient.js.html#line269">line 269</a>
+        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line68">line 68</a>
     </li></ul></dd>
     
 
@@ -2312,61 +2150,33 @@ const subscription = await subscriptionProduct.submit({ });</code></pre>
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <ul>
-<li>Updated <a href="module-common.html#~Plan">module:common~Plan</a> object.</li>
-</ul>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Plan></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="sync"><span class="type-signature">(async) </span>sync<span class="signature">()</span><span class="type-signature"> &rarr; {this}</span></h4>
-    
-
-    
 
 
 
@@ -2383,49 +2193,15 @@ this call is necessary to fetch the subscription's manager data.</p>
 
 
 
-
-
-
-
-<dl class="details">
-
+    <h5>Examples</h5>
     
+    <pre class="prettyprint"><code>const daisy = new DaisySDK({ identifier: ... }, web3);
+await daisy.sync() // required</code></pre>
 
-    
+    <pre class="prettyprint"><code>const daisy = new DaisySDK(manager, web3); // not required here.</code></pre>
 
-    
 
-    
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="browser_index.js.html">browser/index.js</a>, <a href="browser_index.js.html#line73">line 73</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -2452,7 +2228,7 @@ this call is necessary to fetch the subscription's manager data.</p>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -2465,16 +2241,6 @@ this call is necessary to fetch the subscription's manager data.</p>
 </dl>
 
     
-
-
-
-
-    <h5>Examples</h5>
-    
-    <pre class="prettyprint"><code>const daisy = new DaisySDK({ identifier: ... }, web3);
-await daisy.sync() // required</code></pre>
-
-    <pre class="prettyprint"><code>const daisy = new DaisySDK(manager, web3); // not required here.</code></pre>
 
 
 
@@ -2491,19 +2257,21 @@ await daisy.sync() // required</code></pre>
 
 
 
+    
+    
 </div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li><a href="module-private.html">private</a></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul><h3>Classes</h3><ul><li><a href="module-browser-DaisySDK.html">DaisySDK</a></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a></li></ul>
-</nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 09:33:23 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on Sun Jul 21 2019 14:02:53 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/search.js" defer></script>
+
+
 </body>
 </html>

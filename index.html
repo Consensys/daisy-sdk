@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <title>Home - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
 
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    <header><a href="index.html"><img id="logo" src="https://s3.amazonaws.com/assets.daisypayments.com/white_logo.svg" alt="Home"/></a></header><section><div class="daisy-input-container"><input type="text" id="nav-search" class="daisy-input" placeholder="Search" /><span class="label">Search</span></div><h3>Classes</h3><ul><li><a href="module-browser-DaisySDK.html">DaisySDK</a><ul class='methods'><li data-type='method'><a href="module-browser-DaisySDK.html#getData">getData</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#getPlans">getPlans</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#getReceipts">getReceipts</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#getSubscription">getSubscription</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#getSubscriptions">getSubscriptions</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#loadToken">loadToken</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#prepareToken">prepareToken</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#submit">submit</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#submitCancel">submitCancel</a></li><li data-type='method'><a href="module-browser-DaisySDK.html#sync">sync</a></li></ul></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a><ul class='methods'><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getData">getData</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getPlans">getPlans</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getReceipts">getReceipts</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getSubscription">getSubscription</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#getSubscriptions">getSubscriptions</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#submit">submit</a></li><li data-type='method'><a href="module-common-SubscriptionProductClient.html#submitCancel">submitCancel</a></li></ul></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a><ul class='methods'><li data-type='method'><a href="module-private-ServiceSubscriptions.html#authorize">authorize</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#createInvitation">createInvitation</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getData">getData</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getPlans">getPlans</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getReceipts">getReceipts</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getSubscription">getSubscription</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#getSubscriptions">getSubscriptions</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#submit">submit</a></li><li data-type='method'><a href="module-private-ServiceSubscriptions.html#submitCancel">submitCancel</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li></li><li></li><li><a href="module-private.html">private</a></li><li></li><li></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul></section>
+</nav>
+
 <div id="main">
-
-    <h1 class="page-title">Home</h1>
+    
 
     
 
@@ -26,8 +39,9 @@
     
 
 
-    <h3> </h3>
-
+    <section class="package">
+        <h3> </h3>		
+    </section>
 
 
 
@@ -41,14 +55,13 @@
 
 
 
-
-    <section>
+    <section class="readme">
         <article><h1>Daisy SDK &amp; Docs</h1>
 <h2>Install</h2>
 <blockquote>
 <p>You may also require some extra dependencies like <code>axios</code>, <code>web3</code>, <code>eventemitter3</code>, and <code>querystring</code>.</p>
 </blockquote>
-<pre class="prettyprint source lang-sh"><code>yarn add daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
+<pre class="prettyprint source lang-sh"><code>yarn add @daisypayments/daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
 </code></pre>
 <h2>MetaMask helper</h2>
 <p>To help you handle web3 instances and the current account we recommended <a href="https://github.com/daisypayments/react-metamask#readme">daisypayments/react-metamask</a>.</p>
@@ -60,11 +73,12 @@
 <pre class="prettyprint source lang-txt"><code># Example values
 DAISY_ID=margarita
 DAISY_SECRET_KEY=key
+DAISY_CALLBACK_PUBLIC_KEY=key
 </code></pre>
 <h4>1.2 Integration in the server</h4>
-<p>Create an instance of <code>ServiceSubscriptions</code> from the <code>daisy-sdk/private</code> sub-module.
+<p>Create an instance of <code>ServiceSubscriptions</code> from the <code>@daisypayments/daisy-sdk/private</code> sub-module.
 It is extremely important to keep <code>DAISY_SECRET_KEY</code> <strong>private</strong>.</p>
-<pre class="prettyprint source lang-js"><code>const { ServiceSubscriptions } = require(&quot;daisy-sdk/private&quot;);
+<pre class="prettyprint source lang-js"><code>const { ServiceSubscriptions } = require(&quot;@daisypayments/daisy-sdk/private&quot;);
 
 const subscriptionService = new ServiceSubscriptions({
   identifier: process.env.DAISY_ID,
@@ -123,7 +137,7 @@ app.post(&quot;/api/plan/:pid/subscriptions/&quot;, h(async (req, res) => {
 </code></pre>
 <h5>1.2.1 Get plans from the frontend (not recommended)</h5>
 <p>This will only expose <code>private: false</code> plans.</p>
-<pre class="prettyprint source lang-js"><code>import DaisySDK from &quot;daisy-sdk&quot;;
+<pre class="prettyprint source lang-js"><code>import DaisySDK from &quot;@daisypayments/daisy-sdk&quot;;
 
 const daisy = new DaisySDK({ identifier: &quot;margarita&quot; }, web3)
 
@@ -236,28 +250,58 @@ interface WebhookFromInvitation {
   };
   invitation: {
     id: ID;
+    automatic: boolean;
   };
-  agreement: SubscriptionAgreement;
+  agreement: CreateSubscriptionAgreement;
+  /**
+   * When pre-signed (maybe because automatic was set to `true`) this field contains the authorizer signature.
+   * To void a pre-signed subscription, return `{ authSignature: null }` from the webhook.
+   */
+  authSignature: string | null;
   extra: any;
+  /**
+   * Use SDK to verify this signature.
+   */
+  digest: string;
 }
 
-// From Daisy SDK `sign` method.
-interface SubscriptionAgreement = {
+interface CreateSubscriptionAgreement {
+  subscription: SubscriptionAgreement;
   /**
-   * Subscriber Ethereum address
+   * Ignore. this is for future compatibility
+   */
+  previousSubscriptionId: string;
+  /**
+   * Ignore. this is for future compatibility
+   */
+  credits: string;
+  nonce: string;
+  signatureExpiresAt: string;
+};
+
+interface SubscriptionAgreement {
+  /**
+   * Ethereum address (subscriber)
    */
   subscriber: string;
   /**
-   * Token address
+   * Ethereum address (ERC20 Token)
    */
   token: string;
-  amount: string;
+  price: string;
+  /**
+   * DAY | MONTH | YEAR
+   */
   periodUnit: string;
+  /**
+   * Number as string (blockchain stuff)
+   */
   periods: string;
-  maxExecutions: string;
-  signatureExpiresAt: string;
+  maxExecutions: string; // 0 = infinite
+  /**
+   * Plan's onChainId
+   */
   plan: string;
-  nonce: string;
 }
 </code></pre>
 <p>So a normal server should handle this POST request like:</p>
@@ -266,25 +310,12 @@ const h = require(&quot;express-async-handler&quot;);
 
 const app = express();
 
-// GET /api/callback/daisy-invitation/ -> Daisy callback handler
-app.get(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
-  const { subscription, plan } = req.body
+// POST /api/callback/daisy-invitation/ -> Daisy callback handler
+app.post(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
+  const { subscription, plan, authSignature } = req.body
 
   // TODO: Identify the user
   await user.patch({ daisyID: subscription[&quot;daisyId&quot;] });
-
-  let authSignature = null; // not required for public plans.
-  if (plan.private) {
-    // TODO: Add conditions for user to use private plan.
-
-    const authorizer = {
-      privateKey: Buffer.from(process.env.PRIVATE_KEYS, &quot;hex&quot;),
-    };
-    authSignature = await subscriptionService.authorize(
-      authorizer,
-      agreement,
-    );
-  }
 
   // Optional redirect URL, may have custom tokens.
   // Is not guaranteed the user is going to enter this URL.
@@ -293,7 +324,18 @@ app.get(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
   res.json({ authSignature, redirectURL })
 }));
 </code></pre>
-<h4>2.2 Identifying the user</h4>
+<h4>2.2 Voiding a subscription</h4>
+<p>To void a subscription and prevent the blockchain transaction set <code>authSignature</code> to <code>null</code>.</p>
+<pre class="prettyprint source lang-js"><code>// POST /api/callback/daisy-invitation/ -> Daisy callback handler
+app.post(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
+  const { subscription, plan, authSignature } = req.body
+
+  /* Void logic */
+
+  res.json({ authSignature: null });
+}));
+</code></pre>
+<h4>2.3 Identifying the user</h4>
 <p>One way to identify an user after getting the callback is by knowing before-hand the user's Ethereum address.
 So it can be queried from <code>req.body[&quot;agreement&quot;][&quot;subscriber&quot;]</code></p>
 <p>A better way is setting the <code>callbackExtra</code> payload to something we can recognize in the backend.
@@ -302,8 +344,8 @@ Example:</p>
 callbackURL: https://myapp.com/api/callback/daisy-invitation/
 callbackExtra: { &quot;email&quot;: &quot;user@daisypayments.com&quot; }
 </code></pre>
-<pre class="prettyprint source lang-js"><code>// GET /api/callback/daisy-invitation/ -> Daisy callback handler
-app.get(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
+<pre class="prettyprint source lang-js"><code>// POST /api/callback/daisy-invitation/ -> Daisy callback handler
+app.post(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
   const { subscription, plan, extra } = req.body
 
   // TODO: Identify the user
@@ -315,6 +357,28 @@ app.get(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
 
   res.json({ authSignature, redirectURL })
 }
+</code></pre>
+<h4>2.4 Verify authenticity</h4>
+<p>To tell if the webhook POST actually came from Daisy servers you can verify its signature:</p>
+<pre class="prettyprint source lang-js"><code>const { verify } = require('@daisypayments/daisy-sdk/private/webhooks');
+
+// POST /api/callback/daisy-invitation/ -> Daisy callback handler
+app.post(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
+  const { digest, ...payload } = req.body
+
+  const isAuthentic = verify({
+    message: payload,
+    digest: digest,
+    publicKey: process.env.DAISY_CALLBACK_PUBLIC_KEY,
+  });
+
+  if (!isAuthentic) {
+    // ...
+    res.json({ authSignature: null });
+  }
+
+  // ...
+});
 </code></pre></article>
     </section>
 
@@ -323,19 +387,21 @@ app.get(&quot;/api/callback/daisy-invitation/&quot;, h(async (req, res) => {
 
 
 
+    
+    
 </div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-browser.html">browser</a></li><li><a href="module-common.html">common</a></li><li><a href="module-private.html">private</a></li></ul><h3>Externals</h3><ul><li><a href="external-_web3.eth.Contract_.html">web3.eth.Contract</a></li><li><a href="external-PromiEvent.html">PromiEvent</a></li></ul><h3>Classes</h3><ul><li><a href="module-browser-DaisySDK.html">DaisySDK</a></li><li><a href="module-common-Client.html">Client</a></li><li><a href="module-common-SubscriptionProductClient.html">SubscriptionProductClient</a></li><li><a href="module-private-ServiceSubscriptions.html">ServiceSubscriptions</a></li></ul>
-</nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 09:33:23 GMT-0500 (Central Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on Sun Jul 21 2019 14:02:53 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/search.js" defer></script>
+
+
 </body>
 </html>
