@@ -10,7 +10,10 @@ module.exports = {
   },
   opts: {
     readme: "README.md",
+    template: "../daisy-docdash/",
+    encoding: "utf8",
     destination: "docs/",
     recurse: true,
+    verbose: true,
   },
 };

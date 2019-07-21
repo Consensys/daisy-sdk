@@ -1987,6 +1987,11 @@ diff-sequences@^24.3.0:
   resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-24.3.0.tgz#0f20e8a1df1abddaf4d9c226680952e64118b975"
   integrity sha512-xLqpez+Zj9GKSnPWS0WZw1igGocZ+uua8+y+5dDNTT934N3QuY1sp2LkHzwiaYQGz60hMq0pjAshdeXm5VUOEw==
 
+docdash@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/docdash/-/docdash-1.1.1.tgz#89924e57938388fc3d1fa900927acfced7f3b24f"
+  integrity sha512-WQkkr01zL6kcIfq9YCSXtqqevM6NYoTXLdl+Td0OYCEcX0RgsuEMeqHXQaXFt+p6Lo15RIgA5XhLAn7RL+erhA==
+
 doctrine@1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-1.5.0.tgz#379dce730f6166f76cefa4e6707a159b02c5a6fa"
