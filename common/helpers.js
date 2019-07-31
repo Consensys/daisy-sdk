@@ -26,8 +26,7 @@ exports.TYPES = {
     { name: "signatureExpiresAt", type: "uint256" },
   ],
 
-  SubscriptionAction: [
-    { name: "action", type: "string" },
+  CancelSubscription: [
     { name: "subscriptionId", type: "bytes32" },
     { name: "signatureExpiresAt", type: "uint256" },
   ],
