@@ -1,10 +1,10 @@
-# Daisy SDK & Docs
+# Daisy SDK
 
 ## Install
 
 > You may also require some extra dependencies like `axios`, `web3`, `eventemitter3`, and `querystring`.
 
-```sh
+```nocode
 yarn add @daisypayments/daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
 ```
 
