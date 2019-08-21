@@ -23,11 +23,13 @@ exports.TYPES = {
 
   RemovePlan: [
     { name: "plan", type: "string" },
+    { name: "nonce", type: "bytes32" },
     { name: "signatureExpiresAt", type: "uint256" },
   ],
 
   CancelSubscription: [
     { name: "subscriptionId", type: "bytes32" },
+    { name: "nonce", type: "bytes32" },
     { name: "signatureExpiresAt", type: "uint256" },
   ],
 
