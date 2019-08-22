@@ -250,14 +250,14 @@ export class DaisySDKToken {
    */
   signCancel({ account, onChainId, signatureExpiresAt }) {
     const agreement = {
-      action: "cancel",
       subscriptionId: onChainId,
+      nonce: "0x0",
       signatureExpiresAt: getExpirationInSeconds(signatureExpiresAt),
     };
     const typedData = {
       types: TYPES,
       domain: { verifyingContract: this.manager["address"] },
-      primaryType: "SubscriptionAction",
+      primaryType: "CancelSubscription",
       message: agreement,
     };
 
@@ -283,6 +283,7 @@ export class DaisySDKToken {
 
     const agreement = {
       plan: plan["onChainId"],
+      nonce: "0x0",
       signatureExpiresAt: expiration,
     };
 
