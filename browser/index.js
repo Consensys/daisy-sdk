@@ -190,7 +190,24 @@ export class DaisySDKToken {
    */
   allowance(sendArgs) {
     if (!sendArgs.tokenOwner) {
-      throw new Error("Missing `sendArgs.tokenOwner` argument");
+      throw new Error(`allowance() was called without a tokenOwner specified. Be sure to call allowance() like:
+      
+      daisy
+        .prepareToken(token)
+        .allowance({ tokenOwner: account })
+      
+      `);
+    }
+    if (!this.manager["address"]) {
+      throw new Error(
+        `You are attempting to check how many tokens the subscription product "${
+          this.manager["name"]
+        }" is allowed to spend on behalf of ${
+          sendArgs.tokenOwner
+        }, but the address of "${
+          this.manager["name"]
+        }" is null. Are you sure that this subscription product is deployed?`
+      );
     }
     return this.token.methods["allowance"](
       sendArgs.tokenOwner,
@@ -215,7 +232,13 @@ export class DaisySDKToken {
    */
   balanceOf(sendArgs) {
     if (!sendArgs.tokenOwner) {
-      throw new Error("Missing `sendArgs.tokenOwner` argument");
+      throw new Error(`balanceOf() was called without a tokenOwner specified. Be sure to call balanceOf() like:
+      
+      daisy
+        .prepareToken(token)
+        .balanceOf({ tokenOwner: account })
+      
+      `);
     }
     return this.token.methods["balanceOf"](sendArgs.tokenOwner).call();
   }
