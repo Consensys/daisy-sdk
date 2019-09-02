@@ -469,6 +469,34 @@ export class DaisySDKToken {
       agreement,
     }));
   }
+
+  /**
+   * Sign one time payment
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Ethereum address, beneficiary of the subscription.
+   * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
+   * @returns {Promise<Object>} Object with `signature` and `agreement` property.
+   */
+  signOneTimePayment({ account, signatureExpiresAt, nonce }) {
+    const agreement = {
+      nonce: nonce || genNonce(this.web3),
+      signatureExpiresAt: getExpirationInSeconds(signatureExpiresAt),
+    };
+
+    const typedData = {
+      types: TYPES,
+      // TODO: set payment contract
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "ExecuteTokenPullPayment",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      agreement,
+      signature,
+    }));
+  }
 }
 
 /**

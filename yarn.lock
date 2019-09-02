@@ -832,6 +832,11 @@
     eslint-plugin-react "^7.12.4"
     prettier "^1.17.0"
 
+"@daisypayments/smart-contracts@^0.2.2-beta":
+  version "0.2.2-beta"
+  resolved "https://registry.yarnpkg.com/@daisypayments/smart-contracts/-/smart-contracts-0.2.2-beta.tgz#5d4e21f644f5d6c54444325731dae7f85f00b86d"
+  integrity sha512-dHYrJEDZt6HLzg8ym454DlEcIFdtSqcrftmDPTAytqDvM+ljLCup6XPhdhmzbVsQ17yBq3dXZwC1lhCRJO4skA==
+
 "@jest/console@^24.7.1":
   version "24.7.1"
   resolved "https://registry.yarnpkg.com/@jest/console/-/console-24.7.1.tgz#32a9e42535a97aedfe037e725bd67e954b459545"
