@@ -47,6 +47,8 @@ const Client = require("./Client");
  * @property {string} [endedAt] - When the subscription ended (off-chain value).
  * @property {Date|string} updatedAt - Timestamp.
  * @property {Date|string} createdAt -  Timestamp.
+ * @property {module:common~Plan} plan
+ * @property {string} plan.id - Plan ID (nothing more).
  */
 
 /**
@@ -54,7 +56,13 @@ const Client = require("./Client");
  * @property {string} id - ID.
  * @property {string} txHash - Transaction hash.
  * @property {string} action - What happened in this billing cycle.
+ * @property {string} [feeRecipient] - Service fee recipient (since this field is available in the blockchain, we also display it here).
+ * @property {string} [feeAmount] - Token amount, also available in the blockchain (stored as string).
+ * @property {string} [paymentRecipient] - Payment recipient.
+ * @property {string} [paymentAmount] - Payment amount (stored as string).
  * @property {string} [nextPayment] - When is the next billing cycle.
+ * @property {Date|string} [nextPaymentDate] - nextPayment but as UNIX timestamp (as ms).
+ * @property {Date|string} [onChainCreatedAt] -Timestamp of the subscription creation on the blockchain.
  * @property {Error|string} [reason] - If failed, this is the error message.
  * @property {Date|string} createdAt - When was executed.
  */
@@ -72,10 +80,27 @@ const Client = require("./Client");
  * @property {string} [txHash] - Transaction hash when it was deployed.
  * @property {string} state - Enum: `DRAFT`, `PENDING`, `DEPLOYED`, `FAILED`.
  * @property {string} identifier - DAISY_ID.
- * @property {string} [secretKey] - DAISY_SECRET_LEY.
+ * @property {string} [secretKey] - DAISY_SECRET_KEY.
  * @property {Date|string} createdAt - Timestamp.
  * @property {Date|string} updatedAt - Timestamp.
  * @property {module:common~Plan[]} [plans] - Plans related to this manager.
+ */
+
+/**
+ * @typedef {Object} Invitation
+ * @property {string} identifier - Unique identifier.
+ * @property {number} maxUsages - Max usages (active and expired subscriptions).
+ * @property {boolean} active - Active or not.
+ * @property {boolean} automatic - Requires manual approval or not.
+ * @property {string} sharePath - Share path.
+ * @property {string} shareURL - Share URL.
+ * @property {string} callbackURL -
+ * @property {Object} callbackExtra -
+ * @property {string} redirectURLDefault -
+ * @property {Date|string} createdAt -  Timestamp.
+ * @property {Date|string} updatedAt - Timestamp.
+ * @property {module:common~Plan} plan
+ * @property {string} plan.id - Plan ID (nothing more).
  */
 
 /**
