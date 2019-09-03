@@ -478,8 +478,26 @@ export class DaisySDKToken {
    * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
    * @returns {Promise<Object>} Object with `signature` and `agreement` property.
    */
-  signOneTimePayment({ account, signatureExpiresAt, nonce }) {
+  signOneTimePayment({
+    uuid,
+    account,
+    token,
+    amount,
+    wallet,
+    signatureExpiresAt,
+    nonce,
+    pullPaymentAddress,
+  }) {
+    const requestId = this.web3.utils.soliditySha3(
+      { t: "bytes32", v: uuid },
+      { t: "address", v: token },
+      { t: "address", v: wallet }
+    );
+
     const agreement = {
+      requestId,
+      token,
+      amount,
       nonce: nonce || genNonce(this.web3),
       signatureExpiresAt: getExpirationInSeconds(signatureExpiresAt),
     };
@@ -487,8 +505,8 @@ export class DaisySDKToken {
     const typedData = {
       types: TYPES,
       // TODO: set payment contract
-      domain: { verifyingContract: this.manager["address"] },
-      primaryType: "ExecuteTokenPullPayment",
+      domain: { verifyingContract: pullPaymentAddress },
+      primaryType: "Payment",
       message: agreement,
     };
 
