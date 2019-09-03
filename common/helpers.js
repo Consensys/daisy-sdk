@@ -1,6 +1,6 @@
 /** @module common */
 
-import { EIP712Types } from "@daisypayments/smart-contracts";
+const { EIP712Types } = require("@daisypayments/smart-contracts/eip712");
 
 exports.TYPES = EIP712Types;
 
