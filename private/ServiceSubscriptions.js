@@ -44,7 +44,7 @@ class ServiceSubscriptions extends SubscriptionProductClient {
    * @param {Object} [params.callbackExtra={}] - Extra payload, helpful to identify the user.
    * @param {String} [params.callbackURL] - Callback URL to receive Daisy ID from the subscription
    * @param {String} [params.redirectURLDefault] - On success default redirect button.
-   * @returns {Promise<Invitation>} - Invitation object with public link and identifier.
+   * @returns {Promise<Invitation>} - Invitation object ({@link module:common~Invitation}) with public link and identifier.
    */
   createInvitation(
     plan,
