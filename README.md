@@ -2,10 +2,10 @@
 
 ## Install
 
-> You may also require some extra dependencies like `axios`, `web3`, `eventemitter3`, and `querystring`.
+> You may also require some extra dependencies like `web3`, and `eventemitter3`
 
 ```nocode
-yarn add @daisypayments/daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
+yarn add @daisypayments/daisy-sdk eventemitter3 web3@1.0.0-beta.37
 ```
 
 ## MetaMask helper

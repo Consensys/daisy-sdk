@@ -1,7 +1,5 @@
 /** @module common */
 
-const querystring = require("querystring");
-
 const Client = require("./Client");
 
 /**
@@ -114,7 +112,7 @@ class SubscriptionProductClient extends Client {
    * @param {Object} manager - Object can be taken from `const manager = await instance.getData()` but only the `identifier` is the real important.
    * @param {string} manager.identifier - Get it from the Daisy Dashboard as `DAISY_ID`.
    * @param {string} manager.secretKey - Get it from the Daisy Dashboard as `DAISY_SECRET_KEY`. THIS SHOULD ONLY BE KEEP SECRET ON A SERVER. DO NOT USE ON BROWSERS.
-   * @param {Object} override - Override `axios` config. This is intended for development purposes.
+   * @param {Object} override - Override config. This is intended for development purposes.
    */
   constructor(manager, override) {
     const { identifier, secretKey } = manager;
@@ -173,7 +171,8 @@ class SubscriptionProductClient extends Client {
   getSubscriptions(filter = {}) {
     return this.request({
       method: "get",
-      url: `/subscriptions/?${querystring.stringify(filter)}`,
+      url: "/subscriptions/",
+      data: filter,
     }).then(({ data: body }) => body.data);
   }
 

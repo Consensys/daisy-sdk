@@ -1,9 +1,10 @@
 /** @module browser */
 
+import { EIP712Types } from "@daisypayments/smart-contracts/eip712";
 import EventEmitter from "eventemitter3";
 
 import ERC20 from "../contracts/lite/ERC20.json";
-import { TYPES, signTypedData, genNonce } from "../common/helpers";
+import { signTypedData, genNonce } from "../common/helpers";
 import SubscriptionProductClient from "../common/SubscriptionProductClient";
 
 const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
@@ -278,7 +279,7 @@ export class DaisySDKToken {
       signatureExpiresAt: getExpirationInSeconds(signatureExpiresAt),
     };
     const typedData = {
-      types: TYPES,
+      types: EIP712Types,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "CancelSubscription",
       message: agreement,
@@ -311,7 +312,7 @@ export class DaisySDKToken {
     };
 
     const typedData = {
-      types: TYPES,
+      types: EIP712Types,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "RemovePlan",
       message: agreement,
@@ -367,7 +368,7 @@ export class DaisySDKToken {
     };
 
     const typedData = {
-      types: TYPES,
+      types: EIP712Types,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "CreateSubscription",
       message: agreement,
@@ -389,7 +390,7 @@ export class DaisySDKToken {
    */
   signAuthorization({ account, agreement }) {
     const typedData = {
-      types: TYPES,
+      types: EIP712Types,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "CreateSubscription",
       message: agreement,
@@ -421,7 +422,7 @@ export class DaisySDKToken {
     };
 
     const typedData = {
-      types: TYPES,
+      types: EIP712Types,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "SetWallet",
       message: agreement,
@@ -458,7 +459,7 @@ export class DaisySDKToken {
     };
 
     const typedData = {
-      types: TYPES,
+      types: EIP712Types,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "SetAuthorizer",
       message: agreement,

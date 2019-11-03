@@ -1,7 +1,7 @@
 /** @module private */
 
 const sigUtil = require("eth-sig-util");
-const { TYPES } = require("../common/helpers");
+const { EIP712Types } = require("@daisypayments/smart-contracts/eip712");
 
 /**
  * @private
@@ -16,7 +16,7 @@ class Signer {
 
   signTypedData(type, message) {
     const data = {
-      types: TYPES,
+      types: EIP712Types,
       domain: this.domain,
       primaryType: type,
       message,
