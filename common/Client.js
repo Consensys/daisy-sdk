@@ -52,30 +52,45 @@ class Client {
       body: !isGET && args.data ? JSON.stringify(args.data) : undefined,
     };
 
-    return fetch(url, config).then(response => {
-      if (!response.ok) {
-        // TODO: axiosify error object
-        throw new Error("Fetch error:", response.statusText);
-      } else {
-        const axiosify = data => ({
-          data,
+    return fetch(url, config).then(this.axiosify, requestError => {
+      // eslint-disable-next-line no-param-reassign
+      requestError.request = {};
+      throw requestError;
+    });
+  }
+
+  materialize(response) {
+    const content =
+      response.headers.has(CONTENT_TYPE) && response.headers.get(CONTENT_TYPE);
+
+    switch (content) {
+      case "text/html":
+        return response.text();
+      case "application/json":
+      default:
+        return response.json();
+    }
+  }
+
+  axiosify(response) {
+    return this.materialize(response).then(materialized => {
+      if (response.ok) {
+        return {
+          data: materialized,
           status: response.status,
           statusText: response.statusText,
           headers: response.headers,
-          config,
-        });
-
-        const content =
-          response.headers.has(CONTENT_TYPE) &&
-          response.headers.get(CONTENT_TYPE);
-
-        switch (content) {
-          case "text/html":
-            return response.text().then(axiosify);
-          case "application/json":
-          default:
-            return response.json().then(axiosify);
-        }
+          // config,
+        };
+      } else {
+        const error = new Error(materialized["message"]);
+        error.response = {
+          data: materialized,
+          status: response.status,
+          statusText: response.statusText,
+          headers: response.headers,
+        };
+        throw error;
       }
     });
   }
