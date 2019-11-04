@@ -44,6 +44,10 @@ function getExpirationInSeconds(signatureExpiresAt) {
  * @extends module:common~SubscriptionProductClient
  */
 class DaisySDK extends SubscriptionProductClient {
+  static set fetch(f) {
+    SubscriptionProductClient.fetch = f;
+  }
+
   constructor(manager, web3, override) {
     super(manager, override);
     this.manager = manager;

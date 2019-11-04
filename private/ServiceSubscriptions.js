@@ -8,6 +8,10 @@ const SubscriptionProductClient = require("../common/SubscriptionProductClient")
  * @extends module:common~SubscriptionProductClient
  */
 class ServiceSubscriptions extends SubscriptionProductClient {
+  static set fetch(f) {
+    SubscriptionProductClient.fetch = f;
+  }
+
   /**
    * Authorize a private plan. Using this over a non-private plan is safe.
    * @async

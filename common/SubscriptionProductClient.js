@@ -69,7 +69,7 @@ const Client = require("./Client");
  * @typedef {Object} SubscriptionManager
  * @property {number|string} networkId - Ethereum network identifier.
  * @property {string} name - Name.
- * @property {string} wallet - Where the billed tokens are transferer.
+ * @property {string} walletAddress - Where the billed tokens are transferer.
  * @property {string} publisher - Ethereum address of the publisher of this contract (can edit data and plans).
  * @property {string} tokenAddress - ERC20 Token address.
  * @property {Date|string} [deployedAt] - When the contract was deployed.
@@ -107,6 +107,10 @@ const Client = require("./Client");
  * @extends module:common~Client
  */
 class SubscriptionProductClient extends Client {
+  static set fetch(f) {
+    Client.fetch = f;
+  }
+
   /**
    * Create an instance.
    * @param {Object} manager - Object can be taken from `const manager = await instance.getData()` but only the `identifier` is the real important.

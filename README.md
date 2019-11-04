@@ -36,12 +36,16 @@ It is extremely important to keep `DAISY_SECRET_KEY` **private**.
 
 ```js
 const { ServiceSubscriptions } = require("@daisypayments/daisy-sdk/private");
+const fetch = require("node-fetch");
 
+ServiceSubscriptions.fetch = fetch;
 const subscriptionService = new ServiceSubscriptions({
   identifier: process.env.DAISY_ID,
   secretKey: process.env.DAISY_SECRET_KEY,
 });
 ```
+
+> Server instances requires an assignation of `fetch`. We recommend [node-fetch](https://www.npmjs.com/package/node-fetch).
 
 Create and endpoint to retrieve information from your servers back to the frontend.
 Here is an example using Express.js:
