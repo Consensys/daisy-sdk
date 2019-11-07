@@ -18,29 +18,62 @@ class ClientPayments extends Client {
   getData() {
     return this.request({
       method: "get",
-      url: "/payments/",
+      url: "/otp/",
+    }).then(({ data: body }) => body.data);
+  }
+
+  /**
+   * Get subscriptions.
+   * @async
+   * @param {Object} filter - Filtering criteria.
+   * @param {string} filter.state - Filter by invoice state.
+   * @returns {Promise<Invoice[]>} - Invoices
+   */
+  getInvoices(filter = {}) {
+    return this.request({
+      method: "get",
+      url: "/otp/invoices/",
+      data: filter,
     }).then(({ data: body }) => body.data);
   }
 
   /**
    * @async
    */
-  getInvoices() {}
+  getInvoice({ identifier, address }) {
+    if (identifier) {
+      return this.request({
+        method: "get",
+        url: `/otp/invoices/${identifier}/`,
+      }).then(({ data: body }) => body.data);
+    } else if (address) {
+      return this.request({
+        method: "get",
+        url: `/otp/invoices/address/${address}/`,
+      }).then(({ data: body }) => body.data);
+    } else {
+      throw new Error("Missing arguments");
+    }
+  }
 
   /**
    * @async
    */
-  getInvoice() {}
-
-  /**
-   * @async
-   */
-  getReceipts() {}
-
-  /**
-   * @async
-   */
-  createInvoice() {}
+  getReceipts({ identifier, address }) {
+    if (identifier) {
+      return this.request({
+        method: "get",
+        url: `/otp/invoices/${identifier}/receipts/`,
+      }).then(({ data: body }) => body.data);
+    } else if (address) {
+      return this.request({
+        method: "get",
+        url: `/otp/invoices/address/${address}/receipts/`,
+      }).then(({ data: body }) => body.data);
+    } else {
+      throw new Error("Missing arguments");
+    }
+  }
 }
 
 ClientPayments.ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
