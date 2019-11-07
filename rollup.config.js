@@ -32,7 +32,7 @@ export default {
     json(),
   ],
   external: id => {
-    const externals = ["web3", "axios", "eventemitter3", "querystring"];
+    const externals = ["web3", "eventemitter3"];
     return externals.includes(id);
   },
 };

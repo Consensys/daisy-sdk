@@ -23,25 +23,28 @@
     "private"
   ],
   "dependencies": {
-    "axios": "^0.18.0",
-    "eth-sig-util": "^2.1.2",
-    "eventemitter3": "^3.1.2"
+    "@daisypayments/smart-contracts": "^0.2.2-beta",
+    "eth-sig-util": "^2.5.0",
+    "eventemitter3": "^4.0.0"
   },
   "peerDependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.4.4",
+    "@babel/core": "^7.6.4",
     "@babel/plugin-external-helpers": "^7.2.0",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
-    "@daisypayments/eslint-config": "^1.6.3",
-    "eslint": "^5.16.0",
-    "husky": "^2.4.1",
-    "jest": "^24.7.1",
-    "rollup": "^1.11.0",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^9.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "@daisypayments/eslint-config": "^1.7.0",
+    "eslint": "^6.6.0",
+    "husky": "^3.0.9",
+    "jest": "^24.9.0",
+    "rollup": "^1.26.2",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^4.2.3"
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "optionalDependencies": {
+    "node-fetch": "^2.6.0"
   }
 }

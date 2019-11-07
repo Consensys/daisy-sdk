@@ -1,13 +1,15 @@
 /** @module private */
 
 const Signer = require("./Signer");
-const SubscriptionProductClient = require("../common/SubscriptionProductClient");
+const ClientSubscriptions = require("../common/ClientSubscriptions");
 
-/**
- * ServiceSubscriptions class
- * @extends module:common~SubscriptionProductClient
- */
-class ServiceSubscriptions extends SubscriptionProductClient {
+class ServerSubscriptions extends ClientSubscriptions {
+  constructor({ manager, override, withGlobals }) {
+    super(manager, override, withGlobals);
+    this.manager = manager;
+    this.override = override;
+  }
+
   /**
    * Authorize a private plan. Using this over a non-private plan is safe.
    * @async
@@ -28,7 +30,7 @@ class ServiceSubscriptions extends SubscriptionProductClient {
       return signer.signTypedData("Subscription", {
         ...agreement,
         subscriber: opts.allowAnyAddress
-          ? SubscriptionProductClient.ZERO_ADDRESS
+          ? ClientSubscriptions.ZERO_ADDRESS
           : agreement.subscriber,
       });
     });
@@ -71,4 +73,4 @@ class ServiceSubscriptions extends SubscriptionProductClient {
   }
 }
 
-module.exports = ServiceSubscriptions;
+module.exports = ServerSubscriptions;

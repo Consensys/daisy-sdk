@@ -1,13 +1,13 @@
-const SubscriptionProductClient = require("./SubscriptionProductClient");
+const ClientSubscriptions = require("./ClientSubscriptions");
 
-describe("SubscriptionProductClient", () => {
+describe("ClientSubscriptions", () => {
   function createInstance(
     credentials = { identifier: "margarita", secretKey: "key" }
   ) {
     const SDK_DEV = {
       // baseURL: "http://localhost:8000",
     };
-    return new SubscriptionProductClient(credentials, SDK_DEV);
+    return new ClientSubscriptions(credentials, SDK_DEV);
   }
 
   test("Get plans", async () => {

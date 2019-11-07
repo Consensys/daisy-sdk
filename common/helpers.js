@@ -1,51 +1,5 @@
 /** @module common */
 
-exports.TYPES = {
-  EIP712Domain: [{ name: "verifyingContract", type: "address" }],
-
-  Subscription: [
-    { name: "subscriber", type: "address" },
-    { name: "token", type: "address" },
-    { name: "price", type: "uint256" },
-    { name: "periodUnit", type: "string" },
-    { name: "periods", type: "uint256" },
-    { name: "maxExecutions", type: "uint256" },
-    { name: "plan", type: "string" },
-  ],
-
-  CreateSubscription: [
-    { name: "subscription", type: "Subscription" },
-    { name: "previousSubscriptionId", type: "bytes32" },
-    { name: "credits", type: "uint256" },
-    { name: "nonce", type: "bytes32" },
-    { name: "signatureExpiresAt", type: "uint256" },
-  ],
-
-  RemovePlan: [
-    { name: "plan", type: "string" },
-    { name: "nonce", type: "bytes32" },
-    { name: "signatureExpiresAt", type: "uint256" },
-  ],
-
-  CancelSubscription: [
-    { name: "subscriptionId", type: "bytes32" },
-    { name: "nonce", type: "bytes32" },
-    { name: "signatureExpiresAt", type: "uint256" },
-  ],
-
-  SetAuthorizer: [
-    { name: "authorizer", type: "address" },
-    { name: "nonce", type: "bytes32" },
-    { name: "signatureExpiresAt", type: "uint256" },
-  ],
-
-  SetWallet: [
-    { name: "wallet", type: "address" },
-    { name: "nonce", type: "bytes32" },
-    { name: "signatureExpiresAt", type: "uint256" },
-  ],
-};
-
 /**
  * @async
  * @private
@@ -83,4 +37,17 @@ exports.genNonce = function genNonce(web3, len = 32) {
     value = web3.utils.randomHex(len);
   } while (value.length !== len * 2 + 2); // +2 because of "0x"
   return value;
+};
+
+const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+exports.getExpirationInSeconds = function getExpirationInSeconds(
+  signatureExpiresAt
+) {
+  return String(
+    Math.floor(
+      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
+        1000
+    )
+  ); // unix timestamp in seconds
 };

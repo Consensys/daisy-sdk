@@ -2,10 +2,10 @@
 
 ## Install
 
-> You may also require some extra dependencies like `axios`, `web3`, `eventemitter3`, and `querystring`.
+> You may also require some extra dependencies like `web3`, and `eventemitter3`
 
 ```nocode
-yarn add @daisypayments/daisy-sdk axios eventemitter3 querystring web3@1.0.0-beta.37
+yarn add @daisypayments/daisy-sdk eventemitter3 web3@1.0.0-beta.37
 ```
 
 ## MetaMask helper
@@ -36,12 +36,16 @@ It is extremely important to keep `DAISY_SECRET_KEY` **private**.
 
 ```js
 const { ServiceSubscriptions } = require("@daisypayments/daisy-sdk/private");
+const fetch = require("node-fetch");
 
+ServiceSubscriptions.fetch = fetch;
 const subscriptionService = new ServiceSubscriptions({
   identifier: process.env.DAISY_ID,
   secretKey: process.env.DAISY_SECRET_KEY,
 });
 ```
+
+> Server instances requires an assignation of `fetch`. We recommend [node-fetch](https://www.npmjs.com/package/node-fetch).
 
 Create and endpoint to retrieve information from your servers back to the frontend.
 Here is an example using Express.js:
