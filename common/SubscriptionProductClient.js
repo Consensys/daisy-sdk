@@ -159,8 +159,10 @@ class SubscriptionProductClient extends Client {
    * Get subscriptions.
    * @async
    * @param {Object} filter - Filtering criteria.
-   * @param {string} filter.account - Filter by Ethereum address.
-   * @param {string} filter.state - Filter by subscription state.
+   * @param {string|string[]} filter.account - Filter by Ethereum address.
+   * @param {string|string[]} filter.state - Filter by subscription state: `NOT_STARTED`, `PENDING`, `ACTIVE`, `ACTIVE_CANCELLED`, `CANCELLED`, `EXPIRED`, `INVALID`, `NOT_ENOUGH_FUNDS`, `FAILED`.
+   * @param {string|string[]} filter.token - Filter by token Ethereum address.
+   * @param {string|string[]} filter.planId - Filter by token Ethereum address.
    * @returns {Promise<Subscription[]>} - Subscriptions based on the filtering criteria.
    *
    * @example
@@ -169,6 +171,10 @@ class SubscriptionProductClient extends Client {
    *   identifier: process.env.DAISY_ID,
    * });
    * const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0..." });
+   * const subscriptionsActive = await subscriptionProduct.getSubscriptions({
+   *   account: "0x0...",
+   *   state: ["ACTIVE", "ACTIVE_CANCELLED"],
+   * });
    */
   getSubscriptions(filter = {}) {
     return this.request({
