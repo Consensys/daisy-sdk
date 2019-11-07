@@ -3,7 +3,7 @@
 const Client = require("./Client");
 
 /**
- * @typedef {Object} Plan - Daisy's Plan object. Can be retrieved using {@link module:common~SubscriptionProductClient#getData}.
+ * @typedef {Object} Plan - Daisy's Plan object. Can be retrieved using {@link module:common~ClientSubscriptions#getData}.
  * @property {string} id - ID.
  * @property {string} name - Plan name.
  * @property {string} onChainId - Plan ID in the Ethereum blockchain (internal use of the SDK).
@@ -106,28 +106,17 @@ const Client = require("./Client");
  * The important data here is the `DAISY_ID`.
  * @extends module:common~Client
  */
-class SubscriptionProductClient extends Client {
-  static set fetch(f) {
-    Client.fetch = f;
-  }
-
-  /**
-   * Create an instance.
-   * @param {Object} manager - Object can be taken from `const manager = await instance.getData()` but only the `identifier` is the real important.
-   * @param {string} manager.identifier - Get it from the Daisy Dashboard as `DAISY_ID`.
-   * @param {string} manager.secretKey - Get it from the Daisy Dashboard as `DAISY_SECRET_KEY`. THIS SHOULD ONLY BE KEEP SECRET ON A SERVER. DO NOT USE ON BROWSERS.
-   * @param {Object} override - Override config. This is intended for development purposes.
-   */
-  constructor(manager, override) {
+class ClientSubscriptions extends Client {
+  constructor(manager, override, withGlobals = {}) {
     const { identifier, secretKey } = manager;
-    super({
-      ...Client.DEFAULT_CONFIG,
+    const config = {
       auth: {
         username: identifier,
         password: secretKey,
       },
       ...override,
-    });
+    };
+    super(config, withGlobals);
   }
 
   /**
@@ -137,7 +126,7 @@ class SubscriptionProductClient extends Client {
    *
    * @example
    *
-   * const subscriptionProduct = new SubscriptionProductClient({
+   * const subscriptionProduct = new ClientSubscriptions({
    *   identifier: process.env.DAISY_ID,
    * });
    * const { plans, ...manager } = await subscriptionProduct.getData();
@@ -150,7 +139,7 @@ class SubscriptionProductClient extends Client {
   }
 
   /**
-   * @deprecated Renamed to {@link module:common~SubscriptionProductClient#getData}.
+   * @deprecated Renamed to {@link module:common~ClientSubscriptions#getData}.
    */
   getPlans() {
     // TODO: add deprecation warning.
@@ -167,7 +156,7 @@ class SubscriptionProductClient extends Client {
    *
    * @example
    *
-   * const subscriptionProduct = new SubscriptionProductClient({
+   * const subscriptionProduct = new ClientSubscriptions({
    *   identifier: process.env.DAISY_ID,
    * });
    * const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0..." });
@@ -190,7 +179,7 @@ class SubscriptionProductClient extends Client {
    *
    * @example
    *
-   * const subscriptionProduct = new SubscriptionProductClient({
+   * const subscriptionProduct = new ClientSubscriptions({
    *   identifier: process.env.DAISY_ID,
    * });
    * const subscription = await subscriptionProduct.getSubscription({ id: "" });
@@ -246,7 +235,7 @@ class SubscriptionProductClient extends Client {
    *
    * @example
    *
-   * const subscriptionProduct = new SubscriptionProductClient({
+   * const subscriptionProduct = new ClientSubscriptions({
    *   identifier: process.env.DAISY_ID,
    * });
    * const subscription = await subscriptionProduct.submit({ });
@@ -284,7 +273,6 @@ class SubscriptionProductClient extends Client {
   }
 }
 
-SubscriptionProductClient.ZERO_ADDRESS =
-  "0x0000000000000000000000000000000000000000";
+ClientSubscriptions.ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-module.exports = SubscriptionProductClient;
+module.exports = ClientSubscriptions;

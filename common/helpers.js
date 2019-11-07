@@ -38,3 +38,16 @@ exports.genNonce = function genNonce(web3, len = 32) {
   } while (value.length !== len * 2 + 2); // +2 because of "0x"
   return value;
 };
+
+const EXPIRATION_TIME_TO_LIVE = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+exports.getExpirationInSeconds = function getExpirationInSeconds(
+  signatureExpiresAt
+) {
+  return String(
+    Math.floor(
+      (Number(signatureExpiresAt) || Date.now() + EXPIRATION_TIME_TO_LIVE) /
+        1000
+    )
+  ); // unix timestamp in seconds
+};

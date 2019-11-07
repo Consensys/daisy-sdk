@@ -8,8 +8,10 @@ const ACCEPT = "Accept";
 function base64(string) {
   if (typeof window !== "undefined" && window.btoa) {
     return btoa(string);
-  } else {
+  } else if (typeof Buffer !== "undefined") {
     return Buffer.from(string).toString("base64");
+  } else {
+    throw new Error("Can not convert to base64");
   }
 }
 
@@ -31,24 +33,18 @@ class Client {
     };
   }
 
-  static set fetch(f) {
-    // eslint-disable-next-line no-underscore-dangle
-    Client._fetch = f;
+  get fetch() {
+    return this.withGlobals.fetch || window.fetch;
   }
 
-  static get fetch() {
-    // eslint-disable-next-line no-underscore-dangle
-    return Client._fetch || window.fetch;
+  get Headers() {
+    return this.withGlobals.Headers || this.fetch.Headers || window.Headers;
   }
 
-  static get Headers() {
-    return Client.fetch.Headers || window.Headers;
-  }
-
-  constructor(config) {
+  constructor(config, withGlobals = {}) {
     this.config = { ...Client.DEFAULT_CONFIG, ...config };
-    // Remove trailing slash.
-    this.config.baseURL = this.config.baseURL.replace(/\/$/, "");
+    this.config.baseURL = this.config.baseURL.replace(/\/$/, ""); // Remove trailing slash.
+    this.withGlobals = withGlobals;
   }
 
   /**
@@ -67,7 +63,7 @@ class Client {
     args = { method: "get", url: "/", headers: {}, data: undefined, auth: {} }
   ) {
     // eslint-disable-next-line no-shadow
-    const { fetch, Headers } = Client;
+    const { fetch, Headers } = this;
 
     const method = args.method.toLowerCase();
     const isGET = method === "get";
