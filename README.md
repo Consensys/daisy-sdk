@@ -12,7 +12,7 @@ yarn add @daisypayments/daisy-sdk eventemitter3 web3@1.0.0-beta.37
 
 To help you handle web3 instances and the current account we recommended [daisypayments/react-metamask](https://github.com/Consensys/react-metamask).
 
-## Usage
+## Usage: Subscriptions
 
 ### 1. Standard private and public plans with DaisySDK
 
@@ -20,7 +20,7 @@ This is the default flow with standardized plans. This requires the implementati
 
 #### 1.1 Create a Subscription Product and Plans
 
-After deploying a Subscription Product to the blockchain go to the *API Integration* tab and get the `DAISY_ID` and `DAISY_SECRET_KEY`.
+After deploying a Subscription Product to the blockchain go to the *API Integration* tab and grab the `DAISY_ID` and `DAISY_SECRET_KEY`.
 
 ```txt
 # Example values
@@ -31,21 +31,24 @@ DAISY_CALLBACK_PUBLIC_KEY=key
 
 #### 1.2 Integration in the server
 
-Create an instance of `ServiceSubscriptions` from the `@daisypayments/daisy-sdk/private` sub-module.
+Create an instance of `ServerSubscriptions` from the `@daisypayments/daisy-sdk/private` sub-module.
 It is extremely important to keep `DAISY_SECRET_KEY` **private**.
 
 ```js
-const { ServiceSubscriptions } = require("@daisypayments/daisy-sdk/private");
+const { ServerSubscriptions } = require("@daisypayments/daisy-sdk/private");
 const fetch = require("node-fetch");
 
-ServiceSubscriptions.fetch = fetch;
-const subscriptionService = new ServiceSubscriptions({
-  identifier: process.env.DAISY_ID,
-  secretKey: process.env.DAISY_SECRET_KEY,
+ServerSubscriptions.fetch = fetch;
+const subscriptions = new ServerSubscriptions({
+  manager: {
+    identifier: process.env.DAISY_ID,
+    secretKey: process.env.DAISY_SECRET_KEY,
+  },
+  withGlobals: { fetch },
 });
 ```
 
-> Server instances requires an assignation of `fetch`. We recommend [node-fetch](https://www.npmjs.com/package/node-fetch).
+> Server instances requires an instance of `fetch`. We recommend [node-fetch](https://www.npmjs.com/package/node-fetch).
 
 Create and endpoint to retrieve information from your servers back to the frontend.
 Here is an example using Express.js:
@@ -58,7 +61,7 @@ const app = express();
 
 // GET /api/plans/ -> Fetch plans from the frontend
 app.get("/api/plans/", h(async (req, res) => {
-  const { plans } = await subscriptionService.getData();
+  const { plans } = await subscriptions.getData();
   res.json({ plans });
 }));
 
@@ -67,26 +70,13 @@ app.post("/api/plan/:pid/subscriptions/", h(async (req, res) => {
   const user = req.session;
   const { agreement, signature } = req.body;
 
-  const { plans } = await subscriptionService.getData();
+  const { plans } = await subscriptions.getData();
   const plan = plans.find(p => p["id"] === req.params["pid"]);
   if (!plan) {
-    throw // ...
+    throw new Error("Plan not found");
   }
 
-  let authSignature = null; // not required for public plans.
-  if (plan.private) {
-    // TODO: Add conditions for `user` to use private plan.
-
-    const authorizer = {
-      privateKey: Buffer.from(process.env.PRIVATE_KEYS, "hex"),
-    };
-    authSignature = await subscriptionService.authorize(
-      authorizer,
-      agreement,
-    );
-  }
-
-  const { data: subscription } = await subscriptionService.submit({
+  const { data: subscription } = await subscriptions.submit({
     agreement,
     authSignature,
     signature,
@@ -107,7 +97,10 @@ This will only expose `private: false` plans.
 ```js
 import DaisySDK from "@daisypayments/daisy-sdk";
 
-const daisy = new DaisySDK({ identifier: "margarita" }, web3)
+const daisy = await DaisySDK.initSubscriptions({
+  manager: { identifier: "margarita" },
+  withGlobals: { web3 },
+});
 
 const { plans } = await daisy.getData();
 ```
@@ -117,8 +110,10 @@ const { plans } = await daisy.getData();
 It is required to approve tokens before signing the subscription agreement.
 
 ```js
-const daisy = new DaisySDK({ identifier: "margarita" }, web3)
-await daisy.sync();
+const daisy = await DaisySDK.initSubscriptions({
+  manager: { identifier: "margarita" },
+  withGlobals: { web3 },
+});
 
 const token = daisy.loadToken(); // web3.js contract instance
 
@@ -153,8 +148,10 @@ function handleApprove_error(error) {
 #### 1.4 Signing subscription agreement
 
 ```js
-const daisy = new DaisySDK({ identifier: "margarita" }, web3)
-await daisy.sync();
+const daisy = await DaisySDK.initSubscriptions({
+  manager: { identifier: "margarita" },
+  withGlobals: { web3 },
+});
 
 const token = daisy.loadToken(); // web3.js contract instance
 
@@ -187,12 +184,12 @@ const { data: subscription } = await daisy.submit({
 Verify subscription state with:
 
 ```js
-const subscription = await subscriptionService.getSubscription({
+const sub = await subscriptions.getSubscription({
   id: daisyID,
 });
-console.log(subscription["state"]);
+console.log(sub["state"]);
 
-const subscriptions = await subscriptionService.getSubscriptions({
+const subs = await subscriptions.getSubscriptions({
   account: "0x...",
 });
 ```
@@ -203,7 +200,7 @@ Daisy Invitation allows client to externalize the flow to Daisy's domain.
 
 #### 2.1 Recommended usage: WebHooks
 
-Let's say you created a Daisy Invitation with the following id:
+Let's say you created a Daisy Invitation with the following:
 
 ```txt
 identifier: "/i/af4cff8c"
@@ -212,8 +209,7 @@ callbackExtra: {}
 
 ```
 
-Then we need to route `callbackURL` to your server URL (with HTTPS) and a path.
-This route must handle a HTTP POST request and return a `2XX` status code.
+This route (`callbackURL`) must handle a HTTP POST request and return a `2XX` status code.
 
 ```ts
 // TypeScript typing
@@ -334,6 +330,8 @@ app.post("/api/callback/daisy-invitation/", h(async (req, res) => {
 }));
 ```
 
+> An alternative way of voiding is to return any response with a 400 or 500 HTTP status code.
+
 #### 2.3 Identifying the user
 
 One way to identify an user after getting the callback is by knowing before-hand the user's Ethereum address.
@@ -369,7 +367,8 @@ app.post("/api/callback/daisy-invitation/", h(async (req, res) => {
 To tell if the webhook POST actually came from Daisy servers you can verify its signature:
 
 ```js
-const { verify } = require('@daisypayments/daisy-sdk/private/webhooks');
+const { verify } = require("@daisypayments/daisy-sdk/private/webhooks");
+const dedent = require("dedent");
 
 // POST /api/callback/daisy-invitation/ -> Daisy callback handler
 app.post("/api/callback/daisy-invitation/", h(async (req, res) => {
@@ -378,7 +377,17 @@ app.post("/api/callback/daisy-invitation/", h(async (req, res) => {
   const isAuthentic = verify({
     message: payload,
     digest: digest,
-    publicKey: process.env.DAISY_CALLBACK_PUBLIC_KEY,
+    publicKey: dedent`
+      -----BEGIN PUBLIC KEY-----
+      MYIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyUaW5FK4ogS2/j7e7h65
+      u73/1QrdfocqHB14123kMQO6Z2CR1+dqa9afty3DQ+mLJ7gupOjvYFYrsiIQoMVc
+      J3zsmlYNjAnoHe8Kn2nU+Gjq+mJ6mscRIC6uMIMm/LslsiMugeL1YlpYXZ0uwbnY
+      TDKiC+g08iGc3tNiaFVCrzNcTH3221vasd321vh21UkWPcAJFDSR+YTtrXjpLMAB
+      jm3Vij8IarAmoCmTMIlUPbCb3j6NMjP4r0hulFUx6/u0DFvQPfKwzKnOph0CoX8u
+      kde74DGOsKxinYycP20w73aypC9eLY7M3PKtJCft3EypTEvgZRHG5Wd2BaTOvzF4
+      tQIDAGAB
+      -----END PUBLIC KEY-----
+    `,
   });
 
   if (!isAuthentic) {
@@ -388,4 +397,135 @@ app.post("/api/callback/daisy-invitation/", h(async (req, res) => {
 
   // ...
 });
+```
+
+## Usage: Payments invoices
+
+### 1. Creating invoices with Daisy SDK
+
+#### 1.1 Create an Invitation
+
+The first step is going to the Daisy Dashboard and setup an Invitation product. After setting this go to the API Integration and grab the `DAISY_ID` and `DAISY_SECRET_KEY`.
+
+```txt
+# Example values
+DAISY_OTP_ID=plantae
+DAISY_OTP_SECRET_KEY=key
+```
+
+#### 1.2 Server integration
+
+Create an instance of `ServerPayments` from the `@daisypayments/daisy-sdk/private` sub-module.
+It is extremely important to keep `DAISY_SECRET_KEY` **private**.
+
+```js
+const { ServerPayments } = require("@daisypayments/daisy-sdk/private");
+const fetch = require("node-fetch");
+
+ServerPayments.fetch = fetch;
+const payments = new ServerPayments({
+  manager: {
+    identifier: process.env.DAISY_ID,
+    secretKey: process.env.DAISY_SECRET_KEY,
+  },
+  withGlobals: { fetch },
+});
+```
+
+> Server instances requires an instance of `fetch`. We recommend [node-fetch](https://www.npmjs.com/package/node-fetch).
+
+Let's say we want to sell an access pass for 20 USD or equivalent in DAI.
+
+```js
+const express = require("express");
+const h = require("express-async-handler");
+
+const app = express();
+
+app.get("/api/checkout/invoice/", h(async (req, res) => {
+  const user = req.session;
+
+  // Create an invoice using Daisy SDK
+  const invoice = await payments.createInvoice({
+    invoicedPrice: 20, // required
+    invoicedEmail: user.email, // optional
+    invoicedName: user.name, // optional
+    invoicedDetail: "Paid Access", // optional
+  });
+
+  // Save and associate invoice to user
+  await user.update({ invoiceId: invoice["id"]} );
+
+  // Use this object in the frontend to start the transaction.
+  res.json({ invoice });
+});
+```
+
+The `invoice` object looks like this using TypeScript notation:
+
+```ts
+interface PaymentInvoice {
+  id: string;
+  identifier: string;
+  state: PaymentInvoiceState;
+  amountPaid: string | BigNumber;
+  paidAt?: string;
+  address: string;
+  tokenAddress: string;
+  walletAddress: string;
+  invoicedPrice: string;
+  invoicedEmail?: string;
+  invoicedName?: string;
+  invoicedDetail?: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
+
+export enum PaymentInvoiceState {
+  Pending = "PENDING",
+  UnderPaid = "UNDER_PAID",
+  Paid = "PAID",
+  OverPaid = "OVER_PAID",
+}
+```
+
+Since any transaction sending money to the invoice address can fulfill the requested amount, one way to know the state of the payment is to ask Daisy via polling.
+
+```js
+app.get("/api/checkout/state/", h(async (req, res) => {
+  const user = req.session;
+
+  try {
+    const invoice = await payments.getInvoice({
+      identifier: user.invoiceId,
+    });
+    const success = ["PAID", "OVER_PAID"].includes(invoice["state"]);
+
+    res.json({ invoice });
+  } catch (error) {
+    //
+  }
+});
+```
+
+To get the receipts from any Invoice:
+
+```js
+const receipts = await payments.getReceipts({
+  identifier: user.invoiceId,
+});
+```
+
+Receipt object shape:
+
+```ts
+interface PaymentReceipt {
+  id: string;
+  txHash: string;
+  account: string;
+  amount: string | BigNumber;
+  onChainCreatedAt: string | Date;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
 ```

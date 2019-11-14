@@ -76,6 +76,4 @@ class ClientPayments extends Client {
   }
 }
 
-ClientPayments.ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
-
 module.exports = ClientPayments;

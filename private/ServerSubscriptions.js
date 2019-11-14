@@ -2,6 +2,7 @@
 
 const Signer = require("./Signer");
 const ClientSubscriptions = require("../common/ClientSubscriptions");
+const { ZERO_ADDRESS } = require("../common/helpers");
 
 class ServerSubscriptions extends ClientSubscriptions {
   constructor({ manager, override, withGlobals }) {
@@ -29,9 +30,7 @@ class ServerSubscriptions extends ClientSubscriptions {
       const signer = new Signer(authorizer.privateKey, manager["address"]);
       return signer.signTypedData("Subscription", {
         ...agreement,
-        subscriber: opts.allowAnyAddress
-          ? ClientSubscriptions.ZERO_ADDRESS
-          : agreement.subscriber,
+        subscriber: opts.allowAnyAddress ? ZERO_ADDRESS : agreement.subscriber,
       });
     });
   }

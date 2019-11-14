@@ -2,6 +2,9 @@
 
 const ServerSubscriptions = require("./ServerSubscriptions");
 
+/**
+ * Legacy and deprecating soon.
+ */
 class ServiceSubscriptions extends ServerSubscriptions {
   constructor(manager, override, withGlobals) {
     super({ manager, override, withGlobals });
