@@ -416,17 +416,16 @@ DAISY_OTP_SECRET_KEY=key
 #### 1.2 Server integration
 
 Create an instance of `ServerPayments` from the `@daisypayments/daisy-sdk/private` sub-module.
-It is extremely important to keep `DAISY_SECRET_KEY` **private**.
+It is extremely important to keep `DAISY_OTP_SECRET_KEY` **private**.
 
 ```js
-const { ServerPayments } = require("@daisypayments/daisy-sdk/private");
+const DaisySDK = require("@daisypayments/daisy-sdk/private");
 const fetch = require("node-fetch");
 
-ServerPayments.fetch = fetch;
-const payments = new ServerPayments({
+const payments = new DaisySDK.ServerPayments({
   manager: {
-    identifier: process.env.DAISY_ID,
-    secretKey: process.env.DAISY_SECRET_KEY,
+    identifier: process.env.DAISY_OTP_ID,
+    secretKey: process.env.DAISY_OTP_SECRET_KEY,
   },
   withGlobals: { fetch },
 });
