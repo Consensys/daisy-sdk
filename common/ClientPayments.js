@@ -3,7 +3,7 @@
 const Client = require("./Client");
 
 class ClientPayments extends Client {
-  static init(manager, override, withGlobals) {
+  constructor(manager, override, withGlobals = {}) {
     const { identifier, secretKey } = manager;
     const config = {
       auth: {
@@ -12,7 +12,7 @@ class ClientPayments extends Client {
       },
       ...override,
     };
-    return new ClientPayments(config, withGlobals);
+    super(config, withGlobals);
   }
 
   getData() {

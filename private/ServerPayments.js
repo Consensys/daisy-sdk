@@ -19,7 +19,7 @@ class ServerPayments extends ClientPayments {
 
     return this.request({
       method: "post",
-      url: `/opt/`,
+      url: `/otp/`,
       data,
     }).then(({ data: body }) => body.data);
   }
