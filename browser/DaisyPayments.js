@@ -2,16 +2,15 @@ import ClientPayments from "../common/ClientPayments";
 
 import ERC20 from "../contracts/lite/ERC20.json";
 
-export default class DaisyPayments {
+export default class DaisyPayments extends ClientPayments {
   get web3() {
     return this.withGlobals.web3 || window.web3;
   }
 
   constructor({ manager, override, withGlobals }) {
+    super(manager, override, withGlobals);
     this.manager = manager;
-    this.withGlobals = withGlobals;
     this.override = override;
-    this.client = ClientPayments.init(manager, override, withGlobals);
   }
 
   with(withGlobals) {
@@ -23,15 +22,13 @@ export default class DaisyPayments {
   }
 
   sync() {
-    return this.client
-      .request({
-        method: "get",
-        url: "/payments",
-      })
-      .then(({ data: body }) => {
-        this.manager = { ...this.manager, ...body["data"] };
-        return this;
-      });
+    return this.request({
+      method: "get",
+      url: "/otp/",
+    }).then(({ data: body }) => {
+      this.manager = { ...this.manager, ...body["data"] };
+      return this;
+    });
   }
 
   loadToken({ symbol, address } = {}) {
