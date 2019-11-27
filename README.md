@@ -120,7 +120,7 @@ It is required to approve tokens before signing the subscription agreement.
 const daisy = new DaisySDK({ identifier: "margarita" }, web3)
 await daisy.sync();
 
-const token = daisy.loadToken(); // web3.js contract instance
+const token = daisy.loadToken(plan); // web3.js contract instance
 
 const approvalAmount = "9000000000000000";
 const account = "0x..." // from MetaMask.
@@ -156,7 +156,7 @@ function handleApprove_error(error) {
 const daisy = new DaisySDK({ identifier: "margarita" }, web3)
 await daisy.sync();
 
-const token = daisy.loadToken(); // web3.js contract instance
+const token = daisy.loadToken(plan); // web3.js contract instance
 
 const { signature, agreement } = await daisy
   .prepareToken(token)
