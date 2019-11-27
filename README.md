@@ -115,7 +115,7 @@ const daisy = await DaisySDK.initSubscriptions({
   withGlobals: { web3 },
 });
 
-const token = daisy.loadToken(); // web3.js contract instance
+const token = daisy.loadToken(plan); // web3.js contract instance
 
 const approvalAmount = "9000000000000000";
 const account = "0x..." // from MetaMask.
@@ -153,7 +153,7 @@ const daisy = await DaisySDK.initSubscriptions({
   withGlobals: { web3 },
 });
 
-const token = daisy.loadToken(); // web3.js contract instance
+const token = daisy.loadToken(plan); // web3.js contract instance
 
 const { signature, agreement } = await daisy
   .prepareToken(token)
