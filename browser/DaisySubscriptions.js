@@ -90,6 +90,8 @@ export default class DaisySubscriptions extends ClientSubscriptions {
   loadToken(plan) {
     if (!plan) {
       throw new TypeError("Plan argument missing.");
+    } else if (!plan["tokenAddress"]) {
+      throw new TypeError("Plan argument has missing `tokenAddress` property.");
     }
     return new this.web3.eth.Contract(ERC20["abi"], plan["tokenAddress"]);
   }
@@ -118,7 +120,7 @@ export default class DaisySubscriptions extends ClientSubscriptions {
    */
   resume(receipt) {
     if (!receipt) {
-      throw new Error("Missing argument.");
+      throw new TypeError("Missing argument.");
     }
     const transactionHash = receipt["transactionHash"] || receipt;
 
@@ -330,8 +332,8 @@ export class DaisySubscriptionsOnToken extends DaisySubscriptions {
    *   .on("error", error => {});
    */
   approve(amount, sendArgs) {
-    if (!sendArgs.from) {
-      throw new Error("Missing `sendArgs.from` argument");
+    if (!sendArgs || !sendArgs.from) {
+      throw new TypeError("Missing `sendArgs.from` argument");
     }
     return this.token.methods["approve"](this.manager["address"], amount).send(
       sendArgs
@@ -354,8 +356,8 @@ export class DaisySubscriptionsOnToken extends DaisySubscriptions {
    *   .allowance({ tokenOwner: account })
    */
   allowance(sendArgs) {
-    if (!sendArgs.tokenOwner) {
-      throw new Error(`allowance() was called without a tokenOwner specified. Be sure to call allowance() like:
+    if (!sendArgs || !sendArgs.tokenOwner) {
+      throw new TypeError(`allowance() was called without a tokenOwner specified. Be sure to call allowance() like:
       
       daisy
         .prepareToken(token)
@@ -396,8 +398,8 @@ export class DaisySubscriptionsOnToken extends DaisySubscriptions {
    *   .balanceOf({ tokenOwner: account })
    */
   balanceOf(sendArgs) {
-    if (!sendArgs.tokenOwner) {
-      throw new Error(`balanceOf() was called without a tokenOwner specified. Be sure to call balanceOf() like:
+    if (!sendArgs || !sendArgs.tokenOwner) {
+      throw new TypeError(`balanceOf() was called without a tokenOwner specified. Be sure to call balanceOf() like:
       
       daisy
         .prepareToken(token)
@@ -429,7 +431,7 @@ export class DaisySubscriptionsOnToken extends DaisySubscriptions {
     nonce = undefined,
   }) {
     if (!account || !plan) {
-      throw new Error(`Missing required arguments.`);
+      throw new TypeError(`Missing required arguments.`);
     }
 
     const expiration = getExpirationInSeconds(signatureExpiresAt);

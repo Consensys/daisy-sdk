@@ -52,7 +52,7 @@ class ClientPayments extends Client {
         url: `/otp/invoices/address/${address}/`,
       }).then(({ data: body }) => body.data);
     } else {
-      throw new Error("Missing arguments");
+      throw new TypeError("Missing arguments");
     }
   }
 
@@ -71,7 +71,7 @@ class ClientPayments extends Client {
         url: `/otp/invoices/address/${address}/receipts/`,
       }).then(({ data: body }) => body.data);
     } else {
-      throw new Error("Missing arguments");
+      throw new TypeError("Missing arguments");
     }
   }
 }

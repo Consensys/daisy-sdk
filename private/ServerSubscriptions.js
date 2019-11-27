@@ -23,7 +23,7 @@ class ServerSubscriptions extends ClientSubscriptions {
    */
   authorize(authorizer, agreement, opts = { allowAnyAddress: false }) {
     if (!authorizer || !authorizer.privateKey) {
-      throw new Error("Missing authorizer.privateKey");
+      throw new TypeError("Missing authorizer.privateKey");
     }
     return this.getData().then(manager => {
       // Sign private plan using authorizer private key.
@@ -52,7 +52,7 @@ class ServerSubscriptions extends ClientSubscriptions {
     params = { active: true, maxUsages: 0, callbackExtra: {} }
   ) {
     if (!plan) {
-      throw new Error("Missing first argument: plan");
+      throw new TypeError("Missing first argument: plan");
     }
 
     const data = {

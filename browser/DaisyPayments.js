@@ -31,17 +31,15 @@ export default class DaisyPayments extends ClientPayments {
     });
   }
 
-  loadToken({ symbol, address } = {}) {
-    if (address) {
-      return new this.web3.eth.Contract(ERC20["abi"], address);
-    } else if (symbol) {
-      throw new Error("Not implemented yet");
-    } else {
-      return new this.web3.eth.Contract(
-        ERC20["abi"],
-        this.manager["tokenAddress"]
+  loadToken(invoice) {
+    if (!invoice) {
+      throw new TypeError("Invoice argument missing.");
+    } else if (!invoice["tokenAddress"]) {
+      throw new TypeError(
+        "Invoice argument has missing `tokenAddress` property."
       );
     }
+    return new this.web3.eth.Contract(ERC20["abi"], invoice["tokenAddress"]);
   }
 
   prepareToken(token) {
@@ -56,8 +54,8 @@ export class DaisyPaymentsOnToken {
   }
 
   balanceOf(sendArgs) {
-    if (!sendArgs.tokenOwner) {
-      throw new Error(`balanceOf() was called without a tokenOwner specified. Be sure to call balanceOf() like:
+    if (!sendArgs || !sendArgs.tokenOwner) {
+      throw new TypeError(`balanceOf() was called without a tokenOwner specified. Be sure to call balanceOf() like:
       
       daisy
         .prepareToken(token)
