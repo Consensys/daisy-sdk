@@ -75,4 +75,12 @@ export class DaisyPaymentsOnToken {
     const address = invoice["address"];
     return this.token.methods["transfer"](address, price).send(sendArgs);
   }
+
+  getTransfers(invoice, opts = { fromBlock: 0, toBlock: "latest" }) {
+    const address = invoice["address"];
+    return this.token.getPastEvents("Transfer", {
+      filter: { to: [address] },
+      ...opts,
+    });
+  }
 }
