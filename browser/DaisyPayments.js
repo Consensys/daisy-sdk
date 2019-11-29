@@ -26,7 +26,12 @@ export default class DaisyPayments extends ClientPayments {
       method: "get",
       url: "/otp/",
     }).then(({ data: body }) => {
-      this.manager = { ...this.manager, ...body["data"] };
+      this.manager = {
+        ...this.manager,
+        ...body["data"],
+        identifier: this.manager["identifier"],
+        secretKey: this.manager["secretKey"],
+      };
       return this;
     });
   }

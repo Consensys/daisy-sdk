@@ -68,7 +68,12 @@ export default class DaisySubscriptions extends ClientSubscriptions {
       method: "get",
       url: "/",
     }).then(({ data: body }) => {
-      this.manager = { ...this.manager, ...body["data"] };
+      this.manager = {
+        ...this.manager,
+        ...body["data"],
+        identifier: this.manager["identifier"],
+        secretKey: this.manager["secretKey"],
+      };
       return this;
     });
   }
