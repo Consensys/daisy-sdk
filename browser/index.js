@@ -10,14 +10,14 @@ class DaisySDK extends DaisySubscriptions {
 }
 
 DaisySDK.Subscriptions = DaisySubscriptions;
-DaisySDK.initSubscriptions = function initSubscriptions(args) {
-  const instance = new DaisySubscriptions(args);
+DaisySDK.initSubscriptions = function initSubscriptions(...args) {
+  const instance = new DaisySubscriptions(...args);
   return instance.sync();
 };
 
 DaisySDK.Payments = DaisyPayments;
-DaisySDK.initPayments = function initPayments(args) {
-  const instance = new DaisyPayments(args);
+DaisySDK.initPayments = function initPayments(...args) {
+  const instance = new DaisyPayments(...args);
   return instance.sync();
 };
 

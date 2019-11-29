@@ -202,7 +202,7 @@ class ClientSubscriptions extends Client {
         url: `/subscriptions/hash/${onChainId}/`,
       }).then(({ data: body }) => body.data);
     } else {
-      throw new Error("Missing arguments");
+      throw new TypeError("Missing arguments");
     }
   }
 
@@ -226,7 +226,7 @@ class ClientSubscriptions extends Client {
         url: `/subscriptions/hash/${onChainId}/receipts/`,
       }).then(({ data: body }) => body.data);
     } else {
-      throw new Error("Missing arguments");
+      throw new TypeError("Missing arguments");
     }
   }
 
@@ -278,7 +278,5 @@ class ClientSubscriptions extends Client {
     });
   }
 }
-
-ClientSubscriptions.ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 module.exports = ClientSubscriptions;

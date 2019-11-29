@@ -68,16 +68,19 @@ export default class DaisySubscriptions extends ClientSubscriptions {
       method: "get",
       url: "/",
     }).then(({ data: body }) => {
-      this.manager = { ...this.manager, ...body["data"] };
+      this.manager = {
+        ...this.manager,
+        ...body["data"],
+        identifier: this.manager["identifier"],
+        secretKey: this.manager["secretKey"],
+      };
       return this;
     });
   }
 
   /**
    * Load token's web3 contract as {@link external:"web3.eth.Contract"}.
-   * @param {Object} [input={}] - Optional input argument.
-   * @param {string} [input.symbol] - Load a ERC20 token with Web3 using its symbol.
-   * @param {string} [input.address] - Load a ERC20 token with Web3 using its address.
+   * @param {Object} plan - Plan object.
    * @returns {external:"web3.eth.Contract"} - Ethereum contract.
    *
    * @example
@@ -87,19 +90,15 @@ export default class DaisySubscriptions extends ClientSubscriptions {
    * }, web3);
    * await daisy.sync(); // load manager
    *
-   * const token = daisy.loadToken(); // the token is taken from the `manager`.
+   * const token = daisy.loadToken(plan); // the token is taken from the plan object.
    */
-  loadToken({ symbol, address } = {}) {
-    if (address) {
-      return new this.web3.eth.Contract(ERC20["abi"], address);
-    } else if (symbol) {
-      throw new Error("Not implemented yet");
-    } else {
-      return new this.web3.eth.Contract(
-        ERC20["abi"],
-        this.manager["tokenAddress"]
-      );
+  loadToken(plan) {
+    if (!plan) {
+      throw new TypeError("Plan argument missing.");
+    } else if (!plan["tokenAddress"]) {
+      throw new TypeError("Plan argument has missing `tokenAddress` property.");
     }
+    return new this.web3.eth.Contract(ERC20["abi"], plan["tokenAddress"]);
   }
 
   /**
@@ -108,137 +107,12 @@ export default class DaisySubscriptions extends ClientSubscriptions {
    * @returns {module:browser.DaisySubscriptionsOnToken} Wrapped token.
    */
   prepareToken(token) {
-    return new DaisySubscriptionsOnToken(this.web3, this.manager, token);
-  }
-}
-
-/**
- * DaisySDK class related to token operations. This should NOT be instantiated directly.
- * Use {@link module:browser~DaisySDK#prepareToken} to get an instance of this class.
- *
- * @example
- *
- * import DaisySDK from "@daisypayments/daisy-sdk/browser";
- *
- * const web3 = ...; // we recommend getting `web3` from [react-metamask](https://github.com/consensys/react-metamask)
- * const daisy = new DaisySDK({
- *   identifier: process.env.DAISY_ID,
- * }, web3);
- * await daisy.sync(); // load manager
- *
- * // the token address is taken from the `manager`.
- * const token = daisy.prepareToken(daisy.loadToken());
- * console.log(token instanceof DaisySubscriptionsOnToken);
- * // > true
- */
-export class DaisySubscriptionsOnToken {
-  /**
-   * @private
-   */
-  constructor(web3, manager, token) {
-    this.token = token;
-    this.web3 = web3;
-    this.manager = manager;
-  }
-
-  /**
-   * Approve a token with Metamask
-   * @param {string|number} amount - Amounts of tokens to approve. It can be more tokens than the current amount the user has.
-   * @param {Object} sendArgs - Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
-   * @param {string} sendArgs.from - User account Ethereum address.
-   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. See the example for the returned values.
-   *
-   * @example
-   *
-   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
-   * const token = daisy.loadToken(); // web3 contract instance.
-   * const amount = 100000; // defined by user. We recommend a very big number.
-   *
-   * daisy
-   *   .prepareToken(token)
-   *   .approve(amount, { from: account })
-   *   .on("transactionHash", transactionHash => {})
-   *   .on("confirmation", (confirmationNumber, receipt) => {})
-   *   .on("receipt", receipt => {})
-   *   .on("error", error => {});
-   */
-  approve(amount, sendArgs) {
-    if (!sendArgs.from) {
-      throw new Error("Missing `sendArgs.from` argument");
-    }
-    return this.token.methods["approve"](this.manager["address"], amount).send(
-      sendArgs
-    );
-  }
-
-  /**
-   * Check allowance that spender has given to subscription manager
-   * @param {Object} sendArgs - Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
-   * @param {string} sendArgs.tokenOwner - User account Ethereum address.
-   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. Promise resolves to string representing how much of the ERC20 token the tokenOwner has approved the subscription manager to spend.
-   *
-   * @example
-   *
-   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
-   * const token = daisy.loadToken(); // web3 contract instance.
-   *
-   * daisy
-   *   .prepareToken(token)
-   *   .allowance({ tokenOwner: account })
-   */
-  allowance(sendArgs) {
-    if (!sendArgs.tokenOwner) {
-      throw new Error(`allowance() was called without a tokenOwner specified. Be sure to call allowance() like:
-      
-      daisy
-        .prepareToken(token)
-        .allowance({ tokenOwner: account })
-      
-      `);
-    }
-    if (!this.manager["address"]) {
-      throw new Error(
-        `You are attempting to check how many tokens the subscription product "${
-          this.manager["name"]
-        }" is allowed to spend on behalf of ${
-          sendArgs.tokenOwner
-        }, but the address of "${
-          this.manager["name"]
-        }" is null. Are you sure that this subscription product is deployed?`
-      );
-    }
-    return this.token.methods["allowance"](
-      sendArgs.tokenOwner,
-      this.manager["address"]
-    ).call();
-  }
-
-  /**
-   * Check balance of spender. Useful to prevent subscriber from submitting a signed agreement if they do not have sufficient funds
-   * @param {Object} sendArgs - Web3 arguments for transactions. Must have tokenOwner field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
-   * @param {string} sendArgs.tokenOwner - User account Ethereum address.
-   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. Promise resolves to string representing account's balance of ERC20 token.
-   *
-   * @example
-   *
-   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
-   * const token = daisy.loadToken(); // web3 contract instance.
-   *
-   * daisy
-   *   .prepareToken(token)
-   *   .balanceOf({ tokenOwner: account })
-   */
-  balanceOf(sendArgs) {
-    if (!sendArgs.tokenOwner) {
-      throw new Error(`balanceOf() was called without a tokenOwner specified. Be sure to call balanceOf() like:
-      
-      daisy
-        .prepareToken(token)
-        .balanceOf({ tokenOwner: account })
-      
-      `);
-    }
-    return this.token.methods["balanceOf"](sendArgs.tokenOwner).call();
+    return new DaisySubscriptionsOnToken({
+      withGlobals: this.withGlobals,
+      override: this.override,
+      manager: this.manager,
+      token,
+    });
   }
 
   /**
@@ -251,7 +125,7 @@ export class DaisySubscriptionsOnToken {
    */
   resume(receipt) {
     if (!receipt) {
-      throw new Error("Missing argument.");
+      throw new TypeError("Missing argument.");
     }
     const transactionHash = receipt["transactionHash"] || receipt;
 
@@ -312,62 +186,6 @@ export class DaisySubscriptionsOnToken {
       types: EIP712Types,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "RemovePlan",
-      message: agreement,
-    };
-
-    return signTypedData(this.web3, account, typedData).then(signature => ({
-      signature,
-      agreement,
-    }));
-  }
-
-  /**
-   * Sign agreement wit Metamask
-   * @async
-   * @param {Object} input - Input object
-   * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
-   * @param {Plan} input.plan - The `Plan` object the user is going to sign for.
-   * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
-   * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAY` as {@link module:common~Plan#periods} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
-   * @param {string|number} [input.credits=0] - Amount of credits to add to the subscription.
-   * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
-   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~ClientSubscriptions#submit}.
-   */
-  sign({
-    account,
-    plan,
-    signatureExpiresAt,
-    maxExecutions = "0",
-    credits = "0",
-    nonce = undefined,
-  }) {
-    if (!account || !plan) {
-      throw new Error(`Missing required arguments.`);
-    }
-
-    const expiration = getExpirationInSeconds(signatureExpiresAt);
-
-    // Subscription object
-    const agreement = {
-      subscription: {
-        subscriber: account,
-        token: this.token.options.address,
-        price: plan["price"],
-        periodUnit: plan["periodUnit"],
-        periods: plan["periods"],
-        maxExecutions,
-        plan: plan["onChainId"],
-      },
-      previousSubscriptionId: "0x0", // TODO: pass as parameter once it is implemented in the backend
-      credits,
-      nonce: nonce || genNonce(this.web3),
-      signatureExpiresAt: expiration,
-    };
-
-    const typedData = {
-      types: EIP712Types,
-      domain: { verifyingContract: this.manager["address"] },
-      primaryType: "CreateSubscription",
       message: agreement,
     };
 
@@ -459,6 +277,191 @@ export class DaisySubscriptionsOnToken {
       types: EIP712Types,
       domain: { verifyingContract: this.manager["address"] },
       primaryType: "SetAuthorizer",
+      message: agreement,
+    };
+
+    return signTypedData(this.web3, account, typedData).then(signature => ({
+      signature,
+      agreement,
+    }));
+  }
+}
+
+/**
+ * DaisySDK class related to token operations. This should NOT be instantiated directly.
+ * Use {@link module:browser~DaisySDK#prepareToken} to get an instance of this class.
+ *
+ * @example
+ *
+ * import DaisySDK from "@daisypayments/daisy-sdk/browser";
+ *
+ * const web3 = ...; // we recommend getting `web3` from [react-metamask](https://github.com/consensys/react-metamask)
+ * const daisy = new DaisySDK({
+ *   identifier: process.env.DAISY_ID,
+ * }, web3);
+ * await daisy.sync(); // load manager
+ *
+ * // the token address is taken from the `manager`.
+ * const token = daisy.prepareToken(daisy.loadToken(plan));
+ * console.log(token instanceof DaisySubscriptionsOnToken);
+ * // > true
+ */
+export class DaisySubscriptionsOnToken extends DaisySubscriptions {
+  /**
+   * @private
+   */
+  constructor({ manager, token, override, withGlobals }) {
+    super({ manager, override, withGlobals });
+    this.token = token;
+  }
+
+  /**
+   * Approve a token with Metamask
+   * @param {string|number} amount - Amounts of tokens to approve. It can be more tokens than the current amount the user has.
+   * @param {Object} sendArgs - Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {string} sendArgs.from - User account Ethereum address.
+   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. See the example for the returned values.
+   *
+   * @example
+   *
+   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
+   * const token = daisy.loadToken(plan); // web3 contract instance.
+   * const amount = 100000; // defined by user. We recommend a very big number.
+   *
+   * daisy
+   *   .prepareToken(token)
+   *   .approve(amount, { from: account })
+   *   .on("transactionHash", transactionHash => {})
+   *   .on("confirmation", (confirmationNumber, receipt) => {})
+   *   .on("receipt", receipt => {})
+   *   .on("error", error => {});
+   */
+  approve(amount, sendArgs) {
+    if (!sendArgs || !sendArgs.from) {
+      throw new TypeError("Missing `sendArgs.from` argument");
+    }
+    return this.token.methods["approve"](this.manager["address"], amount).send(
+      sendArgs
+    );
+  }
+
+  /**
+   * Check allowance that spender has given to subscription manager
+   * @param {Object} sendArgs - Web3 arguments for transactions. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {string} sendArgs.tokenOwner - User account Ethereum address.
+   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. Promise resolves to string representing how much of the ERC20 token the tokenOwner has approved the subscription manager to spend.
+   *
+   * @example
+   *
+   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
+   * const token = daisy.loadToken(plan); // web3 contract instance.
+   *
+   * daisy
+   *   .prepareToken(token)
+   *   .allowance({ tokenOwner: account })
+   */
+  allowance(sendArgs) {
+    if (!sendArgs || !sendArgs.tokenOwner) {
+      throw new TypeError(`allowance() was called without a tokenOwner specified. Be sure to call allowance() like:
+      
+      daisy
+        .prepareToken(token)
+        .allowance({ tokenOwner: account })
+      
+      `);
+    }
+    if (!this.manager["address"]) {
+      throw new Error(
+        `You are attempting to check how many tokens the subscription product "${
+          this.manager["name"]
+        }" is allowed to spend on behalf of ${
+          sendArgs.tokenOwner
+        }, but the address of "${
+          this.manager["name"]
+        }" is null. Are you sure that this subscription product is deployed?`
+      );
+    }
+    return this.token.methods["allowance"](
+      sendArgs.tokenOwner,
+      this.manager["address"]
+    ).call();
+  }
+
+  /**
+   * Check balance of spender. Useful to prevent subscriber from submitting a signed agreement if they do not have sufficient funds
+   * @param {Object} sendArgs - Web3 arguments for transactions. Must have tokenOwner field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {string} sendArgs.tokenOwner - User account Ethereum address.
+   * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. Promise resolves to string representing account's balance of ERC20 token.
+   *
+   * @example
+   *
+   * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
+   * const token = daisy.loadToken(plan); // web3 contract instance.
+   *
+   * daisy
+   *   .prepareToken(token)
+   *   .balanceOf({ tokenOwner: account })
+   */
+  balanceOf(sendArgs) {
+    if (!sendArgs || !sendArgs.tokenOwner) {
+      throw new TypeError(`balanceOf() was called without a tokenOwner specified. Be sure to call balanceOf() like:
+      
+      daisy
+        .prepareToken(token)
+        .balanceOf({ tokenOwner: account })
+      
+      `);
+    }
+    return this.token.methods["balanceOf"](sendArgs.tokenOwner).call();
+  }
+
+  /**
+   * Sign agreement wit Metamask
+   * @async
+   * @param {Object} input - Input object
+   * @param {string} input.account - Ethereum address it is going to benefit from the subscription.
+   * @param {Plan} input.plan - The `Plan` object the user is going to sign for.
+   * @param {string|number} [input.signatureExpiresAt=Date.now() + 600000] - Expiration date for the signature in milliseconds (internally it's converted to seconds for the blockchain). By default its 10 minutes from now.
+   * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAY` as {@link module:common~Plan#periods} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
+   * @param {string|number} [input.credits=0] - Amount of credits to add to the subscription.
+   * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
+   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~ClientSubscriptions#submit}.
+   */
+  sign({
+    account,
+    plan,
+    signatureExpiresAt,
+    maxExecutions = "0",
+    credits = "0",
+    nonce = undefined,
+  }) {
+    if (!account || !plan) {
+      throw new TypeError(`Missing required arguments.`);
+    }
+
+    const expiration = getExpirationInSeconds(signatureExpiresAt);
+
+    // Subscription object
+    const agreement = {
+      subscription: {
+        subscriber: account,
+        token: this.token.options.address,
+        price: plan["price"],
+        periodUnit: plan["periodUnit"],
+        periods: plan["periods"],
+        maxExecutions,
+        plan: plan["onChainId"],
+      },
+      previousSubscriptionId: "0x0", // TODO: pass as parameter once it is implemented in the backend
+      credits,
+      nonce: nonce || genNonce(this.web3),
+      signatureExpiresAt: expiration,
+    };
+
+    const typedData = {
+      types: EIP712Types,
+      domain: { verifyingContract: this.manager["address"] },
+      primaryType: "CreateSubscription",
       message: agreement,
     };
 

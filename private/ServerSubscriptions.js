@@ -2,6 +2,7 @@
 
 const Signer = require("./Signer");
 const ClientSubscriptions = require("../common/ClientSubscriptions");
+const { ZERO_ADDRESS } = require("../common/helpers");
 
 class ServerSubscriptions extends ClientSubscriptions {
   constructor({ manager, override, withGlobals }) {
@@ -22,16 +23,14 @@ class ServerSubscriptions extends ClientSubscriptions {
    */
   authorize(authorizer, agreement, opts = { allowAnyAddress: false }) {
     if (!authorizer || !authorizer.privateKey) {
-      throw new Error("Missing authorizer.privateKey");
+      throw new TypeError("Missing authorizer.privateKey");
     }
     return this.getData().then(manager => {
       // Sign private plan using authorizer private key.
       const signer = new Signer(authorizer.privateKey, manager["address"]);
       return signer.signTypedData("Subscription", {
         ...agreement,
-        subscriber: opts.allowAnyAddress
-          ? ClientSubscriptions.ZERO_ADDRESS
-          : agreement.subscriber,
+        subscriber: opts.allowAnyAddress ? ZERO_ADDRESS : agreement.subscriber,
       });
     });
   }
@@ -53,7 +52,7 @@ class ServerSubscriptions extends ClientSubscriptions {
     params = { active: true, maxUsages: 0, callbackExtra: {} }
   ) {
     if (!plan) {
-      throw new Error("Missing first argument: plan");
+      throw new TypeError("Missing first argument: plan");
     }
 
     const data = {
