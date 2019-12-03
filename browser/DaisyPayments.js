@@ -21,7 +21,7 @@ export default class DaisyPayments extends ClientPayments {
   }
 
   /**
-   * If this class is instantiated only with {@link module:common~SubscriptionManager#identifier}
+   * If this class is instantiated only with {@link module:common~PaymentGroup#identifier}
    * this call is necessary to fetch the payment group's manager data.
    * @async
    * @returns {this} - Return self instance.
@@ -128,6 +128,8 @@ export default class DaisyPayments extends ClientPayments {
  * DaisySDK class related to operations over tokens. This should NOT be instantiated directly.
  * Use {@link module:browser~DaisyPayments#prepareToken} to get an instance of this class.
  *
+ * @extends module:common~DaisyPayments
+ *
  * @example
  *
  * import DaisySDK from "@daisypayments/daisy-sdk/browser";
@@ -153,7 +155,7 @@ export class DaisyPaymentsOnToken extends DaisyPayments {
    * Transfer token to an address "predicted" by create2.
    * @async
    * @param {module:common~PaymentInvoice|Object} invoice - Input object
-   * @param {string|number} invoice.invoicedPrice - Amount to pay/transfer. See: {@link module:common~PaymentInvoice#invoeicedPrice}.
+   * @param {string|number} invoice.invoicedPrice - Amount to pay/transfer. See: {@link module:common~PaymentInvoice#invoicedPrice}.
    * @param {string} invoice.address - Beneficiary of the transfer. See: {@link module:common~PaymentInvoice#address}.
    * @param {Object} sendArgs - Web3 arguments for transactions. Must have `from` field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
    * @param {string} sendArgs.from - User account Ethereum address (payer).

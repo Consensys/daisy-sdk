@@ -280,7 +280,7 @@ export default class DaisySubscriptions extends ClientSubscriptions {
 /**
  * DaisySDK class related to operations over tokens. This should NOT be instantiated directly.
  * Use {@link module:browser~DaisySubscriptions#prepareToken} to get an instance of this class.
- *
+ * @extends module:common~DaisySubscriptions
  * @example
  *
  * import DaisySDK from "@daisypayments/daisy-sdk/browser";
