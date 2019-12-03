@@ -19,7 +19,7 @@ import ClientSubscriptions from "../common/ClientSubscriptions";
 
 /**
  * Browser SDK class. This requires a {@link module:common~SubscriptionManager} object to be instantiated and a `web3` instance.
- * The `web3` instance may come from [react-metamask](https://github.com/consensys/react-metamask). If not present is taken from `window`.
+ * The `web3` instance may come from [react-metamask](https://github.com/consensys/react-metamask). If not present, it is taken from `window`.
  * @extends module:common~ClientSubscriptions
  */
 export default class DaisySubscriptions extends ClientSubscriptions {
@@ -34,7 +34,7 @@ export default class DaisySubscriptions extends ClientSubscriptions {
   }
 
   /**
-   * If this class is instantiated only with {@link module:common~SubscriptionManager#identifier}
+   * If this class is instantiated with only {@link module:common~SubscriptionManager#identifier}
    * this call is necessary to fetch the subscription's manager data.
    * @async
    * @returns {this} - Return self instance.
@@ -48,9 +48,10 @@ export default class DaisySubscriptions extends ClientSubscriptions {
    *
    * @example
    *
+   * // `sync` is done behind the scenes with `await DaisySDK.initSubscriptions`.
    * const daisy = await DaisySDK.initSubscriptions({
    *   manager: { identifier: ... }, withGlobals: { web3 },
-   * }); // sync not required here.
+   * });
    *
    */
   sync() {
@@ -313,7 +314,7 @@ export class DaisySubscriptionsOnToken extends DaisySubscriptions {
    *
    * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
    * const token = daisy.loadToken(plan); // web3 contract instance.
-   * const amount = 100000; // defined by user (remember tokens has "decimals").
+   * const amount = "15000000000000000000"; // 15 * 10^18 (remember tokens has 18 "decimals" by default).
    *
    * daisy
    *   .prepareToken(token)

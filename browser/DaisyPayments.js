@@ -6,7 +6,7 @@ import ERC20 from "../contracts/lite/ERC20.json";
 
 /**
  * Browser SDK class. This requires a {@link module:common~PaymentGroup} object to be instantiated and a `web3` instance.
- * The `web3` instance may come from [react-metamask](https://github.com/consensys/react-metamask). If not present is taken from `window`.
+ * The `web3` instance may come from [react-metamask](https://github.com/consensys/react-metamask). If not present, it is taken from `window`.
  * @extends module:common~ClientPayments
  */
 export default class DaisyPayments extends ClientPayments {
@@ -21,7 +21,7 @@ export default class DaisyPayments extends ClientPayments {
   }
 
   /**
-   * If this class is instantiated only with {@link module:common~PaymentGroup#identifier}
+   * If this class is instantiated with only {@link module:common~PaymentGroup#identifier}
    * this call is necessary to fetch the payment group's manager data.
    * @async
    * @returns {this} - Return self instance.
@@ -31,14 +31,14 @@ export default class DaisyPayments extends ClientPayments {
    * const daisy = new DaisySDK.Payments({
    *   manager: { identifier: ... }, withGlobals: { web3 },
    * });
-   * await daisy.sync() // required
+   * await daisy.sync() // may be required
    *
    * @example
    *
+   * // `sync` is done behind the scenes with `await DaisySDK.initPayments`.
    * const daisy = await DaisySDK.initPayments({
    *   manager: { identifier: ... }, withGlobals: { web3 },
-   * }); // sync not required here.
-   *
+   * });
    */
   sync() {
     return this.request({
