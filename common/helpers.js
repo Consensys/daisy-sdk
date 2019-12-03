@@ -1,5 +1,21 @@
 /** @module common */
 
+/**
+ * Web3 uses a hybrid Promise/Callback/EventEmitter mechanism.
+ * @external PromiEvent
+ * @see {@link https://web3js.readthedocs.io/en/1.0/callbacks-promises-events.html#promievent|Documentation}
+ * @see {@link https://github.com/ethereum/web3.js/blob/1.0/packages/web3-core-method/lib/PromiEvent.js|Source-code}
+ */
+
+/**
+ * Web3 contract class that creates an instance based on a address and an ABI.
+ * @external "web3.eth.Contract"
+ * @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#web3-eth-contract|Documentation}
+ */
+
+/**
+ * Default void address
+ */
 exports.ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 /**

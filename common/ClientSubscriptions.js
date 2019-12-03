@@ -18,6 +18,9 @@ const Client = require("./Client");
  * @property {Error|string} [error] - Error message (if any).
  * @property {string} state - Enum: `DRAFT`, `PENDING`, `DEPLOYED`, `FAILED`.
  * @property {string} removalState - Enum: `OK`, `PENDING`, `FAILED`.
+ * @property {string} freeTrialPeriods - Defaults to "0".
+ * @property {string} freeTrialPeriodsUnit - Defaults to MONTH (no free trial).
+ * @property {string} tokenAddress - Token of payment
  * @property {Date|string} createdAt - Timestamp.
  * @property {Date|string} updatedAt - Timestamp.
  */
@@ -71,7 +74,6 @@ const Client = require("./Client");
  * @property {string} name - Name.
  * @property {string} walletAddress - Where the billed tokens are transferer.
  * @property {string} publisher - Ethereum address of the publisher of this contract (can edit data and plans).
- * @property {string} tokenAddress - ERC20 Token address.
  * @property {Date|string} [deployedAt] - When the contract was deployed.
  * @property {string} [address] - Contract address.
  * @property {string} authorizer - Ethereum address of the manager of this contract.
@@ -103,11 +105,20 @@ const Client = require("./Client");
 
 /**
  * Create a instance of a Subscription manager based on the contract deployed at the Daisy Dashboard.
- * The important data here is the `DAISY_ID`.
  * @extends module:common~Client
  */
 class ClientSubscriptions extends Client {
   constructor(manager, override, withGlobals = {}) {
+    if (!manager) {
+      throw new TypeError(
+        "daisy-sdk: Missing `manager` first argument when constructing."
+      );
+    } else if (!manager.identifier) {
+      throw new TypeError(
+        "daisy-sdk: Missing `manager.identifier` field when constructing."
+      );
+    }
+
     const { identifier, secretKey } = manager;
     const config = {
       auth: {
@@ -127,7 +138,7 @@ class ClientSubscriptions extends Client {
    * @example
    *
    * const subscriptionProduct = new ClientSubscriptions({
-   *   identifier: process.env.DAISY_ID,
+   *   manager: { identifier: process.env.DAISY_ID },
    * });
    * const { plans, ...manager } = await subscriptionProduct.getData();
    */
@@ -142,7 +153,9 @@ class ClientSubscriptions extends Client {
    * @deprecated Renamed to {@link module:common~ClientSubscriptions#getData}.
    */
   getPlans() {
-    // TODO: add deprecation warning.
+    console.warn(
+      "daisy-sdk: Method `getPlans` is deprecated in favor of `getData()`"
+    );
     return this.getData();
   }
 
@@ -153,16 +166,16 @@ class ClientSubscriptions extends Client {
    * @param {string|string[]} filter.account - Filter by Ethereum address.
    * @param {string|string[]} filter.state - Filter by subscription state: `NOT_STARTED`, `PENDING`, `ACTIVE`, `ACTIVE_CANCELLED`, `CANCELLED`, `EXPIRED`, `INVALID`, `NOT_ENOUGH_FUNDS`, `FAILED`.
    * @param {string|string[]} filter.token - Filter by token Ethereum address.
-   * @param {string|string[]} filter.planId - Filter by token Ethereum address.
-   * @returns {Promise<Subscription[]>} - Subscriptions based on the filtering criteria.
+   * @param {string|string[]} filter.planId - Filter by {@link module:common~Plan#id}}.
+   * @returns {Promise<Subscription[]>} - Subscriptions based on the filtering criteria (if any).
    *
    * @example
    *
-   * const subscriptionProduct = new ClientSubscriptions({
-   *   identifier: process.env.DAISY_ID,
+   * const client = new ClientSubscriptions({
+   *   manager: { identifier: process.env.DAISY_ID },
    * });
-   * const subscriptions = await subscriptionProduct.getSubscriptions({ account: "0x0..." });
-   * const subscriptionsActive = await subscriptionProduct.getSubscriptions({
+   * const subscriptions = await client.getSubscriptions({ account: "0x0..." });
+   * const subscriptionsActive = await client.getSubscriptions({
    *   account: "0x0...",
    *   state: ["ACTIVE", "ACTIVE_CANCELLED"],
    * });
@@ -178,17 +191,17 @@ class ClientSubscriptions extends Client {
   /**
    * Get single subscription.
    * @async
-   * @param {Object} criteria - Filtering criteria, only one field is required.
-   * @param {string} criteria.daisyId - Find Subscription based on a Daisy ID.
-   * @param {string} criteria.onChainId - Find Subscription based on a `onChainId` in the blockchain.
-   * @returns {Promise<?Subscription>} - Subscription found.
+   * @param {Object} [findBy] - Filtering criteria, only one field is needed.
+   * @param {string} [findBy.daisyId] - Find Subscription based on a Daisy ID.
+   * @param {string} [findBy.onChainId] - Find Subscription based on a `onChainId` in the blockchain.
+   * @returns {Promise<?Subscription>} - Subscription found or null;
    *
    * @example
    *
-   * const subscriptionProduct = new ClientSubscriptions({
-   *   identifier: process.env.DAISY_ID,
+   * const client = new ClientSubscriptions({
+   *   manager: { identifier: process.env.DAISY_ID },
    * });
-   * const subscription = await subscriptionProduct.getSubscription({ id: "" });
+   * const subscription = await client.getSubscription({ daisyId: "" });
    */
   getSubscription({ daisyId, onChainId }) {
     if (daisyId) {
@@ -209,10 +222,17 @@ class ClientSubscriptions extends Client {
   /**
    * Get receipts from single subscription.
    * @async
-   * @param {Object} criteria - Filtering criteria, only one field is required.
-   * @param {string} criteria.daisyId - Find Subscription based on a Daisy ID.
-   * @param {string} criteria.onChainId - Find Subscription based on a `onChainId` in the blockchain.
+   * @param {Object} [findBy] - Filtering criteria, only one field is needed.
+   * @param {string} [findBy.daisyId] - Find Subscription based on a Daisy ID.
+   * @param {string} [findBy.onChainId] - Find Subscription based on a `onChainId` in the blockchain.
    * @returns {Promise<Receipt[]>} - Receipts.
+   *
+   * @example
+   *
+   * const client = new ClientSubscriptions({
+   *   manager: { identifier: process.env.DAISY_ID },
+   * });
+   * const receipts = await client.getReceipts({ daisyId: "" });
    */
   getReceipts({ daisyId, onChainId }) {
     if (daisyId) {
@@ -241,10 +261,21 @@ class ClientSubscriptions extends Client {
    *
    * @example
    *
-   * const subscriptionProduct = new ClientSubscriptions({
-   *   identifier: process.env.DAISY_ID,
+   * const daisy = await DaisySDK.initSubscriptions({
+   *   manager: { identifier: "margarita" },
+   *   withGlobals: { web3 },
    * });
-   * const subscription = await subscriptionProduct.submit({ });
+   *
+   * const plans = await daisy.getPlans();
+   * const plan = plans.find(p => ...);
+   *
+   * const token = daisy.loadToken(plan); // web3.js contract instance
+   *
+   * const { signature, agreement } = await daisy
+   *   .prepareToken(token)
+   *   .sign({ account, plan });
+   *
+   * const subscription = await daisy.submit({ signature, agreement });
    */
   submit({ agreement, receipt, signature }) {
     return this.request({
@@ -267,6 +298,24 @@ class ClientSubscriptions extends Client {
    * @param {Object} input.agreement - The `agreement` is the return of {@link module:browser.DaisySDKToken#signCancel}.
    * @param {string} input.signature - The signature is the return of {@link module:browser.DaisySDKToken#signCancel}.
    * @returns {Promise<Subscription>} - Pending for cancellation {@link module:common~Subscription} object.
+   *
+   * @example
+   *
+   * const daisy = await DaisySDK.initSubscriptions({
+   *   manager: { identifier: "margarita" },
+   *   withGlobals: { web3 },
+   * });
+   *
+   * const plans = await daisy.getPlans();
+   * const plan = plans.find(p => ...);
+   *
+   * const token = daisy.loadToken(plan); // web3.js contract instance
+   *
+   * const { signature, agreement } = await daisy
+   *   .prepareToken(token)
+   *   .signCancel({ account, onChainId: subscription["onChainId"] });
+   *
+   * const subscription = await daisy.submitCancel({ signature, agreement });
    */
   submitCancel({ agreement, signature }) {
     return this.request({

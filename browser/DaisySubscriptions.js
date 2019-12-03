@@ -12,19 +12,6 @@ import {
 import ClientSubscriptions from "../common/ClientSubscriptions";
 
 /**
- * Web3 uses a hybrid Promise/Callback/EventEmitter mechanism.
- * @external PromiEvent
- * @see {@link https://web3js.readthedocs.io/en/1.0/callbacks-promises-events.html#promievent|Documentation}
- * @see {@link https://github.com/ethereum/web3.js/blob/1.0/packages/web3-core-method/lib/PromiEvent.js|Source-code}
- */
-
-/**
- * Web3 contract class that creates an instance based on a address and an ABI.
- * @external "web3.eth.Contract"
- * @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#web3-eth-contract|Documentation}
- */
-
-/**
  * @typedef {Object} SignResult
  * @property {Object} agreement Object required in the {@link module:private~ServiceSubscriptions#authorize} and {@link module:common~ClientSubscriptions#submit}.
  * @property {string} signature The `agreement` after being signed by the user using Metamask.
@@ -32,8 +19,7 @@ import ClientSubscriptions from "../common/ClientSubscriptions";
 
 /**
  * Browser SDK class. This requires a {@link module:common~SubscriptionManager} object to be instantiated and a `web3` instance.
- * The `web3` instance should come from [react-metamask](https://github.com/consensys/react-metamask).
- * @see {@link module:browser~DaisySDK#sync} for info about syncing with Daisy services.
+ * The `web3` instance may come from [react-metamask](https://github.com/consensys/react-metamask). If not present, it is taken from `window`.
  * @extends module:common~ClientSubscriptions
  */
 export default class DaisySubscriptions extends ClientSubscriptions {
@@ -48,19 +34,24 @@ export default class DaisySubscriptions extends ClientSubscriptions {
   }
 
   /**
-   * If this class is instantiated only with {@link module:common~SubscriptionManager#identifier}
+   * If this class is instantiated with only {@link module:common~SubscriptionManager#identifier}
    * this call is necessary to fetch the subscription's manager data.
    * @async
    * @returns {this} - Return self instance.
    *
    * @example
    *
-   * const daisy = new DaisySDK({ identifier: ... }, web3);
+   * const daisy = new DaisySDK.Subscriptions({
+   *   manager: { identifier: ... }, withGlobals: { web3 },
+   * });
    * await daisy.sync() // required
    *
    * @example
    *
-   * const daisy = new DaisySDK(manager, web3); // not required here.
+   * // `sync` is done behind the scenes with `await DaisySDK.initSubscriptions`.
+   * const daisy = await DaisySDK.initSubscriptions({
+   *   manager: { identifier: ... }, withGlobals: { web3 },
+   * });
    *
    */
   sync() {
@@ -75,43 +66,6 @@ export default class DaisySubscriptions extends ClientSubscriptions {
         secretKey: this.manager["secretKey"],
       };
       return this;
-    });
-  }
-
-  /**
-   * Load token's web3 contract as {@link external:"web3.eth.Contract"}.
-   * @param {Object} plan - Plan object.
-   * @returns {external:"web3.eth.Contract"} - Ethereum contract.
-   *
-   * @example
-   *
-   * const daisy = new DaisySDK({
-   *   identifier: process.env.DAISY_ID,
-   * }, web3);
-   * await daisy.sync(); // load manager
-   *
-   * const token = daisy.loadToken(plan); // the token is taken from the plan object.
-   */
-  loadToken(plan) {
-    if (!plan) {
-      throw new TypeError("Plan argument missing.");
-    } else if (!plan["tokenAddress"]) {
-      throw new TypeError("Plan argument has missing `tokenAddress` property.");
-    }
-    return new this.web3.eth.Contract(ERC20["abi"], plan["tokenAddress"]);
-  }
-
-  /**
-   * Takes an Web3's contract instance and wraps it into a {@link module:browser.DaisySubscriptionsOnToken}.
-   * @param {external:"web3.eth.Contract"} token - Web3's contract instance from {@link module:browser~DaisySDK#loadToken}.
-   * @returns {module:browser.DaisySubscriptionsOnToken} Wrapped token.
-   */
-  prepareToken(token) {
-    return new DaisySubscriptionsOnToken({
-      withGlobals: this.withGlobals,
-      override: this.override,
-      manager: this.manager,
-      token,
     });
   }
 
@@ -285,25 +239,59 @@ export default class DaisySubscriptions extends ClientSubscriptions {
       agreement,
     }));
   }
+
+  /**
+   * Load token's web3 contract as {@link external:"web3.eth.Contract"}.
+   * @param {Object} plan - Plan object.
+   * @param {Object} plan.tokenAddress - Required token address.
+   * @returns {external:"web3.eth.Contract"} - Ethereum contract.
+   *
+   * @example
+   *
+   * const daisy = new DaisySDK.Subscriptions({
+   *   manager: { identifier: ... }, withGlobals: { web3 },
+   * });
+   *
+   * const token = daisy.loadToken(plan); // the token is taken from the plan object.
+   */
+  loadToken(plan) {
+    if (!plan) {
+      throw new TypeError("Plan argument missing.");
+    } else if (!plan["tokenAddress"]) {
+      throw new TypeError("Plan argument has missing `tokenAddress` property.");
+    }
+    return new this.web3.eth.Contract(ERC20["abi"], plan["tokenAddress"]);
+  }
+
+  /**
+   * Takes an Web3's contract instance and wraps it into a {@link module:browser.DaisySubscriptionsOnToken}.
+   * @param {external:"web3.eth.Contract"} token - Web3's contract instance from {@link module:browser~DaisySubscriptions#loadToken}.
+   * @returns {module:browser.DaisySubscriptionsOnToken} Wrapped token.
+   */
+  prepareToken(token) {
+    return new DaisySubscriptionsOnToken({
+      manager: this.manager,
+      override: this.override,
+      withGlobals: this.withGlobals,
+      token,
+    });
+  }
 }
 
 /**
- * DaisySDK class related to token operations. This should NOT be instantiated directly.
- * Use {@link module:browser~DaisySDK#prepareToken} to get an instance of this class.
- *
+ * DaisySDK class related to operations over tokens. This should NOT be instantiated directly.
+ * Use {@link module:browser~DaisySubscriptions#prepareToken} to get an instance of this class.
+ * @extends module:common~DaisySubscriptions
  * @example
  *
  * import DaisySDK from "@daisypayments/daisy-sdk/browser";
  *
  * const web3 = ...; // we recommend getting `web3` from [react-metamask](https://github.com/consensys/react-metamask)
- * const daisy = new DaisySDK({
- *   identifier: process.env.DAISY_ID,
- * }, web3);
- * await daisy.sync(); // load manager
+ * const daisy = await DaisySDK.initSubscriptions({
+ *   manager: { identifier: ... }, withGlobals: { web3 },
+ * });
  *
- * // the token address is taken from the `manager`.
- * const token = daisy.prepareToken(daisy.loadToken(plan));
- * console.log(token instanceof DaisySubscriptionsOnToken);
+ * console.log(daisy.prepareToken(daisy.loadToken(plan)) instanceof DaisySubscriptionsOnToken);
  * // > true
  */
 export class DaisySubscriptionsOnToken extends DaisySubscriptions {
@@ -326,7 +314,7 @@ export class DaisySubscriptionsOnToken extends DaisySubscriptions {
    *
    * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
    * const token = daisy.loadToken(plan); // web3 contract instance.
-   * const amount = 100000; // defined by user. We recommend a very big number.
+   * const amount = "15000000000000000000"; // 15 * 10^18 (remember tokens has 18 "decimals" by default).
    *
    * daisy
    *   .prepareToken(token)
@@ -388,8 +376,9 @@ export class DaisySubscriptionsOnToken extends DaisySubscriptions {
   }
 
   /**
-   * Check balance of spender. Useful to prevent subscriber from submitting a signed agreement if they do not have sufficient funds
-   * @param {Object} sendArgs - Web3 arguments for transactions. Must have tokenOwner field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * Check balance of spender. Useful to prevent subscriber from submitting a signed agreement if they do not have sufficient funds.
+   * @async
+   * @param {Object} sendArgs - Web3 arguments for transactions. Must have `tokenOwner` field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
    * @param {string} sendArgs.tokenOwner - User account Ethereum address.
    * @returns {external:PromiEvent} - `web3`'s return value for actions on the Blockchain. Promise resolves to string representing account's balance of ERC20 token.
    *
@@ -398,7 +387,7 @@ export class DaisySubscriptionsOnToken extends DaisySubscriptions {
    * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
    * const token = daisy.loadToken(plan); // web3 contract instance.
    *
-   * daisy
+   * const balance = await daisy
    *   .prepareToken(token)
    *   .balanceOf({ tokenOwner: account })
    */
@@ -426,6 +415,17 @@ export class DaisySubscriptionsOnToken extends DaisySubscriptions {
    * @param {string|number} [input.credits=0] - Amount of credits to add to the subscription.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
    * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~ClientSubscriptions#submit}.
+   *
+   * @example
+   *
+   * const daisy = await DaisySDK.initSubscriptions({
+   *   manager: { identifier: ... }, withGlobals: { web3 },
+   * });
+   * const token = daisy.loadToken(plan);
+   * const { signature, agreement } = await daisy.prepareToken(token).sign({
+   *   account,
+   *   plan,
+   * });
    */
   sign({
     account,
