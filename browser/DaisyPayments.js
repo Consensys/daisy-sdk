@@ -1,6 +1,7 @@
 /** @module browser */
 
 import ClientPayments from "../common/ClientPayments";
+import { ZERO_ADDRESS } from "../common/helpers";
 
 import ERC20 from "../contracts/lite/ERC20.json";
 
@@ -51,6 +52,21 @@ export default class DaisyPayments extends ClientPayments {
         identifier: this.manager["identifier"],
         secretKey: this.manager["secretKey"],
       };
+
+      const validate = address => address && address !== ZERO_ADDRESS;
+
+      if (!validate(this.manager["tokenAddress"])) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          "Please go to https://app.daisypayments.com and set a default token for new invoices."
+        );
+      } else if (!validate(this.manager["walletAddress"])) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `Please go to https://app.daisypayments.com and set a default wallet for new invoices.`
+        );
+      }
+
       return this;
     });
   }
