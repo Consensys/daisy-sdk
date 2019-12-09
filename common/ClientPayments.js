@@ -49,7 +49,7 @@ const Client = require("./Client");
  * @extends module:common~Client
  */
 class ClientPayments extends Client {
-  constructor(manager, override, withGlobals = {}) {
+  constructor(manager, override, withGlobals) {
     if (!manager) {
       throw new TypeError(
         "daisy-sdk: Missing `manager` first argument when constructing."
@@ -108,7 +108,7 @@ class ClientPayments extends Client {
     return this.request({
       method: "get",
       url: "/otp/invoices/",
-      data: filter,
+      query: filter,
     }).then(({ data: body }) => body.data);
   }
 
