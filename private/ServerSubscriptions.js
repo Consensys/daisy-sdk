@@ -11,6 +11,21 @@ class ServerSubscriptions extends ClientSubscriptions {
     this.override = override;
   }
 
+  sync() {
+    return this.request({
+      method: "get",
+      url: "/",
+    }).then(({ data: body }) => {
+      this.manager = {
+        ...this.manager,
+        ...body["data"],
+        identifier: this.manager["identifier"],
+        secretKey: this.manager["secretKey"],
+      };
+      return this;
+    });
+  }
+
   /**
    * Authorize a private plan. Using this over a non-private plan is safe.
    * @async
