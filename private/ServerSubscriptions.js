@@ -5,30 +5,10 @@ const ClientSubscriptions = require("../common/ClientSubscriptions");
 const { ZERO_ADDRESS } = require("../common/helpers");
 
 class ServerSubscriptions extends ClientSubscriptions {
-  constructor({ manager, override, withGlobals }) {
-    super(manager, override, withGlobals);
-    this.manager = manager;
-    this.override = override;
-  }
-
-  sync() {
-    return this.request({
-      method: "get",
-      url: "/",
-    }).then(({ data: body }) => {
-      this.manager = {
-        ...this.manager,
-        ...body["data"],
-        identifier: this.manager["identifier"],
-        secretKey: this.manager["secretKey"],
-      };
-      return this;
-    });
-  }
-
   /**
-   * Authorize a private plan. Using this over a non-private plan is safe.
+   * Authorize a private plan
    * @async
+   * @private
    * @param {Object} authorizer - Authorizer, must match the `authorizer` address in Daisy dashboard.
    * @param {string} authorizer.privateKey - Buffer, use `Buffer.from("PRIVATE_KEY", "hex")`.
    * @param {Object} agreement - From {@link module:browser.DaisySDKToken#sign}.

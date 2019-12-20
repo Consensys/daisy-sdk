@@ -3,27 +3,6 @@
 const ClientPayments = require("../common/ClientPayments");
 
 class ServerPayments extends ClientPayments {
-  constructor({ manager, override, withGlobals }) {
-    super(manager, override, withGlobals);
-    this.manager = manager;
-    this.override = override;
-  }
-
-  sync() {
-    return this.request({
-      method: "get",
-      url: "/otp/",
-    }).then(({ data: body }) => {
-      this.manager = {
-        ...this.manager,
-        ...body["data"],
-        identifier: this.manager["identifier"],
-        secretKey: this.manager["secretKey"],
-      };
-      return this;
-    });
-  }
-
   createInvoice(params = {}) {
     if (!params || !params.invoicedPrice) {
       throw new TypeError(`Missing params.invoicedPrice argument.`);

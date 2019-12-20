@@ -1,6 +1,7 @@
 /** @module common */
 
-const Client = require("./Client");
+const ClientSDK = require("./ClientSDK");
+const { isEther } = require("./helpers");
 
 /**
  * @typedef {Object} PaymentGroup - Payment's manager object.
@@ -48,27 +49,65 @@ const Client = require("./Client");
  * Create a instance of a Payments manager based on the entity at the Daisy Dashboard.
  * @extends module:common~Client
  */
-class ClientPayments extends Client {
-  constructor(manager, override, withGlobals) {
-    if (!manager) {
-      throw new TypeError(
-        "daisy-sdk: Missing `manager` first argument when constructing."
-      );
-    } else if (!manager.identifier) {
-      throw new TypeError(
-        "daisy-sdk: Missing `manager.identifier` field when constructing."
-      );
-    }
+class ClientPayments extends ClientSDK {
+  /**
+   * If this class is instantiated with only {@link module:common~PaymentGroup#identifier}
+   * this call is necessary to fetch the payment group's manager data.
+   * @async
+   * @returns {this} - Return self instance.
+   *
+   * @example
+   *
+   * const daisy = new DaisySDK.Payments({
+   *   manager: { identifier: ... }, withGlobals: { web3 },
+   * });
+   * await daisy.sync() // may be required
+   *
+   * @example
+   *
+   * // `sync` is done behind the scenes with `await DaisySDK.initPayments`.
+   * const daisy = await DaisySDK.initPayments({
+   *   manager: { identifier: ... }, withGlobals: { web3 },
+   * });
+   */
+  sync() {
+    return this.request({
+      method: "get",
+      url: "/otp/",
+    }).then(({ data: body }) => {
+      this.manager = {
+        ...this.manager,
+        ...body["data"],
+        identifier: this.manager["identifier"],
+        secretKey: this.manager["secretKey"],
+      };
+      return this;
+    });
+  }
 
-    const { identifier, secretKey } = manager;
-    const config = {
-      auth: {
-        username: identifier,
-        password: secretKey,
-      },
-      ...override,
-    };
-    super(config, withGlobals);
+  /**
+   * Load token's web3 contract as {@link external:"web3.eth.Contract"}.
+   * @param {module:common~PaymentInvoice|Object} invoice - Invoice object.
+   * @param {Object} invoice.tokenAddress - Required token address.
+   * @returns {module:browser.DaisyPaymentsOnToken} Wrapped token.
+   *
+   * @example
+   *
+   * const daisy = new DaisySDK.Payments({
+   *   manager: { identifier: ... }, withGlobals: { web3 },
+   * });
+   *
+   * const token = daisy.with(invoice); // the token is taken from the invoice object.
+   */
+  with(invoice) {
+    const currency = super.loadToken(invoice); // `null` if ETH
+
+    return new DaisyPaymentsOnToken({
+      manager: this.manager,
+      override: this.override,
+      withGlobals: this.withGlobals,
+      currency,
+    });
   }
 
   /**
@@ -172,6 +211,95 @@ class ClientPayments extends Client {
     } else {
       throw new TypeError("Missing arguments");
     }
+  }
+}
+
+/**
+ * DaisySDK class related to operations over tokens. This should NOT be instantiated directly.
+ * Use {@link module:browser~ClientPayments#prepareToken} to get an instance of this class.
+ *
+ * @extends module:common~ClientPayments
+ *
+ * @example
+ *
+ * import DaisySDK from "@daisypayments/daisy-sdk/browser";
+ *
+ * const web3 = ...; // we recommend getting `web3` from [react-metamask](https://github.com/consensys/react-metamask)
+ * const daisy = await DaisySDK.initPayments({
+ *   manager: { identifier: ... }, withGlobals: { web3 },
+ * });
+ *
+ * console.log(daisy.prepareToken(daisy.loadToken(invoice)) instanceof DaisyPaymentsOnToken);
+ * // > true
+ */
+class DaisyPaymentsOnToken extends ClientPayments {
+  /**
+   * @private
+   */
+  constructor({ manager, currency, override, withGlobals }) {
+    super({ manager, override, withGlobals });
+    this.currency = currency;
+  }
+
+  balanceOf(account) {
+    return super.balanceOf(account, this.currency);
+  }
+
+  /**
+   * Transfer token to an address "predicted" by create2.
+   * @async
+   * @param {module:common~PaymentInvoice|Object} invoice - Input object
+   * @param {string|number} invoice.invoicedPrice - Amount to pay/transfer. See: {@link module:common~PaymentInvoice#invoicedPrice}.
+   * @param {string} invoice.address - Beneficiary of the transfer. See: {@link module:common~PaymentInvoice#address}.
+   * @param {Object} sendArgs - Web3 arguments for transactions. Must have `from` field. @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#methods-mymethod-send|web3js.readthedocs}
+   * @param {string} sendArgs.from - User account Ethereum address (payer).
+   * @returns {external:PromiEvent} It's a transaction result object.
+   *
+   * @example
+   *
+   * const daisy = await DaisySDK.initPayments({
+   *   manager: { identifier: ... }, withGlobals: { web3 },
+   * });
+   * const token = daisy.loadToken(invoice);
+   * const { transactionHash } = await daisy
+   *   .prepareToken(token)
+   *   .pay(invoice, { from: account });
+   */
+  pay(invoice, sendArgs) {
+    if (!invoice) {
+      throw new TypeError("Missing `invoice` argument.");
+    } else if (!sendArgs || !sendArgs.from) {
+      throw new TypeError("Missing `sendArgs.from` argument");
+    }
+
+    const value = invoice["invoicedPrice"];
+    const to = invoice["address"];
+
+    if (isEther(this.currency)) {
+      return this.web3.eth.sendTransaction({ ...sendArgs, to, value });
+    }
+    return this.currency.methods["transfer"](to, value).send(sendArgs);
+  }
+
+  /**
+   * Get blockchain's transfers. Useful to check the state of a processing transaction.
+   * @async
+   * @param {module:common~PaymentInvoice|Object} invoice - Input object
+   * @param {string} invoice.address - Beneficiary of the transfer. See: {@link module:common~PaymentInvoice#address}.
+   * @param {Object} [opts={}]
+   * @param {number|string} [opts.fromBlock=0]
+   * @param {string} [opts.toBlock="latest"]
+   * @returns {external:PromiEvent} Web3 events as an array.
+   */
+  getTransfers(invoice, opts = { fromBlock: 0, toBlock: "latest" }) {
+    if (!invoice) {
+      throw new TypeError("Missing `invoice` argument.");
+    }
+    const address = invoice["address"];
+    return this.currency.getPastEvents("Transfer", {
+      filter: { to: [address] },
+      ...opts,
+    });
   }
 }
 
