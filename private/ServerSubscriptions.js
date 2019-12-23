@@ -1,10 +1,10 @@
 /** @module private */
 
 const Signer = require("./Signer");
-const ClientSubscriptions = require("../common/ClientSubscriptions");
+const DaisySubscriptions = require("../common/DaisySubscriptions");
 const { ZERO_ADDRESS } = require("../common/helpers");
 
-class ServerSubscriptions extends ClientSubscriptions {
+class ServerSubscriptions extends DaisySubscriptions {
   /**
    * Authorize a private plan
    * @async

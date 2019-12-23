@@ -1,8 +1,8 @@
 /** @module private */
 
-const ClientPayments = require("../common/ClientPayments");
+const DaisyPayments = require("../common/DaisyPayments");
 
-class ServerPayments extends ClientPayments {
+class ServerPayments extends DaisyPayments {
   createInvoice(params = {}) {
     if (!params || !params.invoicedPrice) {
       throw new TypeError(`Missing params.invoicedPrice argument.`);

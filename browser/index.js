@@ -1,7 +1,7 @@
 /** @module browser */
 
-import DaisySubscriptions from "./DaisySubscriptions";
-import DaisyPayments from "./DaisyPayments";
+import DaisySubscriptions from "../common/DaisySubscriptions";
+import DaisyPayments from "../common/DaisyPayments";
 
 class DaisySDK extends DaisySubscriptions {
   constructor(manager, web3, override) {
