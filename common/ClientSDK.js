@@ -1,11 +1,10 @@
 /** @module common */
 
 const Client = require("./Client");
-const { isBrowser, isEther } = require("./helpers");
+const { isObject, isBrowser, isEther } = require("./helpers");
 const ERC20 = require("../contracts/lite/ERC20.json");
 
 /**
- * Create a instance of a Payments manager based on the entity at the Daisy Dashboard.
  * @extends module:common~Client
  */
 class ClientSDK extends Client {
@@ -43,6 +42,12 @@ class ClientSDK extends Client {
     this.override = override;
   }
 
+  /**
+   * Returns null if the currency is ETH. Now this method is for internal use.
+   * @param {Object} payable - Invoice or plan
+   * @param {string} payable.tokenAddress - Ethereum address
+   * @private
+   */
   loadToken(payable) {
     if (!payable) {
       throw new TypeError("Payable resource argument missing.");
@@ -59,7 +64,7 @@ class ClientSDK extends Client {
   }
 
   /**
-   * Check balance of spender.
+   * Check balance of spender. We recommend parsing the return value to a BigNumber.
    * @async
    * @param {string} account - User account Ethereum address.
    * @param {Object} [currency=null] - Token instance or null for ETH balance.
@@ -75,12 +80,17 @@ class ClientSDK extends Client {
    */
   balanceOf(account, currency = null) {
     if (!account) {
-      throw new TypeError(`balanceOf() was called without an account specified. Be sure to call balanceOf() like:
-      
-      daisy
-        .balanceOf(account, currency)
-      `);
+      throw new TypeError(
+        `balanceOf() was called without a "owner" specified. Be sure to call balanceOf() like: daisy.with(payable).balanceOf(account)`
+      );
+    } else if (isObject(account)) {
+      console.warn(
+        `Asking for allowance using allowance({ tokenOwner: account }) is going to be deprecated. Please update to: daisy.allowance(account)`
+      );
+      // eslint-disable-next-line no-param-reassign
+      account = account["tokenOwner"];
     }
+
     if (currency) {
       return currency.methods["balanceOf"](account).call();
     }

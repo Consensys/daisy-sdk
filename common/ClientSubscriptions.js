@@ -4,13 +4,14 @@ const EventEmitter = require("eventemitter3");
 const { EIP712Types } = require("@daisypayments/smart-contracts/eip712");
 const ClientSDK = require("./ClientSDK");
 const {
+  isObject,
   genNonce,
   getExpirationInSeconds,
   signTypedData,
 } = require("./helpers");
 
 /**
- * @typedef {Object} Plan - Daisy's Plan object. Can be retrieved using {@link module:common~ClientSubscriptions#getData}.
+ * @typedef {Object} Plan - Daisy's Plan object. Can be retrieved using {@link module:common~DaisySubscriptions#getData}.
  * @property {string} id - ID.
  * @property {string} name - Plan name.
  * @property {string} onChainId - Plan ID in the Ethereum blockchain (internal use of the SDK).
@@ -112,7 +113,7 @@ const {
 
 /**
  * @typedef {Object} SignResult
- * @property {Object} agreement Object required in the {@link module:private~ServiceSubscriptions#authorize} and {@link module:common~ClientSubscriptions#submit}.
+ * @property {Object} agreement Object required in the {@link module:private~ServiceSubscriptions#authorize} and {@link module:common~DaisySubscriptions#submit}.
  * @property {string} signature The `agreement` after being signed by the user using Metamask.
  */
 
@@ -120,7 +121,7 @@ const {
  * Create a instance of a Subscription manager based on the contract deployed at the Daisy Dashboard.
  * @extends module:common~Client
  */
-class ClientSubscriptions extends ClientSDK {
+class DaisySubscriptions extends ClientSDK {
   /**
    * If this class is instantiated with only {@link module:common~SubscriptionManager#identifier}
    * this call is necessary to fetch the subscription's manager data.
@@ -177,10 +178,8 @@ class ClientSubscriptions extends ClientSDK {
   }
 
   /**
-   * Load token's web3 contract as {@link external:"web3.eth.Contract"}.
-   * @param {Object} plan - Plan object.
-   * @param {Object} plan.tokenAddress - Required token address.
-   * @returns {module:browser.DaisySubscriptionsOnToken} Wrapped token.
+   * @param {module:common~Plan|Object} plan - Plan object.
+   * @returns {module:common.DaisySubscriptionsOnToken} Wrapped currency.
    *
    * @example
    *
@@ -188,7 +187,7 @@ class ClientSubscriptions extends ClientSDK {
    *   manager: { identifier: ... }, withGlobals: { web3 },
    * });
    *
-   * const token = daisy.with(plan); // the token is taken from the plan object.
+   * daisy.with(plan);
    */
   with(plan) {
     const currency = super.loadToken(plan); // `null` if ETH
@@ -202,16 +201,33 @@ class ClientSubscriptions extends ClientSDK {
   }
 
   /**
+   * Calling prepareToken(token) is going to be deprecated in favor of daisy.with(payable)
+   * @deprecated
+   */
+  prepareToken(token) {
+    console.warn(
+      `Calling prepareToken(token) is going to be deprecated in favor of daisy.with(payable)`
+    );
+
+    return new DaisySubscriptionsOnToken({
+      manager: this.manager,
+      override: this.override,
+      withGlobals: this.withGlobals,
+      currency: token,
+    });
+  }
+
+  /**
    * Get Subscription Manager data and plans.
    * @async
    * @returns {Promise<SubscriptionManager>} - Subscription Manager and Plans given the manager in the constructor.
    *
    * @example
    *
-   * const subscriptionProduct = new ClientSubscriptions({
+   * const instance = new DaisySubscriptions({
    *   manager: { identifier: process.env.DAISY_ID },
    * });
-   * const { plans, ...manager } = await subscriptionProduct.getData();
+   * const { plans, ...manager } = await instance.getData();
    */
   getData() {
     return this.request({
@@ -221,7 +237,7 @@ class ClientSubscriptions extends ClientSDK {
   }
 
   /**
-   * @deprecated Renamed to {@link module:common~ClientSubscriptions#getData}.
+   * @deprecated Renamed to {@link module:common~DaisySubscriptions#getData}.
    */
   getPlans() {
     console.warn(
@@ -242,11 +258,11 @@ class ClientSubscriptions extends ClientSDK {
    *
    * @example
    *
-   * const client = new ClientSubscriptions({
+   * const instance = new DaisySubscriptions({
    *   manager: { identifier: process.env.DAISY_ID },
    * });
-   * const subscriptions = await client.getSubscriptions({ account: "0x0..." });
-   * const subscriptionsActive = await client.getSubscriptions({
+   * const subscriptions = await instance.getSubscriptions({ account: "0x0..." });
+   * const subscriptionsActive = await instance.getSubscriptions({
    *   account: "0x0...",
    *   state: ["ACTIVE", "ACTIVE_CANCELLED"],
    * });
@@ -269,10 +285,10 @@ class ClientSubscriptions extends ClientSDK {
    *
    * @example
    *
-   * const client = new ClientSubscriptions({
+   * const instance = new DaisySubscriptions({
    *   manager: { identifier: process.env.DAISY_ID },
    * });
-   * const subscription = await client.getSubscription({ daisyId: "" });
+   * const subscription = await instance.getSubscription({ daisyId: "" });
    */
   getSubscription({ daisyId, onChainId }) {
     if (daisyId) {
@@ -300,10 +316,10 @@ class ClientSubscriptions extends ClientSDK {
    *
    * @example
    *
-   * const client = new ClientSubscriptions({
+   * const instance = new DaisySubscriptions({
    *   manager: { identifier: process.env.DAISY_ID },
    * });
-   * const receipts = await client.getReceipts({ daisyId: "" });
+   * const receipts = await instance.getReceipts({ daisyId: "" });
    */
   getReceipts({ daisyId, onChainId }) {
     if (daisyId) {
@@ -337,13 +353,11 @@ class ClientSubscriptions extends ClientSDK {
    *   withGlobals: { web3 },
    * });
    *
-   * const plans = await daisy.getPlans();
+   * const { plans } = await daisy.getData();
    * const plan = plans.find(p => ...);
    *
-   * const token = daisy.loadToken(plan); // web3.js contract instance
-   *
    * const { signature, agreement } = await daisy
-   *   .prepareToken(token)
+   *   .with(plan)
    *   .sign({ account, plan });
    *
    * const subscription = await daisy.submit({ signature, agreement });
@@ -380,10 +394,8 @@ class ClientSubscriptions extends ClientSDK {
    * const plans = await daisy.getPlans();
    * const plan = plans.find(p => ...);
    *
-   * const token = daisy.loadToken(plan); // web3.js contract instance
-   *
    * const { signature, agreement } = await daisy
-   *   .prepareToken(token)
+   *   .with(plan)
    *   .signCancel({ account, onChainId: subscription["onChainId"] });
    *
    * const subscription = await daisy.submitCancel({ signature, agreement });
@@ -465,7 +477,7 @@ class ClientSubscriptions extends ClientSDK {
    * @param {Object} input - Input object
    * @param {string} input.account - Signer address.
    * @param {Object} input.agreement - The `agreement` object from the `sign` step.
-   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~ClientSubscriptions#submit}.
+   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~DaisySubscriptions#submit}.
    */
   signAuthorization({ account, agreement }) {
     const typedData = {
@@ -489,7 +501,7 @@ class ClientSubscriptions extends ClientSDK {
    * @param {Object} input.wallet - The wallet to be set.
    * @param {Object} [input.signatureExpiresAt=Date.now() + 600000] - The timestamp in miliseconds in which the signature is no longer valid.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
-   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~ClientSubscriptions#submit}.
+   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~DaisySubscriptions#submit}.
    */
   signSetWallet({ account, wallet, signatureExpiresAt, nonce = undefined }) {
     const expiration = getExpirationInSeconds(signatureExpiresAt);
@@ -521,7 +533,7 @@ class ClientSubscriptions extends ClientSDK {
    * @param {Object} input.authorizer - The authorizer to be set.
    * @param {Object} [input.signatureExpiresAt=Date.now() + 600000] - The timestamp in miliseconds in which the signature is no longer valid.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
-   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~ClientSubscriptions#submit}.
+   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:common~DaisySubscriptions#submit}.
    */
   signSetAuthorizer({
     account,
@@ -554,7 +566,7 @@ class ClientSubscriptions extends ClientSDK {
 /**
  * DaisySDK class related to operations over tokens. This should NOT be instantiated directly.
  * Use {@link module:browser~DaisySubscriptions#prepareToken} to get an instance of this class.
- * @extends module:common~ClientSubscriptions
+ * @extends module:common~DaisySubscriptions
  * @example
  *
  * import DaisySDK from "@daisypayments/daisy-sdk/browser";
@@ -564,10 +576,10 @@ class ClientSubscriptions extends ClientSDK {
  *   manager: { identifier: ... }, withGlobals: { web3 },
  * });
  *
- * console.log(daisy.prepareToken(daisy.loadToken(plan)) instanceof DaisySubscriptionsOnToken);
+ * console.log(daisy.with(plan) instanceof DaisySubscriptionsOnToken);
  * // > true
  */
-class DaisySubscriptionsOnToken extends ClientSubscriptions {
+class DaisySubscriptionsOnToken extends DaisySubscriptions {
   /**
    * @private
    */
@@ -586,11 +598,10 @@ class DaisySubscriptionsOnToken extends ClientSubscriptions {
    * @example
    *
    * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
-   * const token = daisy.loadToken(plan); // web3 contract instance.
    * const amount = "15000000000000000000"; // 15 * 10^18 (remember tokens has 18 "decimals" by default).
    *
    * daisy
-   *   .prepareToken(token)
+   *   .with(plan)
    *   .approve(amount, { from: account })
    *   .on("transactionHash", transactionHash => {})
    *   .on("confirmation", (confirmationNumber, receipt) => {})
@@ -615,21 +626,16 @@ class DaisySubscriptionsOnToken extends ClientSubscriptions {
    * @example
    *
    * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
-   * const token = daisy.loadToken(plan); // web3 contract instance.
    *
    * daisy
-   *   .prepareToken(token)
+   *   .with(plan)
    *   .allowance(account)
    */
   allowance(account) {
     if (!account) {
-      throw new TypeError(`allowance() was called without a "owner" specified. Be sure to call allowance() like:
-      
-      daisy
-        .prepareToken(token)
-        .allowance(account)
-      
-      `);
+      throw new TypeError(
+        `allowance() was called without a "owner" specified. Be sure to call allowance() like: daisy.with(payable).allowance(account)`
+      );
     }
     if (!this.manager["address"]) {
       throw new Error(
@@ -640,6 +646,15 @@ class DaisySubscriptionsOnToken extends ClientSubscriptions {
         }" is null. Are you sure that this subscription product is deployed?`
       );
     }
+
+    if (isObject(account)) {
+      console.warn(
+        `Asking for allowance using allowance({ tokenOwner: account }) is going to be deprecated. Please update to: daisy.allowance(account)`
+      );
+      // eslint-disable-next-line no-param-reassign
+      account = account["tokenOwner"];
+    }
+
     return this.currency.methods["allowance"](
       account,
       this.manager["address"]
@@ -655,10 +670,9 @@ class DaisySubscriptionsOnToken extends ClientSubscriptions {
    * @example
    *
    * const account = ...; // we recommend getting `account` from [react-metamask](https://github.com/consensys/react-metamask)
-   * const token = daisy.loadToken(plan); // web3 contract instance.
    *
    * const balance = await daisy
-   *   .prepareToken(token)
+   *   .with(plan)
    *   .balanceOf(account)
    */
   balanceOf(account) {
@@ -675,15 +689,14 @@ class DaisySubscriptionsOnToken extends ClientSubscriptions {
    * @param {string|number} [input.maxExecutions=0] - Number of periods the user wants to subscribe. If `0` it will renew indefinitely. Example: if a {@link module:common~Plan} has `2` `DAY` as {@link module:common~Plan#periods} and {@link module:common~Plan#periodUnit}, setting this to `3` means that the subscription will last 6 days.
    * @param {string|number} [input.credits=0] - Amount of credits to add to the subscription.
    * @param {string} [input.nonce=web3.utils.randomHex(32)] - Computed. Open for development purposes only.
-   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~ClientSubscriptions#submit}.
+   * @returns {Promise<module:browser~SignResult>} This result is going to be used in {@link module:private~ServiceSubscriptions#authorize} and/or in {@link module:common~DaisySubscriptions#submit}.
    *
    * @example
    *
    * const daisy = await DaisySDK.initSubscriptions({
    *   manager: { identifier: ... }, withGlobals: { web3 },
    * });
-   * const token = daisy.loadToken(plan);
-   * const { signature, agreement } = await daisy.prepareToken(token).sign({
+   * const { signature, agreement } = await daisy.with(plan).sign({
    *   account,
    *   plan,
    * });
@@ -815,4 +828,4 @@ class ResumeEventEmitter extends EventEmitter {
   }
 }
 
-module.exports = ClientSubscriptions;
+module.exports = DaisySubscriptions;

@@ -32,6 +32,11 @@ exports.isEther = function isEther(address) {
   return !address || address === ZERO_ADDRESS;
 };
 
+exports.isObject = function isObject(something) {
+  // eslint-disable-next-line lodash/prefer-lodash-typecheck
+  return typeof something === "object"; // can be null
+};
+
 /**
  * @async
  * @private

@@ -47,9 +47,9 @@ const { isEther } = require("./helpers");
 
 /**
  * Create a instance of a Payments manager based on the entity at the Daisy Dashboard.
- * @extends module:common~Client
+ * @extends module:common~ClientSDK
  */
-class ClientPayments extends ClientSDK {
+class DaisyPayments extends ClientSDK {
   /**
    * If this class is instantiated with only {@link module:common~PaymentGroup#identifier}
    * this call is necessary to fetch the payment group's manager data.
@@ -86,10 +86,8 @@ class ClientPayments extends ClientSDK {
   }
 
   /**
-   * Load token's web3 contract as {@link external:"web3.eth.Contract"}.
    * @param {module:common~PaymentInvoice|Object} invoice - Invoice object.
-   * @param {Object} invoice.tokenAddress - Required token address.
-   * @returns {module:browser.DaisyPaymentsOnToken} Wrapped token.
+   * @returns {module:common.DaisyPaymentsOnToken} Wrapped currency.
    *
    * @example
    *
@@ -97,7 +95,7 @@ class ClientPayments extends ClientSDK {
    *   manager: { identifier: ... }, withGlobals: { web3 },
    * });
    *
-   * const token = daisy.with(invoice); // the token is taken from the invoice object.
+   * daisy.with(invoice);
    */
   with(invoice) {
     const currency = super.loadToken(invoice); // `null` if ETH
@@ -111,16 +109,33 @@ class ClientPayments extends ClientSDK {
   }
 
   /**
+   * Calling prepareToken(token) is going to be deprecated in favor of daisy.with(payable)
+   * @deprecated
+   */
+  prepareToken(token) {
+    console.warn(
+      `Calling prepareToken(token) is going to be deprecated in favor of daisy.with(payable)`
+    );
+
+    return new DaisyPaymentsOnToken({
+      manager: this.manager,
+      override: this.override,
+      withGlobals: this.withGlobals,
+      currency: token,
+    });
+  }
+
+  /**
    * Get Payment manager (PaymentGroup) data.
    * @async
    * @returns {Promise<PaymentGroup>} - PaymentGroup given the manager in the constructor.
    *
    * @example
    *
-   * const client = new ClientPayments({
+   * const payments = new DaisyPayments({
    *   manager: { identifier: process.env.DAISY_OTP_ID },
    * });
-   * const group = await subscriptionProduct.getData();
+   * const group = await payments.getData();
    */
   getData() {
     return this.request({
@@ -138,10 +153,10 @@ class ClientPayments extends ClientSDK {
    *
    * @example
    *
-   * const client = new ClientPayments({
+   * const payments = new DaisyPayments({
    *   manager: { identifier: process.env.DAISY_OTP_ID },
    * });
-   * const invoices = await client.getInvoices({ state: "PAID" });
+   * const invoices = await payments.getInvoices({ state: "PAID" });
    */
   getInvoices(filter = {}) {
     return this.request({
@@ -161,10 +176,10 @@ class ClientPayments extends ClientSDK {
    *
    * @example
    *
-   * const client = new ClientPayments({
+   * const payments = new DaisyPayments({
    *   manager: { identifier: process.env.DAISY_OTP_ID },
    * });
-   * const invoice = await client.getInvoice({ address: "" });
+   * const invoice = await payments.getInvoice({ address: "" });
    */
   getInvoice({ identifier, address }) {
     if (identifier) {
@@ -192,10 +207,10 @@ class ClientPayments extends ClientSDK {
    *
    * @example
    *
-   * const client = new ClientPayments({
+   * const payments = new DaisyPayments({
    *   manager: { identifier: process.env.DAISY_OTP_ID },
    * });
-   * const receipts = await client.getReceipts({ address: "" });
+   * const receipts = await payments.getReceipts({ address: "" });
    */
   getReceipts({ identifier, address }) {
     if (identifier) {
@@ -216,9 +231,9 @@ class ClientPayments extends ClientSDK {
 
 /**
  * DaisySDK class related to operations over tokens. This should NOT be instantiated directly.
- * Use {@link module:browser~ClientPayments#prepareToken} to get an instance of this class.
+ * Use {@link module:browser~DaisyPayments#with} to get an instance of this class.
  *
- * @extends module:common~ClientPayments
+ * @extends module:common~DaisyPayments
  *
  * @example
  *
@@ -229,10 +244,10 @@ class ClientPayments extends ClientSDK {
  *   manager: { identifier: ... }, withGlobals: { web3 },
  * });
  *
- * console.log(daisy.prepareToken(daisy.loadToken(invoice)) instanceof DaisyPaymentsOnToken);
+ * console.log(daisy.with(invoice) instanceof DaisyPaymentsOnToken);
  * // > true
  */
-class DaisyPaymentsOnToken extends ClientPayments {
+class DaisyPaymentsOnToken extends DaisyPayments {
   /**
    * @private
    */
@@ -260,9 +275,8 @@ class DaisyPaymentsOnToken extends ClientPayments {
    * const daisy = await DaisySDK.initPayments({
    *   manager: { identifier: ... }, withGlobals: { web3 },
    * });
-   * const token = daisy.loadToken(invoice);
    * const { transactionHash } = await daisy
-   *   .prepareToken(token)
+   *   .with({ tokenAddress: invoice["tokenAddress"] })
    *   .pay(invoice, { from: account });
    */
   pay(invoice, sendArgs) {
@@ -303,4 +317,4 @@ class DaisyPaymentsOnToken extends ClientPayments {
   }
 }
 
-module.exports = ClientPayments;
+module.exports = DaisyPayments;
