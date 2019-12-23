@@ -20,10 +20,6 @@ const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
  */
 exports.ZERO_ADDRESS = ZERO_ADDRESS;
 
-exports.toData = function dat(response) {
-  return response.data["data"];
-};
-
 exports.isBrowser = function isBrowser() {
   return typeof window !== "undefined";
 };
