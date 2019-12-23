@@ -10,17 +10,15 @@ describe("Payments", () => {
   const PAYMENT_GROUPS = [
     {
       name: "Uncategorized",
-      networkId: 1,
-      identifier: "uncategorized-661-7ea58516d971a8de",
-      secretKey:
-        "ab11da49bd8ad3a05b7c5d2fc6ea8c7184e9a88199bdd123ac947fe053b3b137",
+      networkId: 0x1d0,
+      identifier: "margarita-otp",
+      secretKey: "key-otp",
     },
     {
       name: "pay-rinkeby",
       networkId: 4,
-      identifier: "pay-rinkeby-337-a1ea35d14123f3b9",
-      secretKey:
-        "2db04817ed4d0fcbd25908b42a5bf5f32438c6f980d9102af258a3caf5f81b6e",
+      identifier: "margarita-otp-rinkeby",
+      secretKey: "key-otp-rinkeby",
     },
   ];
 
@@ -128,7 +126,7 @@ describe("Payments", () => {
       });
       expect(invoice).toHaveProperty("identifier");
       expect(invoice).toHaveProperty("address");
-      expect(invoice).toHaveProperty("state", "PENDING");
+      expect(invoice).toHaveProperty("state", "UNPAID");
       expect(invoice).toHaveProperty("invoicedPrice", "100"); // returned as string
       expect(invoice).toHaveProperty("tokenAddress", tokenAddress);
       expect(invoice).toHaveProperty("walletAddress", walletAddress);

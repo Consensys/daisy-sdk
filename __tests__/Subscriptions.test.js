@@ -8,42 +8,41 @@ const { ZERO_ADDRESS } = require("../common/helpers");
 describe("Subscription product/service", () => {
   const SUBSCRIPTION_SERVICES = [
     {
-      name: "sub-rinkeby",
+      name: "sub rinkeby",
       networkId: 4,
-      identifier: "sub-rinkeby-741-4bbd5e596933adef",
-      secretKey:
-        "c6630b1fa507702a30c34da64a5e3884a800d705ee3df2ddff107695c39664c9",
+      identifier: "sub-rinkeby",
+      secretKey: "sub-rinkeby-secret-key",
       plans: [
         {
-          id: "cGxhbjoyOQ==",
+          // id: "cGxhbjoyOQ==",
           name: "rinkeby-2-dsy-daily-public",
           tokenAddress: DSY,
         },
         {
-          id: "cGxhbjozMA==",
+          // id: "cGxhbjozMA==",
           name: "rinkeby-1-dsy-daily-private",
           tokenAddress: DSY,
           subscriptions: [
             {
-              daisyId: "daisy-67910914-96a0-4a0d-8e6d-6a6e033da914",
-              account: "0x98aDCa769FC6C7628d087dAf69E332Ed27804775",
+              daisyId: "daisy-07c5c335-e2f8-471d-b127-739f07e7a1a5",
+              account: "0x3a3B1b31C5f8F29511b93B7C2a6A5C5D732AaA0e",
             },
           ],
         },
       ],
     },
     {
-      name: "sub-rinkeby-2",
+      name: "sub rinkeby-2",
       networkId: 4,
       publisherAddress: "",
       walletAddress: "",
-      identifier: "sub-rinkeby-2-673-f0474f454a2e38ca",
-      secretKey:
-        "cea92102d21ecc28a6815532dd805ef0352f7a6080f6adab3ab75d9985424914",
+      identifier: "sub-rinkeby-2",
+      secretKey: "sub-rinkeby-2-secret-key",
       plans: [
         {
-          id: "cGxhbjoyOQ==",
+          // id: "cGxhbjoyOQ==",
           name: "Untitled",
+          tokenAddress: DSY,
         },
       ],
     },

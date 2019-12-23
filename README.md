@@ -115,13 +115,11 @@ const daisy = await DaisySDK.initSubscriptions({
   withGlobals: { web3 },
 });
 
-const token = daisy.loadToken(plan); // web3.js contract instance
-
 const approvalAmount = "9000000000000000";
 const account = "0x..." // from MetaMask.
 
 const eventemitter = daisy
-  .prepareToken(token)
+  .with(plan)
   .approve(approvalAmount, { from: account });
 
 const eventemitter
@@ -153,10 +151,8 @@ const daisy = await DaisySDK.initSubscriptions({
   withGlobals: { web3 },
 });
 
-const token = daisy.loadToken(plan); // web3.js contract instance
-
 const { signature, agreement } = await daisy
-  .prepareToken(token)
+  .with(plan)
   .sign({ account, plan });
 
 // Send `signature` and `agreement` back to the server

@@ -13,10 +13,25 @@
  * @see {@link https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html#web3-eth-contract|Documentation}
  */
 
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
 /**
  * Default void address
  */
-exports.ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+exports.ZERO_ADDRESS = ZERO_ADDRESS;
+
+exports.isBrowser = function isBrowser() {
+  return typeof window !== "undefined";
+};
+
+exports.isEther = function isEther(address) {
+  return !address || address === ZERO_ADDRESS;
+};
+
+exports.isObject = function isObject(something) {
+  // eslint-disable-next-line lodash/prefer-lodash-typecheck
+  return typeof something === "object"; // can be null
+};
 
 /**
  * @async
