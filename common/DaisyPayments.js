@@ -113,6 +113,7 @@ class DaisyPayments extends ClientSDK {
    * @deprecated
    */
   prepareToken(token) {
+    // eslint-disable-next-line no-console
     console.warn(
       `Calling prepareToken(token) is going to be deprecated in favor of daisy.with(payable)`
     );

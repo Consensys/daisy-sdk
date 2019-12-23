@@ -24,6 +24,7 @@ class ClientSDK extends Client {
         "daisy-sdk: Missing `manager` first argument when constructing."
       );
     } else if (!manager.identifier) {
+      // eslint-disable-next-line no-console
       console.warn(
         "daisy-sdk: Missing `manager.identifier` field when constructing."
       );
@@ -84,6 +85,7 @@ class ClientSDK extends Client {
         `balanceOf() was called without a "owner" specified. Be sure to call balanceOf() like: daisy.with(payable).balanceOf(account)`
       );
     } else if (isObject(account)) {
+      // eslint-disable-next-line no-console
       console.warn(
         `Asking for allowance using allowance({ tokenOwner: account }) is going to be deprecated. Please update to: daisy.allowance(account)`
       );

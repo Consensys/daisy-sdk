@@ -205,6 +205,7 @@ class DaisySubscriptions extends ClientSDK {
    * @deprecated
    */
   prepareToken(token) {
+    // eslint-disable-next-line no-console
     console.warn(
       `Calling prepareToken(token) is going to be deprecated in favor of daisy.with(payable)`
     );
@@ -240,6 +241,7 @@ class DaisySubscriptions extends ClientSDK {
    * @deprecated Renamed to {@link module:common~DaisySubscriptions#getData}.
    */
   getPlans() {
+    // eslint-disable-next-line no-console
     console.warn(
       "daisy-sdk: Method `getPlans` is deprecated in favor of `getData()`"
     );
@@ -648,6 +650,7 @@ class DaisySubscriptionsOnToken extends DaisySubscriptions {
     }
 
     if (isObject(account)) {
+      // eslint-disable-next-line no-console
       console.warn(
         `Asking for allowance using allowance({ tokenOwner: account }) is going to be deprecated. Please update to: daisy.allowance(account)`
       );
