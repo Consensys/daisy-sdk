@@ -107,7 +107,7 @@ class ClientSDK extends Client {
     }).then(({ data: body }) => body.data);
   }
 
-  getTokenBySymbol(symbol) {
+  getToken({ symbol }) {
     return this.request({
       method: "get",
       url: `/otp/tokens/${symbol}`,
