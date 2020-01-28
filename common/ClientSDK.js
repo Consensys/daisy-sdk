@@ -98,6 +98,21 @@ class ClientSDK extends Client {
     }
     return this.web3.eth.getBalance(account);
   }
+
+  getTokens({ query, orderField, orderDirection }) {
+    return this.request({
+      methods: "get",
+      url: "/otp/tokens",
+      query: { query, orderField, orderDirection },
+    }).then(({ data: body }) => body.data);
+  }
+
+  getTokenBySymbol(symbol) {
+    return this.request({
+      method: "get",
+      url: `/otp/tokens/${symbol}`,
+    }).then(({ data: body }) => body.data);
+  }
 }
 
 module.exports = ClientSDK;
