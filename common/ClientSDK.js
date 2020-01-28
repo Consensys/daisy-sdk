@@ -99,6 +99,22 @@ class ClientSDK extends Client {
     return this.web3.eth.getBalance(account);
   }
 
+  /**
+   * Search tokens.
+   * @async
+   * @param {Object} [params] - Params used to search and order the results.
+   * @param {string} [params.query] - Find tokens by name, symbol or address.
+   * @param {string} [params.orderField] - Order the results using this parameter.
+   * @param {string} [params.orderDirection] - Order the results using this direction.
+   * @returns {Promise<Token[]>} - Tokens found based on the search criteria;
+   *
+   * @example
+   *
+   * const client = new ClientSDK({
+   *   manager: { identifier: process.env.DAISY_OTP_ID },
+   * });
+   * const tokens = await client.getTokens({ query: "DAI" });
+   */
   getTokens({ query, orderField, orderDirection }) {
     return this.request({
       methods: "get",
@@ -107,6 +123,20 @@ class ClientSDK extends Client {
     }).then(({ data: body }) => body.data);
   }
 
+  /**
+   * Find a token using the token symbol.
+   * @async
+   * @param {Object} [params] - Params used to search the token.
+   * @param {string} [params.symbol] - Find a token using the symbol.
+   * @returns {Promise<?Token>} - Token found or null;
+   *
+   * @example
+   *
+   * const client = new ClientSDK({
+   *   manager: { identifier: process.env.DAISY_OTP_ID },
+   * });
+   * const token = await client.getToken({ symbol: "DAI" });
+   */
   getToken({ symbol }) {
     return this.request({
       method: "get",
