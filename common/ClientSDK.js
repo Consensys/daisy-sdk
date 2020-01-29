@@ -115,11 +115,11 @@ class ClientSDK extends Client {
    * });
    * const tokens = await client.getTokens({ query: "DAI" });
    */
-  getTokens({ query, orderField, orderDirection }) {
+  getTokens(filter = {}) {
     return this.request({
-      methods: "get",
+      method: "get",
       url: "/otp/tokens",
-      query: { query, orderField, orderDirection },
+      query: filter,
     }).then(({ data: body }) => body.data);
   }
 
