@@ -4,8 +4,8 @@ const DaisyPayments = require("../common/DaisyPayments");
 
 class ServerPayments extends DaisyPayments {
   createInvoice(params = {}) {
-    if (!params || !params.invoicedPrice) {
-      throw new TypeError(`Missing params.invoicedPrice argument.`);
+    if (!params) {
+      throw new TypeError(`Missing params argument.`);
     }
 
     // TODO: maybe add check if user forgot to add the decimals to the price.
@@ -17,6 +17,9 @@ class ServerPayments extends DaisyPayments {
       invoicedDetail: params.invoicedDetail,
       tokenAddress: params.tokenAddress,
       walletAddress: params.walletAddress,
+      redirectURL: params.redirectURL,
+      cancelURL: params.cancelURL,
+      items: params.items,
     };
 
     return this.request({
