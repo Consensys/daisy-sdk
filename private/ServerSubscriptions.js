@@ -37,25 +37,28 @@ class ServerSubscriptions extends DaisySubscriptions {
    * @param {Object} [params={}] - Invitation attributes.
    * @param {Boolean} [params.active=true] - Is public available or not.
    * @param {Number} [params.maxUsages=0] - Invitation max allowed usages. Set to `0` for unlimited.
-   * @param {Object} [params.callbackExtra={}] - Extra payload, helpful to identify the user.
-   * @param {String} [params.callbackURL] - Callback URL to receive Daisy ID from the subscription
-   * @param {String} [params.redirectURLDefault] - On success default redirect button.
+   * @param {Object} [params.webhooksExtra] - Extra payload, helpful to identify the user.
+   * @param {String} [params.redirectURL] - To redirect the user after a successful/failed checkout.
+   * @param {String} [params.cancelURL] - Allow the user to go back to merchant site.
+   * @param {String} [params.freeTrialPeriods="0"] - Set to enable free trials.
+   * @param {String} [params.freeTrialPeriodsUnit="MONTH"] - Free trial period. Enum: `DAY`, `WEEK`, `MONTH`.
    * @returns {Promise<Invitation>} - Invitation object ({@link module:common~Invitation}) with public link and identifier.
    */
-  createInvitation(
-    plan,
-    params = { active: true, maxUsages: 0, callbackExtra: {} }
-  ) {
+  createInvitation(plan, params = { active: true, maxUsages: 0 }) {
     if (!plan) {
       throw new TypeError("Missing first argument: plan");
     }
 
     const data = {
-      maxUsages: Number(params["maxUsages"]),
       active: params["active"],
-      callbackExtra: JSON.parse(JSON.stringify(params["callbackExtra"])), // TODO: check if plan JS Object.
-      callbackURL: params["callbackURL"],
-      redirectURLDefault: params["redirectURLDefault"],
+      maxUsages: Number(params["maxUsages"]),
+      webhooksExtra: params["webhooksExtra"]
+        ? JSON.parse(JSON.stringify(params["webhooksExtra"]))
+        : undefined, // TODO: check if plan JS Object.
+      redirectURL: params["redirectURL"],
+      cancelURL: params["cancelURL"],
+      freeTrialPeriods: params["freeTrialPeriods"],
+      freeTrialPeriodsUnit: params["freeTrialPeriodsUnit"],
     };
     const planId = plan["id"] || plan;
 
