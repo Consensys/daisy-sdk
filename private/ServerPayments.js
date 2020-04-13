@@ -10,16 +10,23 @@ class ServerPayments extends DaisyPayments {
 
     // TODO: maybe add check if user forgot to add the decimals to the price.
 
+    // Convert numbers and BigNumbers to strings.
+    function stringify(something) {
+      // eslint-disable-next-line lodash/prefer-is-nil
+      return something !== undefined && something !== null
+        ? String(something)
+        : undefined;
+    }
+
     const data = {
-      invoicedPrice: params.invoicedPrice, // required
-      invoicedEmail: params.invoicedEmail,
-      invoicedName: params.invoicedName,
-      invoicedDetail: params.invoicedDetail,
-      tokenAddress: params.tokenAddress,
-      walletAddress: params.walletAddress,
-      redirectURL: params.redirectURL,
-      cancelURL: params.cancelURL,
-      items: params.items,
+      ...params,
+      invoicedPrice: stringify(params.invoicedPrice),
+      items: params.items
+        ? params.items.map(item => ({
+            ...item,
+            amount: stringify(item.amount),
+          }))
+        : undefined,
     };
 
     return this.request({
