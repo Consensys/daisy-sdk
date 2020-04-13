@@ -4,6 +4,94 @@ Daisy's software enables businesses to accept cryptocurrency for purchases, subs
 
 # Daisy SDK
 
+```js
+const fetch = require("node-fetch");
+
+const response = await fetch("https://api.daisypayments.con/graphql", {
+  method: "POST",
+  body: JSON.stringify({
+    query: `
+      query($id: ID!) {
+        invoice(id: $id) {
+          name
+        }
+      }
+    `,
+    variables: { id: 1 },
+  }),
+  headers:{
+    "Content-Type": "application/json"
+    "Authorization": DAISY_API_KEY,
+  }
+});
+const payload = await response.json();
+
+const errors = payload["errors"] || [];
+if (errors.length !== 0) {
+  throw new Error(errors[0]["message"]);
+}
+
+const invoice = payload["data"]["invoice"];
+```
+
+```js
+const fetch = require("node-fetch");
+const Daisy = require("@daisypayments/daisy");
+
+const daisy = new Daisy(DAISY_API_KEY, { fetch });
+
+try {
+  const data = await daisy.graphql({
+    query: `
+      query($id: ID!) {
+        invoice(id: $id) {
+          name
+        }
+      }
+    `,
+    variables: { id: 1 },
+  });
+  const invoice = data["invoice"];
+} catch (error) {
+  if (
+    error instanceof Daisy.DaisyGraphQLError &&
+    error.extensions.code === "BAD_REQUEST")
+  {
+    // ...
+  } else {
+    // ...
+  }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Daisy SDK
+
 Daisy SDK is a library for interacting with all aspects of the Daisy product in both a browser and Node environment. This guide will go through using the library to sign up for a new subscription, access a subscription's current state and subscriber data, approve tokens for an existing subscription, and cancel an existing subscription.
 
 It is also possible to create Payment Invoices for one-time purchases.
